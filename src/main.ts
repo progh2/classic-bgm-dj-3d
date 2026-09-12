@@ -96,8 +96,10 @@ async function bringInButler(): Promise<void> {
     return
   }
 
-  // 자세를 화면에서 맞춰 보기 위한 통로.
-  ;(window as unknown as Record<string, unknown>).__butler = butler
+  // 자세를 화면에서 맞춰 보기 위한 통로. 개발 빌드에서만 연다.
+  if (import.meta.env.DEV) {
+    ;(window as unknown as Record<string, unknown>).__butler = butler
+  }
   butler.root.position.set(0, 0, -1.05)
   butler.lookAt(salon.viewerAnchor)
   salon.add(butler.root)

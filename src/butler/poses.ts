@@ -7,7 +7,7 @@ import { Quaternion, Vector3 } from 'three'
  *   armDown  T 포즈에서 팔을 얼마나 내렸는가 (π/2 ≈ 옆으로 나란히, 1.4 ≈ 몸에 붙음)
  *   armSwing 내린 팔을 앞(−)/뒤(+)로 흔든 정도
  *   armTwist 팔을 제 축으로 비튼 정도. 팔꿈치가 굽는 방향을 정한다
- *            (0 이면 앞으로, 음수면 몸 안쪽으로)
+ *            (0 이면 카메라 쪽으로, −1.3 쯤이면 몸 안쪽으로 모인다)
  *   elbow    팔꿈치 굽힘, torso/head 앞으로(+) 숙임
  */
 export interface Pose {
@@ -45,23 +45,25 @@ export function armQuat(
 ): Quaternion {
   qA.setFromAxisAngle(AX_Z, down * side)
   qB.setFromAxisAngle(AX_X, swing)
-  qC.setFromAxisAngle(AX_X, twist * side)
+  // 비틀기는 좌우를 뒤집지 않는다. 팔꿈치 회전이 이미 좌우 반대 부호라
+  // 여기서 또 뒤집으면 한쪽 팔만 바깥으로 벌어진다. 화면에서 확인한 값이다.
+  qC.setFromAxisAngle(AX_X, twist)
   return out.copy(qB).multiply(qA).multiply(qC)
 }
 
 /** 집사의 기본 자세. 한 손을 배 앞에 두는 정중한 대기 자세를 기본으로 한다. */
 export const POSES = {
-  /** 대기 — 두 손을 배 앞에 모은 정중한 자세 */
-  idle: { armDown: 1.26, armSwing: -0.12, armTwist: -1.35, elbow: 1.05, torso: 0.0, head: 0.0 },
-  /** 목례 — 허리를 숙이고 손은 모은 채 */
-  bow: { armDown: 1.24, armSwing: -0.06, armTwist: -1.35, elbow: 1.1, torso: 0.42, head: 0.16 },
-  /** 말하는 중 — 대기보다 조금 열린 자세 */
-  speak: { armDown: 1.28, armSwing: -0.14, armTwist: -1.3, elbow: 0.95, torso: -0.02, head: -0.03 },
-  /** 권함 — 오른손을 테이블 쪽으로 내밀어 안내 */
-  present: { armDown: 1.26, armSwing: -0.12, armTwist: -1.35, elbow: 1.05, torso: 0.04, head: 0.04,
-             armDownR: 1.0, armSwingR: -0.5, armTwistR: -0.7, elbowR: 0.5 },
-  /** 감상 중 — 두 손을 모으고 조용히 서 있음 */
-  listen: { armDown: 1.3, armSwing: -0.1, armTwist: -1.4, elbow: 1.2, torso: 0.03, head: 0.05 },
+  /** 대기 — 두 손을 허리 앞에 모은 정중한 자세 */
+  idle: { armDown: 1.22, armSwing: 0.32, armTwist: -1.3, elbow: 1.35, torso: 0.0, head: 0.0 },
+  /** 목례 — 손은 모은 채 허리를 숙인다 */
+  bow: { armDown: 1.24, armSwing: 0.3, armTwist: -1.3, elbow: 1.38, torso: 0.42, head: 0.16 },
+  /** 말하는 중 — 손을 조금 풀고 몸을 살짝 편다 */
+  speak: { armDown: 1.24, armSwing: 0.28, armTwist: -1.26, elbow: 1.22, torso: -0.02, head: -0.03 },
+  /** 권함 — 오른손을 테이블 쪽으로 내밀어 안내한다 */
+  present: { armDown: 1.22, armSwing: 0.32, armTwist: -1.3, elbow: 1.35, torso: 0.04, head: 0.04,
+             armDownR: 0.95, armSwingR: 0.12, armTwistR: -0.5, elbowR: 0.5 },
+  /** 감상 중 — 손을 모으고 조용히 선다 */
+  listen: { armDown: 1.22, armSwing: 0.34, armTwist: -1.32, elbow: 1.4, torso: 0.03, head: 0.05 },
 } satisfies Record<string, Pose>
 
 export type PoseName = keyof typeof POSES
