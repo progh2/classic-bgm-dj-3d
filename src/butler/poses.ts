@@ -53,17 +53,24 @@ export function armQuat(
 
 /** 집사의 기본 자세. 한 손을 배 앞에 두는 정중한 대기 자세를 기본으로 한다. */
 export const POSES = {
-  /** 대기 — 두 손을 허리 앞에 모은 정중한 자세 */
-  idle: { armDown: 1.22, armSwing: 0.32, armTwist: -1.3, elbow: 1.35, torso: 0.0, head: 0.0 },
+  // 팔꿈치를 너무 굽히면 두 손이 서로를 지나쳐 팔짱을 낀 것처럼 보인다.
+  // 한쪽 손이 다른 손 위에 가볍게 얹히도록 좌우를 조금 어긋나게 둔다.
+
+  /** 대기 — 오른손을 왼손 위에 얹은 정중한 자세 */
+  idle: { armDown: 1.26, armSwing: 0.3, armTwist: -1.24, elbow: 1.06, torso: 0.0, head: 0.0,
+          armDownR: 1.22, armSwingR: 0.34, armTwistR: -1.34, elbowR: 0.98 },
   /** 목례 — 손은 모은 채 허리를 숙인다 */
-  bow: { armDown: 1.24, armSwing: 0.3, armTwist: -1.3, elbow: 1.38, torso: 0.42, head: 0.16 },
+  bow: { armDown: 1.28, armSwing: 0.28, armTwist: -1.24, elbow: 1.1, torso: 0.42, head: 0.16,
+         armDownR: 1.24, armSwingR: 0.32, armTwistR: -1.34, elbowR: 1.02 },
   /** 말하는 중 — 손을 조금 풀고 몸을 살짝 편다 */
-  speak: { armDown: 1.24, armSwing: 0.28, armTwist: -1.26, elbow: 1.22, torso: -0.02, head: -0.03 },
+  speak: { armDown: 1.28, armSwing: 0.26, armTwist: -1.2, elbow: 0.94, torso: -0.02, head: -0.03,
+           armDownR: 1.24, armSwingR: 0.3, armTwistR: -1.3, elbowR: 0.88 },
   /** 권함 — 오른손을 테이블 쪽으로 내밀어 안내한다 */
-  present: { armDown: 1.22, armSwing: 0.32, armTwist: -1.3, elbow: 1.35, torso: 0.04, head: 0.04,
+  present: { armDown: 1.26, armSwing: 0.3, armTwist: -1.24, elbow: 1.06, torso: 0.04, head: 0.04,
              armDownR: 0.95, armSwingR: 0.12, armTwistR: -0.5, elbowR: 0.5 },
   /** 감상 중 — 손을 모으고 조용히 선다 */
-  listen: { armDown: 1.22, armSwing: 0.34, armTwist: -1.32, elbow: 1.4, torso: 0.03, head: 0.05 },
+  listen: { armDown: 1.26, armSwing: 0.32, armTwist: -1.26, elbow: 1.1, torso: 0.03, head: 0.05,
+            armDownR: 1.22, armSwingR: 0.36, armTwistR: -1.36, elbowR: 1.02 },
 } satisfies Record<string, Pose>
 
 export type PoseName = keyof typeof POSES

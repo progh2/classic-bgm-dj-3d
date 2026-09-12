@@ -12,6 +12,7 @@ import {
   PMREMGenerator,
   PerspectiveCamera,
   PointLight,
+  Raycaster,
   Vector2,
   Vector3,
   Scene,
@@ -23,6 +24,8 @@ import {
 } from 'three'
 
 import { BACK_Z, createRoom, type Room } from './room'
+import { createHud3D, type Hud3D } from './hud3d'
+import { createTabletop, type Tabletop } from './tabletop'
 import { createScreen, type Screen } from './screen'
 import { createTurntable, type Turntable } from './turntable'
 
@@ -44,10 +47,17 @@ export interface Salon {
   readonly turntable: Turntable
   /** 응접실의 방 자체 */
   readonly room: Room
+  /** 테이블 위의 정물 */
+  readonly tabletop: Tabletop
+  /** 3D 안의 조작부 */
+  readonly hud: Hud3D
   dispose(): void
 }
 
 /** WebGL 초기화 실패를 호출부에서 구분할 수 있게 던지는 오류. */
+/** 상판 높이(m). 집사의 손이 이 뒤로 가려지도록 원래 콘솔보다 높게 잡는다. */
+export const TABLE_TOP = 1.14
+
 export class WebGLUnavailableError extends Error {
   constructor(cause?: unknown) {
     super('WebGL 을 초기화할 수 없습니다')
@@ -84,9 +94,10 @@ export function createSalon(host: HTMLElement): Salon {
   scene.fog = new Fog(0x17110c, 6, 16)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
-  // 안내판(뒤)·집사·테이블 위 재생기가 한 화면에 들어오도록 잡는다.
-  camera.position.set(0, 1.7, 2.35)
-  camera.lookAt(0, 1.28, -0.9)
+  // 상판 높이쯤에서 살짝 올려다본다. 눈높이가 상판보다 높으면 집사의 배와
+  // 손이 상판 위로 비어져 나온다.
+  camera.position.set(0, 1.3, 2.45)
+  camera.lookAt(0, 1.46, -0.95)
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
   const table = new Group()
@@ -139,14 +150,14 @@ export function createSalon(host: HTMLElement): Salon {
   scene.add(fill)
 
   const candle = new PointLight(0xffb469, 2.2, 3.2, 2)
-  candle.position.set(0.78, 1.02, 0.28)
+  candle.position.set(0.78, TABLE_TOP + 0.12, 0.28)
   scene.add(candle)
 
 
 
   // 집사가 이쪽을 보게 할 기준점. 카메라보다 살짝 아래에 둬야 눈이 마주친다.
   const viewerAnchor = new Object3D()
-  const HOME = new Vector3(0, 1.5, 2.05)
+  const HOME = new Vector3(0, 1.42, 2.05)
   viewerAnchor.position.copy(HOME)
   scene.add(viewerAnchor)
 
@@ -165,9 +176,43 @@ export function createSalon(host: HTMLElement): Salon {
     wanted.copy(camera.position).addScaledVector(pointerPlane, 2.1)
   }
 
-  const onPointerMove = (e: PointerEvent): void => aimAt(e.clientX, e.clientY)
+  // 조작판 누르기 — 판을 가리킨 지점을 캔버스 좌표로 되돌려 어느 칸인지 가린다.
+  const raycaster = new Raycaster()
+  const pickAt = (clientX: number, clientY: number): { panel: (typeof hud.panels)[number]; id: string } | null => {
+    const rect = renderer.domElement.getBoundingClientRect()
+    if (rect.width === 0 || rect.height === 0) return null
+    ndc.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1)
+    raycaster.setFromCamera(ndc, camera)
+    const meshes = hud.panels.filter((p) => p.visible).map((p) => p.mesh)
+    for (const hit of raycaster.intersectObjects(meshes, false)) {
+      const panel = hud.panels.find((p) => p.mesh === hit.object)
+      if (!panel || !hit.uv) continue
+      const id = panel.hitTest(hit.uv)
+      if (id) return { panel, id }
+    }
+    return null
+  }
+
+  const clearHover = (): void => {
+    for (const p of hud.panels) p.setHover(null)
+  }
+
+  const onPointerMove = (e: PointerEvent): void => {
+    aimAt(e.clientX, e.clientY)
+    const found = pickAt(e.clientX, e.clientY)
+    clearHover()
+    if (found) found.panel.setHover(found.id)
+    renderer.domElement.style.cursor = found ? 'pointer' : 'default'
+  }
+
+  const onPointerDown = (e: PointerEvent): void => {
+    const found = pickAt(e.clientX, e.clientY)
+    if (found) hud.pick(found.id)
+  }
+  window.addEventListener('pointerdown', onPointerDown)
   const onPointerLeave = (): void => {
     wanted.copy(HOME)
+    clearHover()
   }
   window.addEventListener('pointermove', onPointerMove, { passive: true })
   document.addEventListener('pointerleave', onPointerLeave)
@@ -176,14 +221,22 @@ export function createSalon(host: HTMLElement): Salon {
   // 집사 뒤 안내판 — 지금 흐르는 곡을 여기에 띄운다.
   const screen = createScreen()
   // 안내판은 뒷벽에 건다. 벽에서 떠 있으면 허공에 뜬 판때기로 보인다.
-  screen.root.position.set(0, 1.68, BACK_Z + 0.07)
+  screen.root.position.set(0, 1.78, BACK_Z + 0.07)
   scene.add(screen.root)
 
-  // 테이블 위의 레코드 재생기. 콘솔 상판(0.95m) 위에 놓는다.
+  // 테이블 위의 물건들. 상판 높이에 맞춰 한 묶음으로 올린다.
   const turntable = createTurntable()
-  turntable.root.position.set(-0.34, 0.95, 0.0)
-  turntable.root.rotation.y = 0.18
-  scene.add(turntable.root)
+  turntable.root.position.set(-0.42, 0, -0.02)
+  turntable.root.rotation.y = 0.22
+
+  const tabletop = createTabletop()
+
+  const hud = createHud3D()
+
+  const onTable = new Group()
+  onTable.position.y = TABLE_TOP
+  onTable.add(turntable.root, tabletop.root, hud.root)
+  scene.add(onTable)
 
   const resize = (): void => {
     const w = host.clientWidth || window.innerWidth
@@ -201,6 +254,8 @@ export function createSalon(host: HTMLElement): Salon {
     screen,
     turntable,
     room,
+    tabletop,
+    hud,
     add(object) {
       scene.add(object)
     },
@@ -226,6 +281,7 @@ export function createSalon(host: HTMLElement): Salon {
     resize,
     dispose() {
       window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('pointerleave', onPointerLeave)
       window.removeEventListener('blur', onPointerLeave)
       renderer.dispose()

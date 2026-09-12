@@ -9,8 +9,13 @@ export interface Table {
   readonly topSize: { width: number; depth: number }
 }
 
-/** 응접실 콘솔 테이블(Poly Haven, CC0)을 불러온다. */
-export async function loadTable(url: string): Promise<Table> {
+/**
+ * 응접실 콘솔 테이블(Poly Haven, CC0)을 불러온다.
+ *
+ * targetTopY 를 주면 상판이 그 높이에 오도록 통째로 키운다. 집사의 배와 손이
+ * 상판 뒤로 가려지려면 원래 높이(0.95m)로는 모자란다.
+ */
+export async function loadTable(url: string, targetTopY?: number): Promise<Table> {
   const gltf = await new GLTFLoader().loadAsync(url)
   const root = new Group()
   root.add(gltf.scene)
@@ -26,12 +31,14 @@ export async function loadTable(url: string): Promise<Table> {
   const box = new Box3().setFromObject(gltf.scene)
   const size = box.getSize(new Vector3())
 
+  const scale = targetTopY && size.y > 0.1 ? targetTopY / size.y : 1
+  gltf.scene.scale.setScalar(scale)
   // 바닥에 닿게 내려놓는다.
-  gltf.scene.position.y -= box.min.y
+  gltf.scene.position.y -= box.min.y * scale
 
   return {
     root,
-    topY: size.y,
-    topSize: { width: size.x, depth: size.z },
+    topY: size.y * scale,
+    topSize: { width: size.x * scale, depth: size.z * scale },
   }
 }
