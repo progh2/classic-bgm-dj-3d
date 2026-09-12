@@ -443,6 +443,11 @@ export const SOURCE_SECTIONS: SourceSection[] = [
     link: { label: 'Poly Haven 라이선스', url: 'https://polyhaven.com/license' },
   },
   {
+    title: '벽에 걸린 그림',
+    body: '메트로폴리탄 미술관 오픈 액세스의 퍼블릭 도메인 회화입니다. 이미지는 CC0 이며 저장소에 담지 않고 원 출처에서 바로 받아 겁니다. 올 때마다 다른 그림이 걸립니다.',
+    link: { label: 'The Met 이미지 이용 안내', url: 'https://www.metmuseum.org/policies/image-resources' },
+  },
+  {
     title: '소리',
     body: '집사의 발걸음은 OpenGameArt 의 CC0 효과음입니다. 집사의 말은 기기에 설치된 음성합성을 씁니다.',
     link: { label: '100 CC0 SFX #2', url: 'https://opengameart.org/content/100-cc0-sfx-2' },

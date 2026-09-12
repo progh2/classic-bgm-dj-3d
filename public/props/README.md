@@ -90,3 +90,14 @@ CC-BY 모델을 쓰기로 바꾼다면 출처 안내서에 제작자 표기를 �
 집사가 걸어 들어올 때만 씁니다. 음악 음원은 저장소에 담지 않는다는 원칙의 예외인데,
 이런 짧은 효과음은 스트리밍할 출처가 없기 때문입니다. 원치 않으시면 Web Audio 로
 합성한 소리로 바꿀 수 있습니다.
+
+## 벽에 걸린 그림
+
+[The Met 오픈 액세스](https://www.metmuseum.org/policies/image-resources) 의 퍼블릭 도메인 회화 18점 · **CC0**.
+
+유럽 회화부(departmentId 11)에서 `isPublicDomain` 인 작품만 골랐고,
+이미지가 실제로 받아지는지와 CORS 가 열려 있는지(`access-control-allow-origin: *`)를
+한 점씩 확인했습니다. 목록은 `data/artworks.json`, 조사 도구는 `tools/survey-artworks.mjs`.
+
+**이미지는 저장소에 담지 않습니다.** 주소만 적어 두고 브라우저가 원 출처에서
+받습니다. 음원과 같은 원칙입니다. 방문할 때마다 셋을 무작위로 골라 겁니다.

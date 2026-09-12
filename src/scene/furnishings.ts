@@ -12,6 +12,7 @@ import {
   PointLight,
   SphereGeometry,
   SpotLight,
+  TextureLoader,
   SRGBColorSpace,
   Vector2,
 } from 'three'
@@ -27,10 +28,18 @@ const WOOD_DARK = 0x2a1a0e
 const WOOD = 0x3d2614
 const BRASS = 0x8a6a1e
 
+export interface Artwork {
+  title: string
+  artist: string
+  imageUrl: string
+}
+
 export interface Furnishings {
   readonly root: Group
-  /** 창으로 드는 빛의 세기를 바꾼다. 단계 F(시간대)에서 쓴다. */
-  setDaylight(amount: number): void
+  /** 창으로 드는 빛의 세기와 빛깔을 바꾼다. 0 은 한밤, 1 은 한낮. */
+  setDaylight(amount: number, colour: number): void
+  /** 벽의 액자에 그림을 건다. 실패한 액자는 그리던 그림을 그대로 둔다. */
+  hangArtworks(list: readonly Artwork[]): Promise<void>
 }
 
 export function createFurnishings(backZ: number, wallX: number): Furnishings {
@@ -187,6 +196,9 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
 
   // ---- 오른쪽 벽: 작곡가 액자 ----
   const portraitTexture = makePortraitTexture()
+  /** 액자마다 그림을 갈아 끼울 수 있도록 재질과 크기를 들고 있는다. */
+  const frames: { material: MeshStandardMaterial; canvas: Mesh; box: { w: number; h: number } }[] = []
+
   for (const [i, y, h] of [
     [0, 1.95, 0.62],
     [1, 1.22, 0.62],
@@ -198,13 +210,13 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
     const w = h * 0.78
     const outer = new Mesh(new BoxGeometry(w + 0.09, h + 0.09, 0.05), brass)
     frame.add(outer)
-    const canvasMesh = new Mesh(
-      new PlaneGeometry(w, h),
-      new MeshStandardMaterial({ map: portraitTexture, roughness: 0.9 }),
-    )
+    const material = new MeshStandardMaterial({ map: portraitTexture, roughness: 0.9 })
+    const canvasMesh = new Mesh(new PlaneGeometry(1, 1), material)
+    canvasMesh.scale.set(w, h, 1)
     canvasMesh.position.z = 0.028
     frame.add(canvasMesh)
     root.add(frame)
+    frames.push({ material, canvas: canvasMesh, box: { w, h } })
   }
 
   // ---- 오른쪽 뒤: 나팔 축음기 ----
@@ -279,12 +291,43 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
   cornerLight.position.set(wallX - 0.9, 1.35, backZ + 1.5)
   root.add(cornerLight)
 
+  const loader = new TextureLoader()
+  loader.setCrossOrigin('anonymous')
+
   return {
     root,
-    setDaylight(amount) {
+
+    setDaylight(amount, colour) {
       const a = Math.min(1, Math.max(0, amount))
       daylight.intensity = 9 * a
-      ;(glassGlow.material as MeshBasicMaterial).opacity = 0.15 + 0.7 * a
+      daylight.color.setHex(colour)
+      const glass = glassGlow.material as MeshBasicMaterial
+      glass.color.setHex(colour)
+      // 한밤에도 창이 완전히 죽지는 않는다. 바깥의 먼 불빛이 남는다.
+      glass.opacity = 0.12 + 0.72 * a
+    },
+
+    async hangArtworks(list) {
+      await Promise.all(
+        frames.map(async (frame, i) => {
+          const art = list[i % Math.max(1, list.length)]
+          if (!art) return
+          try {
+            const texture = await loader.loadAsync(art.imageUrl)
+            texture.colorSpace = SRGBColorSpace
+            // 그림의 비율을 지키면서 액자 안에 들어가게 맞춘다.
+            const image = texture.image as { width: number; height: number }
+            const ratio = image.width / image.height
+            const box = frame.box
+            const w = Math.min(box.w, box.h * ratio)
+            frame.canvas.scale.set(w, w / ratio, 1)
+            frame.material.map = texture
+            frame.material.needsUpdate = true
+          } catch {
+            // 못 받으면 그리던 그림을 그대로 둔다.
+          }
+        }),
+      )
     },
   }
 }

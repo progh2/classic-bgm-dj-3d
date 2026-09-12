@@ -4,6 +4,7 @@ import { createSpeech } from './butler/speech'
 import { CATALOG, formatTime } from './catalog/catalog'
 import { buildQueue, DEFAULT_ANSWERS, QUESTIONS, type Answers } from './catalog/select'
 import { createSession, type SessionState } from './core/session'
+import { phaseNow } from './scene/daylight'
 import { AudioFileAdapter } from './playback/audioFileAdapter'
 import { createSalon, TABLE_TOP, WebGLUnavailableError, type Salon } from './scene/salon'
 
@@ -463,6 +464,29 @@ async function lightRoom(): Promise<void> {
   }
 }
 
+/** 창밖을 지금 시각에 맞춘다. 1분마다 다시 본다. */
+function followDaylight(): void {
+  const apply = (): void => {
+    if (!salon) return
+    const phase = phaseNow()
+    salon.furnishings.setDaylight(1 - phase.night, phase.colour)
+  }
+  apply()
+  window.setInterval(apply, 60_000)
+}
+
+/** 벽에 걸 그림을 고른다. 올 때마다 다른 그림이 걸린다. */
+async function hangArtworks(): Promise<void> {
+  if (!salon) return
+  try {
+    const { ARTWORKS } = await import('./catalog/artworks')
+    const shuffled = [...ARTWORKS].sort(() => Math.random() - 0.5).slice(0, 3)
+    await salon.furnishings.hangArtworks(shuffled)
+  } catch (err) {
+    console.warn('그림을 걸지 못했습니다', err)
+  }
+}
+
 async function dressRoom(): Promise<void> {
   if (!salon) return
   const textures = `${import.meta.env.BASE_URL}textures/`
@@ -613,5 +637,7 @@ if (startScene()) {
   updateScene(session.state)
   void lightRoom()
   void dressRoom()
+  followDaylight()
+  void hangArtworks()
   void bringInButler()
 }
