@@ -48,6 +48,8 @@ export interface Screen {
   fitWidth(visibleWidth: number): void
   /** 액자 목재에 결을 입힌다. */
   applyTextures(base: string): Promise<void>
+  /** 판 윗변의 높이(m). 줄어든 배율까지 셈한다. */
+  topY(): number
 }
 
 const W = 1280
@@ -70,10 +72,7 @@ export function createScreen(): Screen {
   const root = new Group()
 
   // 바깥 액자는 어두운 목재, 안쪽 테두리만 황동으로 둘러 무게를 잡는다.
-  const woodFrame = new Mesh(
-    new BoxGeometry(3.48, 2.06, 0.08),
-    frameWood,
-  )
+  const woodFrame = new Mesh(new BoxGeometry(3.48, 2.06, 0.08), frameWood)
   woodFrame.castShadow = true
   root.add(woodFrame)
 
@@ -202,12 +201,17 @@ export function createScreen(): Screen {
   })
 
   const FRAME_W = 3.48
+  const FRAME_H = 2.06
 
   return {
     root,
 
     fitWidth(visibleWidth) {
       root.scale.setScalar(Math.min(1, (visibleWidth * 0.96) / FRAME_W))
+    },
+
+    topY() {
+      return root.position.y + (FRAME_H / 2) * root.scale.y
     },
 
     async applyTextures(base) {

@@ -71,6 +71,7 @@ export const TABLE_TOP = 1.14
 
 /** 구도를 옮길 때 쓰는 임시 벡터. 매 프레임 새로 만들지 않는다. */
 const TARGET_POS = new Vector3()
+const TARGET_AT = new Vector3()
 /** 조작판이 서 있는 z. 여기서 화면에 담기는 폭을 재 조작판 크기를 맞춘다. */
 const TABLE_FRONT_Z = 0.5
 
@@ -160,13 +161,26 @@ export function createSalon(host: HTMLElement): Salon {
     return 2 * Math.abs(camera.position.z - z) * half * camera.aspect
   }
 
+  /**
+   * 세로로 긴 화면에서는 안내판 위로 빈 벽과 천장이 넓게 남는다. 화면 윗변이
+   * 안내판 윗변에 닿도록 바라보는 높이를 내려, 남는 자리를 아래쪽 테이블에 준다.
+   */
+  const aimHeightFor = (name: ShotName): number => {
+    const base = SHOTS[name].at.y
+    if (camera.aspect >= 1) return base
+    const half = Math.tan((camera.fov * Math.PI) / 360)
+    const toBoard = Math.abs(camera.position.z - BACK_Z)
+    const wanted = screen.topY() + 0.1 - toBoard * half
+    return Math.max(0.95, Math.min(base, wanted))
+  }
+
   const applyShot = (): void => {
     if (shotMove) return
     placeFor(shot, camera.position)
-    camAt.copy(SHOTS[shot].at)
-    camera.lookAt(camAt)
     hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
     screen.fitWidth(visibleWidthAt(BACK_Z))
+    camAt.copy(SHOTS[shot].at).setY(aimHeightFor(shot))
+    camera.lookAt(camAt)
   }
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
@@ -386,10 +400,11 @@ export function createSalon(host: HTMLElement): Salon {
           : 1 - (-2 * shotMove.t + 2) ** 3 / 2
         placeFor(shot, TARGET_POS)
         camera.position.lerpVectors(shotMove.from, TARGET_POS, e)
-        camAt.lerpVectors(shotMove.fromAt, SHOTS[shot].at, e)
-        camera.lookAt(camAt)
         hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
         screen.fitWidth(visibleWidthAt(BACK_Z))
+        TARGET_AT.copy(SHOTS[shot].at).setY(aimHeightFor(shot))
+        camAt.lerpVectors(shotMove.fromAt, TARGET_AT, e)
+        camera.lookAt(camAt)
         if (shotMove.t >= 1) shotMove = null
       }
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
