@@ -13,10 +13,12 @@ const WALK_SPEED = 0.78
 const STRIDE = 0.72
 
 /**
- * 앉았을 때 살짝 띄우는 값. 엉덩이 뼈를 앉는 면에 정확히 맞추면 엉덩이 살이
- * 의자를 파고들어 주저앉은 것처럼 보인다.
+ * 앉았을 때 몸을 띄우는 값.
+ *
+ * 엉덩이 뼈를 앉는 면에 정확히 맞추면 주저앉은 것처럼 보이고, 손이 건반보다
+ * 아래로 내려가 건반 속에 파묻힌다. 의자를 높이는 대신 앉은 몸을 올린다.
  */
-const SEAT_LIFT = 0.1
+const SEAT_LIFT = 0.18
 
 const HEAD_YAW_LIMIT = 0.42
 const HEAD_PITCH_LIMIT = 0.22

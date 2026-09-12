@@ -82,8 +82,11 @@ export const POSES = {
   /** 피아노 의자에 앉아 손을 무릎에 둔 자세 */
   sit: { armDown: 1.24, armSwing: 0.34, armTwist: -1.2, elbow: 0.9, torso: 0.06, head: 0.02,
          hip: -1.15, knee: 1.5, foot: 0.0 },
-  /** 연주 — 팔을 건반 쪽으로 내밀고 팔꿈치를 벌린다 */
-  keys: { armDown: 1.12, armSwing: 0.58, armTwist: -0.9, elbow: 0.95, torso: 0.12, head: 0.1,
+  /**
+   * 연주 — 팔을 건반 높이까지 들어 앞으로 내민다.
+   * 팔을 몸에 붙인 채로 두면 손이 건반보다 아래에 놓여 건반 속에 파묻힌다.
+   */
+  keys: { armDown: 0.92, armSwing: 0.52, armTwist: -0.88, elbow: 1.18, torso: 0.12, head: 0.1,
           hip: -1.15, knee: 1.5, foot: 0.0 },
 } satisfies Record<string, Pose>
 
