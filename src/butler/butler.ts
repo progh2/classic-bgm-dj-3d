@@ -86,6 +86,8 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   const qTorso = new Quaternion()
   const qHead = new Quaternion()
   const AX_X = new Vector3(1, 0, 0)
+  // 팔을 내린 뒤의 국소 좌표에서 팔꿈치 굽힘은 Y축 회전이고, 좌우가 서로 반대다.
+  const AX_Y = new Vector3(0, 1, 0)
 
   const setExpressionValues = (name: ExpressionName): void => {
     const m = vrm.expressionManager
@@ -123,7 +125,7 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       // 돌아갈 자세를 기억해 두고 잠시 목례한다.
       poseBeforeBow = pose === POSES.bow ? poseBeforeBow : pose
       pose = POSES.bow
-      bowUntil = performance.now() + 1600
+      bowUntil = performance.now() + 2400
     },
 
     lookAt(target) {
@@ -146,8 +148,8 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
 
       slerp(joints.upperArmL, armQuat(qArmL, 1, pose.armDown, pose.armSwing), k)
       slerp(joints.upperArmR, armQuat(qArmR, -1, downR, swingR), k)
-      slerp(joints.lowerArmL, qElbowL.setFromAxisAngle(AX_X, -pose.elbow), k)
-      slerp(joints.lowerArmR, qElbowR.setFromAxisAngle(AX_X, -elbowR), k)
+      slerp(joints.lowerArmL, qElbowL.setFromAxisAngle(AX_Y, -pose.elbow), k)
+      slerp(joints.lowerArmR, qElbowR.setFromAxisAngle(AX_Y, elbowR), k)
       slerp(joints.spine, qTorso.setFromAxisAngle(AX_X, pose.torso + breath), k)
       slerp(joints.head, qHead.setFromAxisAngle(AX_X, pose.head - breath * 0.5), k)
 
