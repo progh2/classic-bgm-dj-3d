@@ -41,6 +41,8 @@ export interface Hud3D {
   readonly panels: Panel[]
   /** 좁은 화면에서는 단추를 두 줄로 접는다. */
   setCompact(compact: boolean): void
+  /** 화면에 담기는 가로 폭에 맞춰 조작판과 질답 카드를 줄인다. */
+  fitWidth(visibleWidth: number): void
   setContent(c: Hud3DContent): void
   showAsk(c: AskContent | null): void
   /** 판 위 uv 에 있는 칸의 id */
@@ -57,14 +59,16 @@ export function createHud3D(): Hud3D {
 
   // 조작판 — 상판 앞쪽에 보면대처럼 세워 둔다. 눕히면 위에서 봐도 글자가
   // 납작해져 읽히지 않는다. 좁은 화면에서는 두 줄로 접어 단추를 키운다.
-  const controls = createPanel({ width: 1.94, height: 0.66, canvasWidth: 1400 })
-  controls.mesh.position.set(0, 0.3, 0.44)
-  controls.mesh.rotation.x = -0.3
+  const CONTROLS_W = 1.94
+  const controls = createPanel({ width: CONTROLS_W, height: 0.66, canvasWidth: 1400 })
+  controls.mesh.position.set(0, 0.2, 0.5)
+  controls.mesh.rotation.x = -0.22
   root.add(controls.mesh)
 
   // 질답 카드 — 물을 때만 나타난다
-  const ask = createPanel({ width: 2.2, height: 1.12, canvasWidth: 1380 })
-  ask.mesh.position.set(0, 0.78, -0.28)
+  const ASK_W = 2.2
+  const ask = createPanel({ width: ASK_W, height: 1.12, canvasWidth: 1380 })
+  ask.mesh.position.set(0, 0.8, -0.26)
   ask.setVisible(false)
   root.add(ask.mesh)
 
@@ -191,6 +195,13 @@ export function createHud3D(): Hud3D {
   return {
     root,
     panels: [controls, ask],
+
+    fitWidth(visibleWidth) {
+      // 화면 폭의 92% 안에 들어오게 줄인다. 넓은 화면에서는 키우지 않는다.
+      const k = Math.min(1, (visibleWidth * 0.92) / CONTROLS_W)
+      controls.mesh.scale.setScalar(k)
+      ask.mesh.scale.setScalar(Math.min(1, (visibleWidth * 0.94) / ASK_W))
+    },
 
     setCompact(next) {
       if (compact === next) return

@@ -71,6 +71,8 @@ export const TABLE_TOP = 1.14
 
 /** 구도를 옮길 때 쓰는 임시 벡터. 매 프레임 새로 만들지 않는다. */
 const TARGET_POS = new Vector3()
+/** 조작판이 서 있는 z. 여기서 화면에 담기는 폭을 재 조작판 크기를 맞춘다. */
+const TABLE_FRONT_Z = 0.5
 
 export class WebGLUnavailableError extends Error {
   constructor(cause?: unknown) {
@@ -99,7 +101,7 @@ export function createSalon(host: HTMLElement): Salon {
   renderer.shadowMap.type = PCFSoftShadowMap
   // 선형 출력은 촛불 같은 밝은 부분이 하얗게 뭉친다. 필름 톤매핑으로 눌러 준다.
   renderer.toneMapping = ACESFilmicToneMapping
-  renderer.toneMappingExposure = 0.92
+  renderer.toneMappingExposure = 1.18
   renderer.outputColorSpace = SRGBColorSpace
   host.appendChild(renderer.domElement)
 
@@ -108,7 +110,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   const scene = new Scene()
   scene.background = new Color(0x17110c)
-  scene.fog = new Fog(0x17110c, 6, 16)
+  scene.fog = new Fog(0x17110c, 8, 20)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
 
@@ -119,8 +121,8 @@ export function createSalon(host: HTMLElement): Salon {
    * 여기서 생겼다.
    */
   const SHOTS = {
-    wide: { at: new Vector3(0.1, 1.46, -0.7), box: { w: 6.4, h: 3.5 } },
-    close: { at: new Vector3(0.12, 1.36, -0.5), box: { w: 4.1, h: 2.4 } },
+    wide: { at: new Vector3(0.1, 1.5, -0.8), box: { w: 4.6, h: 2.9 } },
+    close: { at: new Vector3(0.12, 1.38, -0.55), box: { w: 3.2, h: 2.0 } },
   } as const
   type ShotName = keyof typeof SHOTS
 
@@ -129,14 +131,29 @@ export function createSalon(host: HTMLElement): Salon {
   let shotMove: { from: Vector3; fromAt: Vector3; t: number } | null = null
   const camAt = SHOTS.wide.at.clone()
 
-  /** 그 구도를 담으려면 카메라가 어디에 서야 하는가. */
+  /**
+   * 그 구도를 담으려면 카메라가 어디에 서야 하는가.
+   *
+   * 세로로 긴 화면에서 가로를 다 담으려 하면 카메라가 방 밖까지 물러난다.
+   * (비율 0.5 에서는 9m 가 나왔다.) 그래서 물러나는 거리에 상한을 두고,
+   * 좁아서 못 담는 가로는 조작판을 줄여 맞춘다.
+   */
+  const MAX_BACK = 4.3
   const placeFor = (name: ShotName, out: Vector3): Vector3 => {
     const s = SHOTS[name]
     const half = Math.tan((camera.fov * Math.PI) / 360)
-    // 가로와 세로 중 더 멀리 물러나야 하는 쪽을 따른다.
-    const d = Math.max(s.box.w / 2 / (half * camera.aspect), s.box.h / 2 / half)
+    const d = Math.min(
+      MAX_BACK,
+      Math.max(s.box.w / 2 / (half * camera.aspect), s.box.h / 2 / half),
+    )
     // 상판이 보이도록 거리에 비례해 눈높이를 올린다.
-    return out.set(s.at.x, s.at.y + d * 0.2, s.at.z + d)
+    return out.set(s.at.x, s.at.y + d * 0.19, s.at.z + d)
+  }
+
+  /** 어떤 z 평면에서 화면에 담기는 가로 폭(m) */
+  const visibleWidthAt = (z: number): number => {
+    const half = Math.tan((camera.fov * Math.PI) / 360)
+    return 2 * Math.abs(camera.position.z - z) * half * camera.aspect
   }
 
   const applyShot = (): void => {
@@ -144,6 +161,7 @@ export function createSalon(host: HTMLElement): Salon {
     placeFor(shot, camera.position)
     camAt.copy(SHOTS[shot].at)
     camera.lookAt(camAt)
+    hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
   }
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
@@ -176,10 +194,10 @@ export function createSalon(host: HTMLElement): Salon {
   const furnishings = createFurnishings(BACK_Z, WALL_X)
   scene.add(furnishings.root)
 
-  scene.add(new AmbientLight(0xffd9a8, 0.12))
+  scene.add(new AmbientLight(0xffd9a8, 0.26))
 
   // 키 — 왼쪽 위에서 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
-  const key = new SpotLight(0xffd2a1, 13, 8, Math.PI / 5, 0.5, 1.6)
+  const key = new SpotLight(0xffd2a1, 20, 10, Math.PI / 4.4, 0.5, 1.5)
   key.position.set(-1.15, 2.6, 1.35)
   key.target.position.set(0, 1.0, -0.4)
   key.castShadow = true
@@ -189,17 +207,17 @@ export function createSalon(host: HTMLElement): Salon {
   scene.add(key, key.target)
 
   // 림 — 뒤 오른쪽에서 오는 서늘한 빛. 집사의 윤곽을 배경에서 떼어낸다.
-  const rim = new SpotLight(0xbcd2ff, 7, 8, Math.PI / 4.5, 0.7, 1.5)
+  const rim = new SpotLight(0xbcd2ff, 10, 9, Math.PI / 4.5, 0.7, 1.4)
   rim.position.set(1.9, 2.5, -2.1)
   rim.target.position.set(0, 1.35, -1.05)
   scene.add(rim, rim.target)
 
   // 필 — 정면 아래에서 아주 약하게. 얼굴 그늘이 까맣게 막히지 않도록.
-  const fill = new PointLight(0xffe6c8, 1.5, 6, 2)
+  const fill = new PointLight(0xffe6c8, 2.4, 7, 1.8)
   fill.position.set(0.4, 1.5, 2.2)
   scene.add(fill)
 
-  const candle = new PointLight(0xffb469, 2.2, 3.2, 2)
+  const candle = new PointLight(0xffb469, 2.6, 3.6, 2)
   candle.position.set(0.78, TABLE_TOP + 0.12, 0.28)
   scene.add(candle)
 
@@ -344,13 +362,14 @@ export function createSalon(host: HTMLElement): Salon {
       const pmrem = new PMREMGenerator(renderer)
       // 배경으로 그리지는 않는다. 반사와 간접광에만 쓴다.
       scene.environment = pmrem.fromEquirectangular(texture).texture
-      scene.environmentIntensity = 0.3
+      scene.environmentIntensity = 0.5
       pmrem.dispose()
       texture.dispose()
     },
     tick(nowMs, deltaSec) {
       if (shotMove) {
-        shotMove.t = Math.min(1, shotMove.t + deltaSec / 2.2)
+        // 집사가 걸어 들어오는 동안 천천히 다가간다.
+        shotMove.t = Math.min(1, shotMove.t + deltaSec / 5)
         // 부드럽게 들어가고 부드럽게 멈춘다.
         const e = shotMove.t < 0.5
           ? 4 * shotMove.t ** 3
@@ -359,6 +378,7 @@ export function createSalon(host: HTMLElement): Salon {
         camera.position.lerpVectors(shotMove.from, TARGET_POS, e)
         camAt.lerpVectors(shotMove.fromAt, SHOTS[shot].at, e)
         camera.lookAt(camAt)
+        hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
         if (shotMove.t >= 1) shotMove = null
       }
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.

@@ -444,11 +444,11 @@ async function bringInButler(): Promise<void> {
   salon.add(butler.root)
   status.textContent = ''
 
+  // 집사가 나타나는 순간부터 천천히 다가간다. 걸어 들어오는 동안 화면이 좁혀진다.
+  salon.moveIn()
   await butler.walkTo(0.62, -1.0, playFootstep)
   butler.bow()
   say(LINES.greetQuiet)
-  // 자리를 잡으면 조작할 수 있는 거리로 다가간다.
-  salon.moveIn()
 }
 
 // ---- 감춰진 층의 단추도 같은 일을 한다 ----
