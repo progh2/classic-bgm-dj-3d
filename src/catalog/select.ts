@@ -3,8 +3,10 @@ import type { CatalogEntry, Era, Focus, Mood } from './types'
 /**
  * 집사의 네 가지 질문으로 곡목을 짠다.
  *
- * 시대와 편성은 '거르기'가 아니라 '가점'이다. 33곡뿐인 카탈로그에서 조건으로
- * 걸러 버리면 서너 곡만 남는다. 그러느니 앞에 세우고 나머지를 뒤에 붙인다.
+ * 고른 조건은 먼저 '거르기'로 쓴다. 피아노를 고르고 관현악이 나오면 고른
+ * 보람이 없기 때문이다. 다만 33곡뿐이라 조건을 겹치면 서너 곡만 남는다.
+ * 남은 곡이 너무 적으면 한 겹씩 풀되, 이용자가 가장 신경 쓰는 편성을 가장
+ * 나중에 푼다. 풀었을 때는 그 사실을 말로 알린다.
  */
 
 export interface Answers {
@@ -155,37 +157,49 @@ export function buildQueue(
   const wantFocus = PRESENCE_FOCUS[answers.presence]
   const excluded = new Set(exclude)
 
-  const score = (e: CatalogEntry): number => {
-    // 여러 분위기를 가진 곡은 가장 높은 가중치를 쓴다.
+  /** 이보다 적게 남으면 조건을 한 겹 푼다. */
+  const MIN_POOL = 6
+
+  const matches = (
+    e: CatalogEntry,
+    use: { era: boolean; instrument: boolean; focus: boolean },
+  ): boolean => {
+    if (use.era && eras && !eras.includes(e.track.era)) return false
+    if (use.instrument && instruments && !instruments.some((i) => e.track.instruments.includes(i)))
+      return false
+    if (use.focus && wantFocus && !e.track.focus.includes(wantFocus)) return false
+    return true
+  }
+
+  // 앞에서부터 시도하고, 곡이 모자라면 다음 단계로 넘어간다.
+  // 편성은 이용자가 가장 신경 쓰는 조건이라 가장 나중에 푼다.
+  const steps: { use: { era: boolean; instrument: boolean; focus: boolean }; relaxed: boolean }[] = [
+    { use: { era: true, instrument: true, focus: true }, relaxed: false },
+    { use: { era: true, instrument: true, focus: false }, relaxed: true },
+    { use: { era: false, instrument: true, focus: false }, relaxed: true },
+    { use: { era: false, instrument: false, focus: false }, relaxed: true },
+  ]
+
+  let pool: CatalogEntry[] = []
+  let relaxed = false
+  for (const step of steps) {
+    pool = catalog.filter((e) => matches(e, step.use))
+    relaxed = step.relaxed
+    if (pool.length >= Math.min(MIN_POOL, size)) break
+  }
+
+  // 최근에 들은 곡은 되도록 뒤로 미룬다. 뺐더니 곡이 모자라면 도로 넣는다.
+  const fresh = pool.filter((e) => !excluded.has(e.track.id))
+  const ranked = (fresh.length >= Math.min(MIN_POOL, size) ? fresh : pool)
+    .map((e) => ({ e, s: score(e) }))
+    .sort((a, b) => b.s - a.s)
+    .map(({ e }) => e)
+
+  function score(e: CatalogEntry): number {
+    // 거르고 남은 안에서는 분위기가 순서를 정한다.
     let best = 0
     for (const m of e.track.moods) best = Math.max(best, weights[m] ?? 0)
-    let s = best * 2 + random() * 1.3
-    if (eras?.includes(e.track.era)) s += 3
-    if (instruments?.some((i) => e.track.instruments.includes(i))) s += 3
-    return s
-  }
-
-  const gather = (useFocus: Focus | null, dropExcluded: boolean): CatalogEntry[] => {
-    const pool = catalog.filter((e) => {
-      if (useFocus && !e.track.focus.includes(useFocus)) return false
-      if (dropExcluded && excluded.has(e.track.id)) return false
-      return true
-    })
-    return pool
-      .map((e) => ({ e, s: score(e) }))
-      .sort((a, b) => b.s - a.s)
-      .map(({ e }) => e)
-  }
-
-  // 조건이 빡세서 곡이 모자라면 한 단계씩 푼다.
-  let relaxed = false
-  let ranked = gather(wantFocus, true)
-  if (ranked.length < size && excluded.size > 0) {
-    ranked = gather(wantFocus, false)
-  }
-  if (ranked.length < size && wantFocus !== null) {
-    ranked = gather(null, false)
-    relaxed = true
+    return best * 2 + random() * 1.3
   }
 
   // 상위권을 넉넉히 남긴 뒤 작곡가를 흩뿌린다 — 1위부터 줄 세운 티가 나지 않게.
@@ -235,6 +249,6 @@ function describe(answers: Answers, entries: CatalogEntry[], relaxed: boolean): 
   }
   if (answers.presence === 'bg') lines.push('있는 줄 모르게 깔아 둘게요.')
   else if (answers.presence === 'fore') lines.push('오늘은 음악에 귀를 내어 주세요.')
-  if (relaxed) lines.push('원하신 조건이 좁아, 결이 가까운 곡을 몇 장 더 얹었어요.')
+  if (relaxed) lines.push('고르신 조건에 맞는 곡이 적어, 결이 가까운 곡을 몇 장 더 얹었어요.')
   return lines.join(' ')
 }

@@ -79,11 +79,33 @@ describe('buildQueue', () => {
     expect(q.summary).toContain('결이 가까운 곡')
   })
 
-  it('시대와 편성은 거르기가 아니라 가점이다', () => {
-    const answers: Answers = { mood: 'hushed', era: 'baroque', instrument: 'keys', presence: 'mid' }
+  it('존재감만 고르면 그 조건의 곡만 나온다', () => {
+    const q = buildQueue({ ...DEFAULT_ANSWERS, presence: 'bg' }, catalog, { size: 2, random: fixed })
+    for (const e of q.entries) expect(e.track.focus).toContain('background')
+  })
+
+  it('고른 편성으로 먼저 거른다', () => {
+    const many = [
+      calmBg,
+      grandFore,
+      playfulBg,
+      track({ era: 'baroque', moods: ['calm'], focus: ['background'], instruments: ['piano'] }),
+      track({ era: 'romantic', moods: ['calm'], focus: ['background'], instruments: ['piano'] }),
+      track({ era: 'classical', moods: ['bright'], focus: ['foreground'], instruments: ['piano'] }),
+      track({ era: 'romantic', moods: ['grand'], focus: ['foreground'], instruments: ['piano'] }),
+    ]
+    const answers: Answers = { mood: 'hushed', era: 'any', instrument: 'keys', presence: 'mid' }
+    const q = buildQueue(answers, many, { size: 4, random: fixed })
+    expect(q.entries.length).toBeGreaterThan(0)
+    for (const e of q.entries) expect(e.track.instruments).toContain('piano')
+  })
+
+  it('고른 편성의 곡이 모자라면 풀되 그 사실을 알린다', () => {
+    const answers: Answers = { mood: 'hushed', era: 'any', instrument: 'quartet', presence: 'mid' }
     const q = buildQueue(answers, catalog, { size: 3, random: fixed })
-    expect(q.entries).toHaveLength(3)
-    expect(q.entries[0]?.track.id).toBe(calmBg.track.id)
+    expect(q.entries.length).toBeGreaterThan(1)
+    expect(q.relaxed).toBe(true)
+    expect(q.summary).toContain('결이 가까운 곡')
   })
 
   it('최근 들은 곡은 되도록 뺀다', () => {
