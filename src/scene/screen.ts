@@ -139,11 +139,11 @@ export function createScreen(): Screen {
     wrap(ctx, c.subtitle, 72, 330, W - 144, 46, `400 34px ${FONT}`, 2)
 
     // 오른쪽 여백에는 피아노 선화와 한 줄 글귀를 둔다.
-    pianoLineArt(ctx, W - 420, 150, 320)
+    pianoLineArt(ctx, W - 400, 156, 270)
     ctx.fillStyle = 'rgba(224, 199, 106, .75)'
-    ctx.font = `italic 300 34px ${FONT}`
+    ctx.font = `italic 300 32px ${FONT}`
     ctx.textAlign = 'right'
-    ctx.fillText('Good Music, Better Day', W - 96, 372)
+    ctx.fillText('Good Music, Better Day', W - 110, 368)
     ctx.textAlign = 'left'
 
     // 본문과 진행 막대를 가르는 장식 괘선
@@ -267,23 +267,25 @@ function pianoLineArt(ctx: CanvasRenderingContext2D, x: number, y: number, w: nu
   ctx.translate(x, y)
   ctx.strokeStyle = 'rgba(224, 199, 106, .45)'
   ctx.lineWidth = 2.2
+  // 위에서 본 그랜드 피아노 — 왼쪽은 곧고 오른쪽만 둥글게 부푼다.
   ctx.beginPath()
-  ctx.moveTo(w * 0.08, h * 0.86)
-  ctx.lineTo(w * 0.08, h * 0.34)
-  ctx.bezierCurveTo(w * 0.3, h * 0.02, w * 0.86, h * 0.06, w * 0.94, h * 0.42)
-  ctx.bezierCurveTo(w * 0.97, h * 0.64, w * 0.8, h * 0.84, w * 0.52, h * 0.86)
+  ctx.moveTo(w * 0.1, h * 0.82)
+  ctx.lineTo(w * 0.1, h * 0.16)
+  ctx.lineTo(w * 0.56, h * 0.16)
+  ctx.bezierCurveTo(w * 0.9, h * 0.18, w * 0.96, h * 0.5, w * 0.74, h * 0.72)
+  ctx.bezierCurveTo(w * 0.66, h * 0.8, w * 0.6, h * 0.82, w * 0.52, h * 0.82)
   ctx.closePath()
   ctx.stroke()
   // 건반
   ctx.beginPath()
-  ctx.rect(w * 0.08, h * 0.86, w * 0.44, h * 0.12)
+  ctx.rect(w * 0.1, h * 0.82, w * 0.42, h * 0.13)
   ctx.stroke()
   ctx.lineWidth = 1
   for (let i = 1; i < 10; i++) {
-    const kx = w * 0.08 + (w * 0.44 * i) / 10
+    const kx = w * 0.1 + (w * 0.42 * i) / 10
     ctx.beginPath()
-    ctx.moveTo(kx, h * 0.86)
-    ctx.lineTo(kx, h * 0.98)
+    ctx.moveTo(kx, h * 0.82)
+    ctx.lineTo(kx, h * 0.95)
     ctx.stroke()
   }
   ctx.restore()

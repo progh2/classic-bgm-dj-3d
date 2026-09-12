@@ -54,20 +54,21 @@ export function createHud3D(): Hud3D {
   let handler: ((id: string) => void) | null = null
 
   // 자막 명판 — 테이블 위, 안내판 아래
-  const subtitle = createPanel({ width: 2.5, height: 0.5, canvasWidth: 1500 })
-  subtitle.mesh.position.set(0, 0.46, -0.55)
+  const subtitle = createPanel({ width: 2.3, height: 0.44, canvasWidth: 1500 })
+  subtitle.mesh.position.set(0, 0.62, -0.62)
   subtitle.setVisible(false)
   root.add(subtitle.mesh)
 
-  // 조작판 — 테이블 앞쪽에 눕혀 둔다
-  const controls = createPanel({ width: 2.1, height: 0.46, canvasWidth: 1260 })
-  controls.mesh.position.set(0, 0.035, 0.34)
-  controls.mesh.rotation.x = -Math.PI / 2.35
+  // 조작판 — 상판 앞쪽에 보면대처럼 세워 둔다. 눕히면 위에서 봐도 글자가
+  // 납작해져 읽히지 않는다.
+  const controls = createPanel({ width: 1.98, height: 0.34, canvasWidth: 1440 })
+  controls.mesh.position.set(0, 0.16, 0.42)
+  controls.mesh.rotation.x = -0.34
   root.add(controls.mesh)
 
   // 질답 카드 — 물을 때만 나타난다
-  const ask = createPanel({ width: 2.3, height: 1.18, canvasWidth: 1380 })
-  ask.mesh.position.set(0, 0.72, -0.3)
+  const ask = createPanel({ width: 2.2, height: 1.12, canvasWidth: 1380 })
+  ask.mesh.position.set(0, 0.78, -0.28)
   ask.setVisible(false)
   root.add(ask.mesh)
 
@@ -96,20 +97,20 @@ export function createHud3D(): Hud3D {
   const drawControls = (): void => {
     controls.draw((ctx, { w, h }, hovered) => {
       plateBackground(ctx, w, h, 0.92)
-      ctx.font = `500 30px ${F}`
+      ctx.font = `500 34px ${F}`
       const regions: Region[] = []
-      const pad = 26
-      const y = 30
-      const bh = 74
+      const pad = 22
+      const y = 26
+      const bh = 84
 
       const cells: { id: string; label: string; width: number; primary?: boolean; off?: boolean }[] = [
-        { id: 'ask', label: '취향 고르기', width: 200 },
-        { id: 'auto', label: '맡길게', width: 150 },
-        { id: 'prev', label: '◀', width: 84, off: !content.hasTrack },
-        { id: 'play', label: content.playLabel, width: 160, primary: true, off: !content.hasTrack },
-        { id: 'next', label: '▶', width: 84, off: !content.hasTrack },
-        { id: 'greet', label: '인사', width: 120 },
-        { id: 'voice', label: content.voiceLabel, width: 190 },
+        { id: 'ask', label: '취향 고르기', width: 222 },
+        { id: 'auto', label: '맡길게', width: 160 },
+        { id: 'prev', label: '◀', width: 88, off: !content.hasTrack },
+        { id: 'play', label: content.playLabel, width: 178, primary: true, off: !content.hasTrack },
+        { id: 'next', label: '▶', width: 88, off: !content.hasTrack },
+        { id: 'greet', label: '인사', width: 126 },
+        { id: 'voice', label: content.voiceLabel, width: 206 },
       ]
       const total = cells.reduce((n, c) => n + c.width, 0) + pad * (cells.length - 1)
       let x = (w - total) / 2
@@ -126,9 +127,9 @@ export function createHud3D(): Hud3D {
 
       if (content.notice) {
         ctx.fillStyle = '#e6b98a'
-        ctx.font = `400 24px ${F}`
+        ctx.font = `400 26px ${F}`
         ctx.textAlign = 'center'
-        ctx.fillText(content.notice, w / 2, y + bh + 34)
+        ctx.fillText(content.notice, w / 2, y + bh + 40)
         ctx.textAlign = 'left'
       }
       return regions

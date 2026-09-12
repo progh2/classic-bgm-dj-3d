@@ -25,7 +25,9 @@ import {
 
 import { createFurnishings, type Furnishings } from './furnishings'
 import { BACK_Z, createRoom, WALL_X, type Room } from './room'
+import { createBooks, type Books } from './books'
 import { createHud3D, type Hud3D } from './hud3d'
+import type { Panel } from './panel'
 import { createTabletop, type Tabletop } from './tabletop'
 import { createScreen, type Screen } from './screen'
 import { createTurntable, type Turntable } from './turntable'
@@ -54,6 +56,10 @@ export interface Salon {
   readonly hud: Hud3D
   /** 방을 채우는 가구들 */
   readonly furnishings: Furnishings
+  /** 프로그램북과 출처 안내서 */
+  readonly books: Books
+  /** 누를 수 있는 판을 장면에 더한다. 레이캐스트 대상이 된다. */
+  addPanel(panel: Panel, pick: (id: string) => void): void
   dispose(): void
 }
 
@@ -92,6 +98,9 @@ export function createSalon(host: HTMLElement): Salon {
   renderer.outputColorSpace = SRGBColorSpace
   host.appendChild(renderer.domElement)
 
+  // 누를 수 있는 판과 그 판의 처리기. 조작판과 책자가 여기에 등록한다.
+  const pickable: { panel: Panel; pick: (id: string) => void }[] = []
+
   const scene = new Scene()
   scene.background = new Color(0x17110c)
   scene.fog = new Fog(0x17110c, 6, 16)
@@ -99,8 +108,8 @@ export function createSalon(host: HTMLElement): Salon {
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
   // 상판 높이쯤에서 살짝 올려다본다. 눈높이가 상판보다 높으면 집사의 배와
   // 손이 상판 위로 비어져 나온다.
-  camera.position.set(0, 1.3, 2.45)
-  camera.lookAt(0, 1.46, -0.95)
+  camera.position.set(0, 1.66, 2.5)
+  camera.lookAt(0, 1.3, -0.95)
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
   const table = new Group()
@@ -163,7 +172,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   // 집사가 이쪽을 보게 할 기준점. 카메라보다 살짝 아래에 둬야 눈이 마주친다.
   const viewerAnchor = new Object3D()
-  const HOME = new Vector3(0, 1.42, 2.05)
+  const HOME = new Vector3(0, 1.46, 2.1)
   viewerAnchor.position.copy(HOME)
   scene.add(viewerAnchor)
 
@@ -184,23 +193,26 @@ export function createSalon(host: HTMLElement): Salon {
 
   // 조작판 누르기 — 판을 가리킨 지점을 캔버스 좌표로 되돌려 어느 칸인지 가린다.
   const raycaster = new Raycaster()
-  const pickAt = (clientX: number, clientY: number): { panel: (typeof hud.panels)[number]; id: string } | null => {
+  const pickAt = (
+    clientX: number,
+    clientY: number,
+  ): { panel: Panel; id: string; pick: (id: string) => void } | null => {
     const rect = renderer.domElement.getBoundingClientRect()
     if (rect.width === 0 || rect.height === 0) return null
     ndc.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1)
     raycaster.setFromCamera(ndc, camera)
-    const meshes = hud.panels.filter((p) => p.visible).map((p) => p.mesh)
-    for (const hit of raycaster.intersectObjects(meshes, false)) {
-      const panel = hud.panels.find((p) => p.mesh === hit.object)
-      if (!panel || !hit.uv) continue
-      const id = panel.hitTest(hit.uv)
-      if (id) return { panel, id }
+    const live = pickable.filter((p) => p.panel.visible)
+    for (const hit of raycaster.intersectObjects(live.map((p) => p.panel.mesh), false)) {
+      const found = live.find((p) => p.panel.mesh === hit.object)
+      if (!found || !hit.uv) continue
+      const id = found.panel.hitTest(hit.uv)
+      if (id) return { panel: found.panel, id, pick: found.pick }
     }
     return null
   }
 
   const clearHover = (): void => {
-    for (const p of hud.panels) p.setHover(null)
+    for (const p of pickable) p.panel.setHover(null)
   }
 
   const onPointerMove = (e: PointerEvent): void => {
@@ -213,7 +225,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   const onPointerDown = (e: PointerEvent): void => {
     const found = pickAt(e.clientX, e.clientY)
-    if (found) hud.pick(found.id)
+    if (found) found.pick(found.id)
   }
   window.addEventListener('pointerdown', onPointerDown)
   const onPointerLeave = (): void => {
@@ -236,12 +248,14 @@ export function createSalon(host: HTMLElement): Salon {
   turntable.root.rotation.y = 0.22
 
   const tabletop = createTabletop()
+  const books = createBooks()
 
   const hud = createHud3D()
+  for (const panel of hud.panels) pickable.push({ panel, pick: (id) => hud.pick(id) })
 
   const onTable = new Group()
   onTable.position.y = TABLE_TOP
-  onTable.add(turntable.root, tabletop.root, hud.root)
+  onTable.add(turntable.root, tabletop.root, books.root, hud.root)
   scene.add(onTable)
 
   const resize = (): void => {
@@ -263,6 +277,10 @@ export function createSalon(host: HTMLElement): Salon {
     tabletop,
     hud,
     furnishings,
+    books,
+    addPanel(panel, pick) {
+      pickable.push({ panel, pick })
+    },
     add(object) {
       scene.add(object)
     },

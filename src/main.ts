@@ -31,6 +31,10 @@ let lastMs = 0
 let userActed = false
 /** 집사가 감상 중인 자세로 서 있는가. */
 let listening = false
+/** 프로그램북에서 지금 펼쳐 보고 있는 곡. 재생 중인 곡과 다를 수 있다. */
+let browsedId: string | null = null
+/** 곡목의 첫 줄 */
+let listOffset = 0
 
 let hudContent: Hud3DContent = {
   subtitle: null,
@@ -59,9 +63,14 @@ let lastAnswers: Answers = DEFAULT_ANSWERS
 
 const session = createSession(adapter, {
   refill: (recent) => buildQueue(lastAnswers, CATALOG, { size: 12, exclude: recent }).entries,
-  onTrackChange: () => {
+  onTrackChange: (entry) => {
     listening = true
     butler?.setPose('listen')
+    // 다른 곡을 펼쳐 읽는 중이면 억지로 옮기지 않는다. 리본으로만 알린다.
+    if (browsedId === null && entry) {
+      const at = session.state.queue.findIndex((e) => e.track.id === entry.track.id)
+      if (at >= 0) listOffset = Math.max(0, Math.floor(at / 7) * 7)
+    }
   },
 })
 
@@ -139,6 +148,13 @@ function updateScene(state: SessionState): void {
     duration: formatTime(duration),
     notice,
     playing,
+  })
+
+  salon.books.setProgram({
+    queue: state.queue,
+    currentId: current?.track.id ?? null,
+    browsedId,
+    listOffset,
   })
 
   salon.turntable.set({
@@ -219,6 +235,8 @@ async function begin(picked: Answers): Promise<void> {
   }
   butler?.setPose('present')
   say(queue.summary)
+  browsedId = null
+  listOffset = 0
   await session.setQueue(queue.entries)
 }
 
@@ -234,6 +252,20 @@ function act(id: string): void {
 
   if (id.startsWith('opt:')) {
     choose(id.slice(4))
+    return
+  }
+  if (id.startsWith('track:')) {
+    const trackId = id.slice(6)
+    const entry = session.state.queue.find((e) => e.track.id === trackId)
+    // 한 번 누르면 펼쳐 읽고, 이미 펼친 곡을 다시 누르면 그 곡을 튼다.
+    if (browsedId === trackId && entry) void session.playEntry(entry)
+    else browsedId = trackId
+    updateScene(session.state)
+    return
+  }
+  if (id.startsWith('link:')) {
+    // 바깥 출처는 새 탭으로 연다. 응접실의 재생은 그대로 이어진다.
+    window.open(id.slice(5), '_blank', 'noopener,noreferrer')
     return
   }
   switch (id) {
@@ -264,6 +296,30 @@ function act(id: string): void {
       if (!speech.enabled) speech.cancel()
       updateScene(session.state)
       break
+    case 'list:prev':
+      listOffset = Math.max(0, listOffset - 7)
+      updateScene(session.state)
+      break
+    case 'list:next':
+      listOffset = Math.min(Math.max(0, session.state.queue.length - 7), listOffset + 7)
+      updateScene(session.state)
+      break
+    case 'follow':
+      browsedId = null
+      updateScene(session.state)
+      break
+    case 'source:open':
+      salon?.books.setSourceOpen(true)
+      break
+    case 'source:close':
+      salon?.books.setSourceOpen(false)
+      break
+    case 'source:track': {
+      const shown =
+        session.state.queue.find((e) => e.track.id === (browsedId ?? session.state.current?.track.id))
+      if (shown) window.open(shown.rights.sourceUrl, '_blank', 'noopener,noreferrer')
+      break
+    }
     case 'back':
       if (askStep > 0) {
         askStep -= 1
@@ -296,6 +352,7 @@ function startScene(): boolean {
   }
 
   salon.hud.onPick(act)
+  for (const panel of salon.books.panels) salon.addPanel(panel, act)
 
   const loop = (t: number): void => {
     const delta = lastMs === 0 ? 0.016 : Math.min(0.1, (t - lastMs) / 1000)
