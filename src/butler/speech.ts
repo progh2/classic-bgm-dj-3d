@@ -57,10 +57,21 @@ function pickKorean(voices: SpeechSynthesisVoice[]): {
 } {
   const ko = voices.filter((v) => v.lang.toLowerCase().startsWith('ko'))
   if (ko.length === 0) return { voice: null, male: false }
-  const male = ko.find((v) => MALE_HINT.test(v.name) && !FEMALE_HINT.test(v.name))
-  if (male) return { voice: male, male: true }
-  const neutral = ko.find((v) => !FEMALE_HINT.test(v.name))
-  return { voice: neutral ?? ko[0] ?? null, male: false }
+
+  // 점수로 고른다. 남성 이름이 가장 크고, 그다음이 음질이다.
+  // 기기에 딸린 기본 음성보다 내려받는 음성이 대체로 덜 기계적이다.
+  const score = (v: SpeechSynthesisVoice): number => {
+    let n = 0
+    if (MALE_HINT.test(v.name)) n += 10
+    if (FEMALE_HINT.test(v.name)) n -= 8
+    if (/google|natural|neural|premium|enhanced/i.test(v.name)) n += 4
+    if (!v.localService) n += 2
+    if (v.default) n += 1
+    return n
+  }
+
+  const best = [...ko].sort((a, b) => score(b) - score(a))[0] ?? null
+  return { voice: best, male: best !== null && MALE_HINT.test(best.name) }
 }
 
 export function createSpeech(opts: SpeechOptions): Speech {
@@ -130,11 +141,11 @@ export function createSpeech(opts: SpeechOptions): Speech {
       const u = new SpeechSynthesisUtterance(text)
       u.lang = 'ko-KR'
       if (voice) u.voice = voice
-      // 집사는 서두르지 않는다. 조금 느리고 낮게.
-      u.rate = 0.94
-      // 남성 음성을 찾았으면 조금만 낮추고, 못 찾았으면 더 낮춰 남성에 가깝게 한다.
-      u.pitch = voiceIsMale ? 0.86 : 0.7
-      u.volume = 0.95
+      // 집사는 서두르지 않는다. 조금 느리게.
+      u.rate = 0.95
+      // 음높이를 많이 내리면 남성처럼 들리기보다 기계음이 된다. 조금만 내린다.
+      u.pitch = voiceIsMale ? 0.92 : 0.88
+      u.volume = 1
       spokeAloud = false
 
       await new Promise<void>((resolve) => {

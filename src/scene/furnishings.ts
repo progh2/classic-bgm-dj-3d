@@ -10,7 +10,6 @@ import {
   MeshStandardMaterial,
   PlaneGeometry,
   PointLight,
-  SphereGeometry,
   SpotLight,
   TextureLoader,
   SRGBColorSpace,
@@ -49,7 +48,6 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
   const wood = new MeshStandardMaterial({ color: WOOD, roughness: 0.6, metalness: 0.05 })
   const brass = new MeshStandardMaterial({ color: BRASS, roughness: 0.34, metalness: 0.8 })
   const velvet = new MeshStandardMaterial({ color: 0x6b1a1c, roughness: 0.95, metalness: 0 })
-  const marble = new MeshStandardMaterial({ color: 0xd8d2c4, roughness: 0.42, metalness: 0.02 })
 
   // ---- 왼쪽 벽: 창과 커튼 ----
   const window = new Group()
@@ -162,37 +160,8 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
   lamp.add(lampGlow)
   root.add(lamp)
 
-  // ---- 왼쪽 뒤: 흉상과 받침 ----
-  const bust = new Group()
-  bust.position.set(-wallX + 0.55, 0, backZ + 0.55)
-  const column = new Mesh(new CylinderGeometry(0.16, 0.19, 1.05, 20), woodDark)
-  column.position.y = 0.525
-  column.castShadow = true
-  bust.add(column)
-  const cap = new Mesh(new BoxGeometry(0.42, 0.05, 0.42), wood)
-  cap.position.y = 1.075
-  bust.add(cap)
-  // 흉상 — 어깨, 목, 머리, 뒤로 넘긴 머리칼
-  const shoulders = new Mesh(
-    new LatheGeometry(
-      [new Vector2(0.001, 0.3), new Vector2(0.1, 0.27), new Vector2(0.17, 0.12), new Vector2(0.19, 0)],
-      20,
-    ),
-    marble,
-  )
-  shoulders.position.y = 1.1
-  shoulders.castShadow = true
-  bust.add(shoulders)
-  const head = new Mesh(new SphereGeometry(0.105, 20, 16), marble)
-  head.scale.set(0.92, 1.12, 1)
-  head.position.set(0, 1.47, 0.01)
-  head.castShadow = true
-  bust.add(head)
-  const hair = new Mesh(new SphereGeometry(0.118, 18, 14, 0, Math.PI * 2, 0, Math.PI * 0.62), marble)
-  hair.scale.set(1, 0.95, 1.05)
-  hair.position.set(0, 1.5, -0.012)
-  bust.add(hair)
-  root.add(bust)
+  // 왼쪽 뒤에 두었던 흉상과 받침은 걷어냈다. 피아노를 세우면서 자리가 겹쳤고,
+  // 이 거리에서는 이목구비 없는 흰 덩어리로만 보였다.
 
   // ---- 오른쪽 벽: 작곡가 액자 ----
   const portraitTexture = makePortraitTexture()
