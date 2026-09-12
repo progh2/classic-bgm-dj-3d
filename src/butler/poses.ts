@@ -75,19 +75,19 @@ export const POSES = {
   /** 감상 중 — 손을 모으고 조용히 선다 */
   listen: { armDown: 1.26, armSwing: 0.32, armTwist: -1.26, elbow: 1.1, torso: 0.03, head: 0.05,
             armDownR: 1.22, armSwingR: 0.36, armTwistR: -1.36, elbowR: 1.02 },
-  // 다리는 두 번 어긋났다. 화면에서 확인한 결론 —
-  //   hip 이 음수면 허벅지가 앞으로 올라온다. -1.5 는 수평을 넘어 위로 떴다.
-  //   knee 가 양수면 정강이가 내려간다. 음수로 두었더니 무릎이 들렸다.
-  // 그래서 허벅지는 덜 올리고(-1.15), 정강이는 더 내린다(+1.5).
+  // 옆에서 본 화면으로 확정한 규칙 —
+  //   hip 이 음수면 허벅지가 몸 뒤로 간다. 앉으려면 양수여야 앞으로 나온다.
+  //   knee 는 허벅지를 기준으로 정강이를 돌린다. 허벅지가 앞이면 음수라야
+  //   정강이가 바닥 쪽으로 내려온다.
   /** 피아노 의자에 앉아 손을 무릎에 둔 자세 */
   sit: { armDown: 1.24, armSwing: 0.34, armTwist: -1.2, elbow: 0.9, torso: 0.06, head: 0.02,
-         hip: -1.15, knee: 1.5, foot: 0.0 },
+         hip: 1.15, knee: -1.5, foot: 0.0 },
   /**
    * 연주 — 팔을 건반 높이까지 들어 앞으로 내민다.
    * 팔을 몸에 붙인 채로 두면 손이 건반보다 아래에 놓여 건반 속에 파묻힌다.
    */
-  keys: { armDown: 0.92, armSwing: 0.52, armTwist: -0.88, elbow: 1.18, torso: 0.12, head: 0.1,
-          hip: -1.15, knee: 1.5, foot: 0.0 },
+  keys: { armDown: 1.02, armSwing: 0.52, armTwist: -0.88, elbow: 1.12, torso: 0.12, head: 0.1,
+          hip: 1.15, knee: -1.5, foot: 0.0 },
 } satisfies Record<string, Pose>
 
 export type PoseName = keyof typeof POSES
