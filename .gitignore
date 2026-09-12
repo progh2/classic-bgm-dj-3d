@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+.vite/
+.cache/
+
+# 음원은 저장소에 담지 않는다. Commons 에서 직접 스트리밍한다.
+public/audio/

@@ -1,0 +1,93 @@
+:root {
+  --mahogany: #3b2118;
+  --walnut: #5a3524;
+  --brass: #c9a227;
+  --brass-soft: #e0c76a;
+  --leather: #1f3a2e;
+  --ivory: #f4ece0;
+  --ink: #2b2118;
+  --ink-soft: #6b5a48;
+  --shadow: 0 18px 48px -18px rgba(0, 0, 0, .7);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #14100d;
+  color: var(--ivory);
+  font-family: "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  /* 최소 16px. 전자칠판은 큰 화면 모드에서 별도로 키운다. */
+  font-size: 16px;
+}
+
+.scene { position: fixed; inset: 0; }
+.scene canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+.gate {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 30%, rgba(60, 40, 26, .75), rgba(10, 8, 6, .92));
+  backdrop-filter: blur(3px);
+}
+.gate[hidden] { display: none; }
+
+.gate__card {
+  max-width: 34rem;
+  padding: clamp(24px, 5vw, 44px);
+  border: 1px solid rgba(201, 162, 39, .38);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(59, 33, 24, .96), rgba(32, 19, 14, .96));
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.gate__eyebrow {
+  margin: 0 0 8px;
+  font-size: .8rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--brass-soft);
+}
+
+.gate__title {
+  margin: 0 0 16px;
+  font-size: clamp(1.6rem, 5vw, 2.3rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.gate__lead { margin: 0 0 28px; line-height: 1.8; color: #e6dac9; }
+
+.gate__actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+.btn {
+  min-height: 48px;
+  padding: 12px 22px;
+  border: 1px solid rgba(201, 162, 39, .5);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ivory);
+  font: inherit;
+  cursor: pointer;
+}
+.btn:hover { background: rgba(201, 162, 39, .12); }
+.btn:focus-visible { outline: 3px solid var(--brass-soft); outline-offset: 2px; }
+
+.btn--primary {
+  border-color: var(--brass);
+  background: linear-gradient(180deg, var(--brass-soft), var(--brass));
+  color: #2b1c05;
+  font-weight: 600;
+}
+.btn--primary:hover { filter: brightness(1.06); }
+
+.gate__note { margin: 22px 0 0; font-size: .85rem; color: #b7a68f; line-height: 1.7; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "classic-bgm-dj-3d",
+  "version": "0.1.0",
+  "private": true,
+  "description": "세바스티안의 음악 응접실 — VRM 집사가 안내하는 3D 클래식 BGM 감상실",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@pixiv/three-vrm": "^3.4.4",
+    "three": "^0.181.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.181.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "vitest": "^3.2.4"
+  }
+}

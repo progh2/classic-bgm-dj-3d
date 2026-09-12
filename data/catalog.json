@@ -1,0 +1,2085 @@
+{
+  "updatedAt": "2026-09-12T04:41:17.832Z",
+  "source": {
+    "name": "Wikimedia Commons — Musopen Kickstarter Project",
+    "url": "https://commons.wikimedia.org/wiki/Category:Musopen_Kickstarter_Project",
+    "playback": "브라우저가 upload.wikimedia.org 에서 직접 스트리밍한다. 저장소에 음원을 담지 않는다."
+  },
+  "trackCount": 33,
+  "totalDurationSec": 11487,
+  "entries": [
+    {
+      "track": {
+        "id": "bach-j-s-goldberg-variations-bwv988-01-aria-shelley-katz",
+        "workId": "bach-j-s-goldberg-variations-bwv988",
+        "recordingId": "bach-j-s-goldberg-variations-bwv988-01-aria-shelley-katz",
+        "title": "골트베르크 변주곡 BWV 988 — 아리아",
+        "originalTitle": "Goldberg Variations, BWV988 - 01. Aria",
+        "composer": "바흐",
+        "composerOriginal": "Johann Sebastian Bach",
+        "performer": "Shelley Katz (피아노)",
+        "era": "baroque",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "calm"
+        ],
+        "focus": [
+          "background",
+          "foreground"
+        ],
+        "durationSec": 292
+      },
+      "source": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-01-aria-shelley-katz",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/e/e6/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_01._Aria_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_01._Aria_%28Shelley_Katz%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/e/e6/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_01._Aria_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_01._Aria_%28Shelley_Katz%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 6979673,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "bach-j-s-goldberg-variations-bwv988-01-aria-shelley-katz",
+        "targetKind": "track",
+        "workRights": "작곡: Johann Sebastian Bach. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Shelley Katz (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_01._Aria_(Shelley_Katz).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_01._Aria_(Shelley_Katz).flac",
+        "originalFormat": "audio/flac, 13.5MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-01-aria-shelley-katz",
+        "language": "ko",
+        "shortNote": "서른 개의 변주가 시작되고 끝나는 자리, 조용한 사라방드 선율.",
+        "fullNote": "바흐가 1741년에 출판한 건반 작품집의 첫 곡입니다. 느린 3박자 춤곡의 몸을 한 이 아리아의 베이스 선율이 이어지는 서른 개 변주 전체의 뼈대가 됩니다. 화려하게 시작하지 않고 가만히 문을 여는 곡이라, 응접실에 막 들어섰을 때 어울립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_01._Aria_(Shelley_Katz).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "bach-j-s-goldberg-variations-bwv988-02-variation-1-shelley-katz",
+        "workId": "bach-j-s-goldberg-variations-bwv988",
+        "recordingId": "bach-j-s-goldberg-variations-bwv988-02-variation-1-shelley-katz",
+        "title": "골트베르크 변주곡 BWV 988 — 변주 1",
+        "originalTitle": "Goldberg Variations, BWV988 - 02. Variation 1",
+        "composer": "바흐",
+        "composerOriginal": "Johann Sebastian Bach",
+        "performer": "Shelley Katz (피아노)",
+        "era": "baroque",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "bright"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 114
+      },
+      "source": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-02-variation-1-shelley-katz",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/08/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_02._Variation_1_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_02._Variation_1_%28Shelley_Katz%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/08/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_02._Variation_1_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_02._Variation_1_%28Shelley_Katz%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 2745095,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "bach-j-s-goldberg-variations-bwv988-02-variation-1-shelley-katz",
+        "targetKind": "track",
+        "workRights": "작곡: Johann Sebastian Bach. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Shelley Katz (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_02._Variation_1_(Shelley_Katz).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_02._Variation_1_(Shelley_Katz).flac",
+        "originalFormat": "audio/flac, 6.3MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-02-variation-1-shelley-katz",
+        "language": "ko",
+        "shortNote": "아리아가 끝나자마자 양손이 서로를 앞질러 달리기 시작합니다.",
+        "fullNote": "첫 변주부터 성격이 확 바뀝니다. 두 손이 같은 음형을 주고받으며 교차하는데, 원래 두 단 건반의 하프시코드를 염두에 둔 서법입니다. 피아노 한 대로 치면 손이 겹치는 자리가 생겨 연주자마다 해법이 다릅니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_02._Variation_1_(Shelley_Katz).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "bach-j-s-goldberg-variations-bwv988-14-variation-13-shelley-katz",
+        "workId": "bach-j-s-goldberg-variations-bwv988",
+        "recordingId": "bach-j-s-goldberg-variations-bwv988-14-variation-13-shelley-katz",
+        "title": "골트베르크 변주곡 BWV 988 — 변주 13",
+        "originalTitle": "Goldberg Variations, BWV988 - 14. Variation 13",
+        "composer": "바흐",
+        "composerOriginal": "Johann Sebastian Bach",
+        "performer": "Shelley Katz (피아노)",
+        "era": "baroque",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "calm",
+          "melancholy"
+        ],
+        "focus": [
+          "background",
+          "foreground"
+        ],
+        "durationSec": 339
+      },
+      "source": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-14-variation-13-shelley-katz",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1c/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_14._Variation_13_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_14._Variation_13_%28Shelley_Katz%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1c/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_14._Variation_13_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_14._Variation_13_%28Shelley_Katz%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 8135466,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "bach-j-s-goldberg-variations-bwv988-14-variation-13-shelley-katz",
+        "targetKind": "track",
+        "workRights": "작곡: Johann Sebastian Bach. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Shelley Katz (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_14._Variation_13_(Shelley_Katz).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_14._Variation_13_(Shelley_Katz).flac",
+        "originalFormat": "audio/flac, 14.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-14-variation-13-shelley-katz",
+        "language": "ko",
+        "shortNote": "느린 걸음의 베이스 위로 오른손이 길게 노래합니다.",
+        "fullNote": "빠른 변주들 사이에 놓인 느린 변주입니다. 왼손이 일정한 걸음으로 화음을 짚는 동안 오른손 선율이 장식음을 달고 길게 늘어집니다. 아리아를 닮은 얼굴이라 전체 흐름에서 쉼표 같은 자리에 있습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_14._Variation_13_(Shelley_Katz).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "bach-j-s-goldberg-variations-bwv988-20-variation-19-shelley-katz",
+        "workId": "bach-j-s-goldberg-variations-bwv988",
+        "recordingId": "bach-j-s-goldberg-variations-bwv988-20-variation-19-shelley-katz",
+        "title": "골트베르크 변주곡 BWV 988 — 변주 19",
+        "originalTitle": "Goldberg Variations, BWV988 - 20. Variation 19",
+        "composer": "바흐",
+        "composerOriginal": "Johann Sebastian Bach",
+        "performer": "Shelley Katz (피아노)",
+        "era": "baroque",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "playful"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 72
+      },
+      "source": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-20-variation-19-shelley-katz",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/57/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_20._Variation_19_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_20._Variation_19_%28Shelley_Katz%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/57/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_20._Variation_19_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_20._Variation_19_%28Shelley_Katz%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 1695416,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "bach-j-s-goldberg-variations-bwv988-20-variation-19-shelley-katz",
+        "targetKind": "track",
+        "workRights": "작곡: Johann Sebastian Bach. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Shelley Katz (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_20._Variation_19_(Shelley_Katz).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_20._Variation_19_(Shelley_Katz).flac",
+        "originalFormat": "audio/flac, 3.7MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-20-variation-19-shelley-katz",
+        "language": "ko",
+        "shortNote": "1분 남짓, 가볍게 튀어 오르는 짧은 춤.",
+        "fullNote": "변주 가운데 가장 짧은 축에 드는 곡입니다. 짧은 음형이 세 성부를 옮겨 다니며 통통 튀는데, 무겁게 눌러 담지 않고 스쳐 지나갑니다. 곡과 곡 사이 숨을 돌리기 좋습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_20._Variation_19_(Shelley_Katz).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "bach-j-s-goldberg-variations-bwv988-32-aria-da-capo-shelley-katz",
+        "workId": "bach-j-s-goldberg-variations-bwv988",
+        "recordingId": "bach-j-s-goldberg-variations-bwv988-32-aria-da-capo-shelley-katz",
+        "title": "골트베르크 변주곡 BWV 988 — 아리아 다 카포",
+        "originalTitle": "Goldberg Variations, BWV988 - 32. Aria Da Capo",
+        "composer": "바흐",
+        "composerOriginal": "Johann Sebastian Bach",
+        "performer": "Shelley Katz (피아노)",
+        "era": "baroque",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "calm"
+        ],
+        "focus": [
+          "background",
+          "foreground"
+        ],
+        "durationSec": 340
+      },
+      "source": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-32-aria-da-capo-shelley-katz",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/8c/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_32._Aria_Da_Capo_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_32._Aria_Da_Capo_%28Shelley_Katz%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/8c/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_32._Aria_Da_Capo_%28Shelley_Katz%29.flac/Bach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_32._Aria_Da_Capo_%28Shelley_Katz%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 7897275,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "bach-j-s-goldberg-variations-bwv988-32-aria-da-capo-shelley-katz",
+        "targetKind": "track",
+        "workRights": "작곡: Johann Sebastian Bach. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Shelley Katz (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_32._Aria_Da_Capo_(Shelley_Katz).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_32._Aria_Da_Capo_(Shelley_Katz).flac",
+        "originalFormat": "audio/flac, 13.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "bach-j-s-goldberg-variations-bwv988-32-aria-da-capo-shelley-katz",
+        "language": "ko",
+        "shortNote": "서른 개의 변주를 지나 처음의 아리아로 돌아옵니다.",
+        "fullNote": "맨 앞의 아리아를 그대로 다시 연주하며 작품을 닫습니다. 악보는 같지만 서른 개의 변주를 들은 뒤라 다르게 들린다는 점이 이 마지막 곡의 전부입니다. 감상을 마무리하는 자리에 두기 좋습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABach%2C_J_S_-_Goldberg_Variations%2C_BWV988_-_32._Aria_Da_Capo_(Shelley_Katz).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "beethoven-coriolan-overture-op-62-musopen-symphony",
+        "workId": "beethoven-coriolan-overture-op-62",
+        "recordingId": "beethoven-coriolan-overture-op-62-musopen-symphony",
+        "title": "코리올란 서곡 Op.62",
+        "originalTitle": "Coriolan Overture, Op. 62",
+        "composer": "베토벤",
+        "composerOriginal": "Ludwig van Beethoven",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "classical",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "tense",
+          "grand"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 499
+      },
+      "source": {
+        "trackId": "beethoven-coriolan-overture-op-62-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/e/e1/Beethoven_-_Coriolan_Overture%2C_Op._62_%28Musopen_Symphony%29.flac/Beethoven_-_Coriolan_Overture%2C_Op._62_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/e/e1/Beethoven_-_Coriolan_Overture%2C_Op._62_%28Musopen_Symphony%29.flac/Beethoven_-_Coriolan_Overture%2C_Op._62_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 13187471,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "beethoven-coriolan-overture-op-62-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Ludwig van Beethoven. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_Coriolan_Overture%2C_Op._62_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_Coriolan_Overture%2C_Op._62_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 88.4MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "beethoven-coriolan-overture-op-62-musopen-symphony",
+        "language": "ko",
+        "shortNote": "세 번의 강한 화음으로 시작해 조용히 사라집니다.",
+        "fullNote": "연극을 위해 쓴 서곡으로, 물러설 줄 모르는 인물과 그를 말리는 목소리를 두 개의 대조적인 주제로 그립니다. 마지막에는 크게 맺지 않고 현악기의 낮은 음이 끊기듯 흩어지며 끝납니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_Coriolan_Overture%2C_Op._62_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "beethoven-string-quartet-no-6-in-b-flat-major-op-18-no-6-iii-scherzo-musopen-string-quarte",
+        "workId": "beethoven-string-quartet-no-6-in-b-flat-major-op-18-no-6",
+        "recordingId": "beethoven-string-quartet-no-6-in-b-flat-major-op-18-no-6-iii-scherzo-musopen-string-quarte",
+        "title": "현악 4중주 6번 Op.18 No.6 — 3악장 스케르초",
+        "originalTitle": "String Quartet No. 6 in B flat major, Op. 18 No. 6 - III. Scherzo",
+        "composer": "베토벤",
+        "composerOriginal": "Ludwig van Beethoven",
+        "performer": "Musopen String Quartet",
+        "era": "classical",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "playful"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 253
+      },
+      "source": {
+        "trackId": "beethoven-string-quartet-no-6-in-b-flat-major-op-18-no-6-iii-scherzo-musopen-string-quarte",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0f/Beethoven_-_String_Quartet_No._6_in_B_flat_major%2C_Op._18_No._6_-_III._Scherzo_%28Musopen_String_Quartet%29.flac/Beethoven_-_String_Quartet_No._6_in_B_flat_major%2C_Op._18_No._6_-_III._Scherzo_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/0/0f/Beethoven_-_String_Quartet_No._6_in_B_flat_major%2C_Op._18_No._6_-_III._Scherzo_%28Musopen_String_Quartet%29.flac/Beethoven_-_String_Quartet_No._6_in_B_flat_major%2C_Op._18_No._6_-_III._Scherzo_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 5820681,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "beethoven-string-quartet-no-6-in-b-flat-major-op-18-no-6-iii-scherzo-musopen-string-quarte",
+        "targetKind": "track",
+        "workRights": "작곡: Ludwig van Beethoven. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_String_Quartet_No._6_in_B_flat_major%2C_Op._18_No._6_-_III._Scherzo_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_String_Quartet_No._6_in_B_flat_major%2C_Op._18_No._6_-_III._Scherzo_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 40.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "beethoven-string-quartet-no-6-in-b-flat-major-op-18-no-6-iii-scherzo-musopen-string-quarte",
+        "language": "ko",
+        "shortNote": "박자를 일부러 어긋나게 놓아 자꾸 발을 헛디딥니다.",
+        "fullNote": "초기 4중주집의 마지막 곡에 든 스케르초입니다. 강세가 예상과 다른 자리에 떨어져서 3박자인데도 자꾸 비틀거리는 인상을 줍니다. 짧고 가벼워 부담이 없습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_String_Quartet_No._6_in_B_flat_major%2C_Op._18_No._6_-_III._Scherzo_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "beethoven-symphony-no-3-in-e-flat-major-op-55-eroica-iii-scherzo-allegro-vivace-musopen-sy",
+        "workId": "beethoven-symphony-no-3-in-e-flat-major-op-55-eroica",
+        "recordingId": "beethoven-symphony-no-3-in-e-flat-major-op-55-eroica-iii-scherzo-allegro-vivace-musopen-sy",
+        "title": "교향곡 3번 ‘영웅’ Op.55 — 3악장 스케르초",
+        "originalTitle": "Symphony No. 3 in E flat major, Op. 55 'Eroica' - III. Scherzo. Allegro vivace",
+        "composer": "베토벤",
+        "composerOriginal": "Ludwig van Beethoven",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "classical",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "playful",
+          "bright"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 349
+      },
+      "source": {
+        "trackId": "beethoven-symphony-no-3-in-e-flat-major-op-55-eroica-iii-scherzo-allegro-vivace-musopen-sy",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/8a/Beethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_%27Eroica%27_-_III._Scherzo._Allegro_vivace_%28Musopen_Symphony%29.flac/Beethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_%27Eroica%27_-_III._Scherzo._Allegro_vivace_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/8a/Beethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_%27Eroica%27_-_III._Scherzo._Allegro_vivace_%28Musopen_Symphony%29.flac/Beethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_%27Eroica%27_-_III._Scherzo._Allegro_vivace_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 8819839,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "beethoven-symphony-no-3-in-e-flat-major-op-55-eroica-iii-scherzo-allegro-vivace-musopen-sy",
+        "targetKind": "track",
+        "workRights": "작곡: Ludwig van Beethoven. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_'Eroica'_-_III._Scherzo._Allegro_vivace_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_'Eroica'_-_III._Scherzo._Allegro_vivace_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 57.0MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "beethoven-symphony-no-3-in-e-flat-major-op-55-eroica-iii-scherzo-allegro-vivace-musopen-sy",
+        "language": "ko",
+        "shortNote": "작게 속삭이다 한꺼번에 터지고, 가운데엔 호른 셋.",
+        "fullNote": "앞선 장송행진곡 뒤에 놓인 밝은 악장입니다. 아주 작은 소리로 들썩이다가 갑자기 전체가 튀어나오고, 트리오에서는 호른 세 대가 사냥 신호처럼 어우러집니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABeethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_'Eroica'_-_III._Scherzo._Allegro_vivace_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "borodin-string-quartet-no-1-in-a-major-iii-scherzo-prestissimo-musopen-string-quartet",
+        "workId": "borodin-string-quartet-no-1-in-a-major",
+        "recordingId": "borodin-string-quartet-no-1-in-a-major-iii-scherzo-prestissimo-musopen-string-quartet",
+        "title": "현악 4중주 1번 A장조 — 3악장 스케르초",
+        "originalTitle": "String Quartet No. 1 in A major - III. Scherzo. Prestissimo",
+        "composer": "보로딘",
+        "composerOriginal": "Alexander Borodin",
+        "performer": "Musopen String Quartet",
+        "era": "romantic",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "playful"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 115
+      },
+      "source": {
+        "trackId": "borodin-string-quartet-no-1-in-a-major-iii-scherzo-prestissimo-musopen-string-quartet",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/2f/Borodin_-_String_Quartet_No._1_in_A_major_-_III._Scherzo._Prestissimo_%28Musopen_String_Quartet%29.flac/Borodin_-_String_Quartet_No._1_in_A_major_-_III._Scherzo._Prestissimo_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/2f/Borodin_-_String_Quartet_No._1_in_A_major_-_III._Scherzo._Prestissimo_%28Musopen_String_Quartet%29.flac/Borodin_-_String_Quartet_No._1_in_A_major_-_III._Scherzo._Prestissimo_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 2612566,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "borodin-string-quartet-no-1-in-a-major-iii-scherzo-prestissimo-musopen-string-quartet",
+        "targetKind": "track",
+        "workRights": "작곡: Alexander Borodin. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABorodin_-_String_Quartet_No._1_in_A_major_-_III._Scherzo._Prestissimo_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABorodin_-_String_Quartet_No._1_in_A_major_-_III._Scherzo._Prestissimo_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 17.6MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "borodin-string-quartet-no-1-in-a-major-iii-scherzo-prestissimo-musopen-string-quartet",
+        "language": "ko",
+        "shortNote": "2분이 안 되는 아주 빠른 스케르초.",
+        "fullNote": "네 대가 빠른 속도로 맞물려 지나가는 짧은 악장입니다. 무게를 싣지 않고 가볍게 스쳐 가므로 긴 곡 사이에 넣기 좋습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABorodin_-_String_Quartet_No._1_in_A_major_-_III._Scherzo._Prestissimo_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "borodin-string-quartet-no-2-in-d-major-iii-notturno-andante-musopen-string-quartet",
+        "workId": "borodin-string-quartet-no-2-in-d-major",
+        "recordingId": "borodin-string-quartet-no-2-in-d-major-iii-notturno-andante-musopen-string-quartet",
+        "title": "현악 4중주 2번 D장조 — 3악장 녹턴",
+        "originalTitle": "String Quartet No. 2 in D major - III. Notturno. Andante",
+        "composer": "보로딘",
+        "composerOriginal": "Alexander Borodin",
+        "performer": "Musopen String Quartet",
+        "era": "romantic",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "calm",
+          "melancholy"
+        ],
+        "focus": [
+          "background",
+          "foreground"
+        ],
+        "durationSec": 547
+      },
+      "source": {
+        "trackId": "borodin-string-quartet-no-2-in-d-major-iii-notturno-andante-musopen-string-quartet",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/5a/Borodin_-_String_Quartet_No._2_in_D_major_-_III._Notturno._Andante_%28Musopen_String_Quartet%29.flac/Borodin_-_String_Quartet_No._2_in_D_major_-_III._Notturno._Andante_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/5a/Borodin_-_String_Quartet_No._2_in_D_major_-_III._Notturno._Andante_%28Musopen_String_Quartet%29.flac/Borodin_-_String_Quartet_No._2_in_D_major_-_III._Notturno._Andante_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 12925390,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "borodin-string-quartet-no-2-in-d-major-iii-notturno-andante-musopen-string-quartet",
+        "targetKind": "track",
+        "workRights": "작곡: Alexander Borodin. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABorodin_-_String_Quartet_No._2_in_D_major_-_III._Notturno._Andante_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABorodin_-_String_Quartet_No._2_in_D_major_-_III._Notturno._Andante_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 89.5MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "borodin-string-quartet-no-2-in-d-major-iii-notturno-andante-musopen-string-quartet",
+        "language": "ko",
+        "shortNote": "첼로가 먼저 부르고 바이올린이 되받는 야상곡.",
+        "fullNote": "이 4중주에서 가장 자주 따로 연주되는 악장입니다. 첼로가 선율을 제시하면 제1바이올린이 같은 노래를 높은 자리에서 되풀이하고, 두 선율이 겹쳐지는 대목이 이 곡의 중심입니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABorodin_-_String_Quartet_No._2_in_D_major_-_III._Notturno._Andante_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "brahms-symphony-no-1-in-c-minor-op-68-ii-andante-sostenuto-musopen-symphony",
+        "workId": "brahms-symphony-no-1-in-c-minor-op-68",
+        "recordingId": "brahms-symphony-no-1-in-c-minor-op-68-ii-andante-sostenuto-musopen-symphony",
+        "title": "교향곡 1번 C단조 Op.68 — 2악장 Andante sostenuto",
+        "originalTitle": "Symphony No. 1 in C minor, Op. 68 - II. Andante sostenuto",
+        "composer": "브람스",
+        "composerOriginal": "Johannes Brahms",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "calm",
+          "grand"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 517
+      },
+      "source": {
+        "trackId": "brahms-symphony-no-1-in-c-minor-op-68-ii-andante-sostenuto-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f3/Brahms_-_Symphony_No._1_in_C_minor%2C_Op._68_-_II._Andante_sostenuto_%28Musopen_Symphony%29.flac/Brahms_-_Symphony_No._1_in_C_minor%2C_Op._68_-_II._Andante_sostenuto_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f3/Brahms_-_Symphony_No._1_in_C_minor%2C_Op._68_-_II._Andante_sostenuto_%28Musopen_Symphony%29.flac/Brahms_-_Symphony_No._1_in_C_minor%2C_Op._68_-_II._Andante_sostenuto_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 11666703,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "brahms-symphony-no-1-in-c-minor-op-68-ii-andante-sostenuto-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Johannes Brahms. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABrahms_-_Symphony_No._1_in_C_minor%2C_Op._68_-_II._Andante_sostenuto_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABrahms_-_Symphony_No._1_in_C_minor%2C_Op._68_-_II._Andante_sostenuto_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 78.3MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "brahms-symphony-no-1-in-c-minor-op-68-ii-andante-sostenuto-musopen-symphony",
+        "language": "ko",
+        "shortNote": "끝에서 바이올린 독주가 홀로 남습니다.",
+        "fullNote": "무겁게 시작한 1악장 뒤에 놓인 느린 악장입니다. 목관악기가 선율을 주고받다가 마지막에 독주 바이올린이 호른과 함께 조용히 곡을 닫습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABrahms_-_Symphony_No._1_in_C_minor%2C_Op._68_-_II._Andante_sostenuto_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "brahms-symphony-no-3-in-f-major-op-90-iii-poco-allegretto-musopen-symphony",
+        "workId": "brahms-symphony-no-3-in-f-major-op-90",
+        "recordingId": "brahms-symphony-no-3-in-f-major-op-90-iii-poco-allegretto-musopen-symphony",
+        "title": "교향곡 3번 F장조 Op.90 — 3악장 Poco allegretto",
+        "originalTitle": "Symphony No. 3 in F major, Op. 90 - III. Poco allegretto",
+        "composer": "브람스",
+        "composerOriginal": "Johannes Brahms",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "melancholy"
+        ],
+        "focus": [
+          "background",
+          "foreground"
+        ],
+        "durationSec": 370
+      },
+      "source": {
+        "trackId": "brahms-symphony-no-3-in-f-major-op-90-iii-poco-allegretto-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1f/Brahms_-_Symphony_No._3_in_F_major%2C_Op._90_-_III._Poco_allegretto_%28Musopen_Symphony%29.flac/Brahms_-_Symphony_No._3_in_F_major%2C_Op._90_-_III._Poco_allegretto_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1f/Brahms_-_Symphony_No._3_in_F_major%2C_Op._90_-_III._Poco_allegretto_%28Musopen_Symphony%29.flac/Brahms_-_Symphony_No._3_in_F_major%2C_Op._90_-_III._Poco_allegretto_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 7882152,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "brahms-symphony-no-3-in-f-major-op-90-iii-poco-allegretto-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Johannes Brahms. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABrahms_-_Symphony_No._3_in_F_major%2C_Op._90_-_III._Poco_allegretto_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ABrahms_-_Symphony_No._3_in_F_major%2C_Op._90_-_III._Poco_allegretto_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 52.7MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "brahms-symphony-no-3-in-f-major-op-90-iii-poco-allegretto-musopen-symphony",
+        "language": "ko",
+        "shortNote": "첼로가 먼저 부르고 나머지가 뒤따르는 6분.",
+        "fullNote": "브람스의 교향곡 악장 가운데 가장 널리 알려진 선율입니다. 크게 부풀리지 않고 악기를 바꿔 가며 같은 노래를 되풀이하는데, 호른이 받는 대목에서 색이 한 번 바뀝니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ABrahms_-_Symphony_No._3_in_F_major%2C_Op._90_-_III._Poco_allegretto_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "dvorak-string-quartet-no-12-in-f-major-op-96-american-ii-lento-musopen-string-quartet",
+        "workId": "dvorak-string-quartet-no-12-in-f-major-op-96-american",
+        "recordingId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-ii-lento-musopen-string-quartet",
+        "title": "현악 4중주 12번 ‘아메리카’ Op.96 — 2악장 Lento",
+        "originalTitle": "String Quartet No. 12 in F major, Op. 96 'American' - II. Lento",
+        "composer": "드보르작",
+        "composerOriginal": "Antonín Dvořák",
+        "performer": "Musopen String Quartet",
+        "era": "romantic",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "melancholy",
+          "calm"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 471
+      },
+      "source": {
+        "trackId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-ii-lento-musopen-string-quartet",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/cc/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_II._Lento_%28Musopen_String_Quartet%29.flac/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_II._Lento_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/cc/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_II._Lento_%28Musopen_String_Quartet%29.flac/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_II._Lento_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 10450938,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-ii-lento-musopen-string-quartet",
+        "targetKind": "track",
+        "workRights": "작곡: Antonín Dvořák. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ADvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_'American'_-_II._Lento_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ADvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_'American'_-_II._Lento_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 73.0MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-ii-lento-musopen-string-quartet",
+        "language": "ko",
+        "shortNote": "제1바이올린이 길게 뽑는 느린 노래.",
+        "fullNote": "드보르작이 미국에 머물던 시기에 쓴 4중주의 느린 악장입니다. 반주는 단순하게 흔들리고 그 위로 선율만 길게 이어져, 가사 없는 노래처럼 들립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ADvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_'American'_-_II._Lento_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "dvorak-string-quartet-no-12-in-f-major-op-96-american-iii-molto-vivace-musopen-string-quar",
+        "workId": "dvorak-string-quartet-no-12-in-f-major-op-96-american",
+        "recordingId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-iii-molto-vivace-musopen-string-quar",
+        "title": "현악 4중주 12번 ‘아메리카’ Op.96 — 3악장 Molto vivace",
+        "originalTitle": "String Quartet No. 12 in F major, Op. 96 'American' - III. Molto vivace",
+        "composer": "드보르작",
+        "composerOriginal": "Antonín Dvořák",
+        "performer": "Musopen String Quartet",
+        "era": "romantic",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "playful",
+          "bright"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 250
+      },
+      "source": {
+        "trackId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-iii-molto-vivace-musopen-string-quar",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/22/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_III._Molto_vivace_%28Musopen_String_Quartet%29.flac/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_III._Molto_vivace_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/22/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_III._Molto_vivace_%28Musopen_String_Quartet%29.flac/Dvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_%27American%27_-_III._Molto_vivace_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 5675776,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-iii-molto-vivace-musopen-string-quar",
+        "targetKind": "track",
+        "workRights": "작곡: Antonín Dvořák. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ADvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_'American'_-_III._Molto_vivace_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ADvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_'American'_-_III._Molto_vivace_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 38.6MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "dvorak-string-quartet-no-12-in-f-major-op-96-american-iii-molto-vivace-musopen-string-quar",
+        "language": "ko",
+        "shortNote": "높은 음에서 반복되는 새소리 같은 음형.",
+        "fullNote": "짧은 음형이 높은 자리에서 계속 되돌아오는 빠른 악장입니다. 같은 재료를 장조와 단조로 번갈아 보여 주며 4분 남짓 만에 마칩니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ADvo%C5%99%C3%A1k_-_String_Quartet_No._12_in_F_major%2C_Op._96_'American'_-_III._Molto_vivace_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "grieg-peer-gynt-suite-no-1-op-46-i-morning-mood-musopen-symphony",
+        "workId": "grieg-peer-gynt-suite-no-1-op-46",
+        "recordingId": "grieg-peer-gynt-suite-no-1-op-46-i-morning-mood-musopen-symphony",
+        "title": "페르 귄트 모음곡 1번 Op.46 — 아침 기분",
+        "originalTitle": "Peer Gynt Suite No. 1, Op. 46 - I. Morning Mood",
+        "composer": "그리그",
+        "composerOriginal": "Edvard Grieg",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "calm",
+          "bright"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 229
+      },
+      "source": {
+        "trackId": "grieg-peer-gynt-suite-no-1-op-46-i-morning-mood-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c2/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_I._Morning_Mood_%28Musopen_Symphony%29.flac/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_I._Morning_Mood_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c2/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_I._Morning_Mood_%28Musopen_Symphony%29.flac/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_I._Morning_Mood_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 6003088,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "grieg-peer-gynt-suite-no-1-op-46-i-morning-mood-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Edvard Grieg. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_I._Morning_Mood_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_I._Morning_Mood_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 39.3MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "grieg-peer-gynt-suite-no-1-op-46-i-morning-mood-musopen-symphony",
+        "language": "ko",
+        "shortNote": "플루트가 먼저, 오보에가 뒤따르는 아침.",
+        "fullNote": "입센의 희곡을 위해 쓴 음악에서 뽑은 모음곡의 첫 곡입니다. 같은 선율을 플루트와 오보에가 번갈아 주고받으며 조금씩 악기를 늘려 가는 방식으로 커집니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_I._Morning_Mood_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "grieg-peer-gynt-suite-no-1-op-46-iii-anitra-s-dance-musopen-symphony",
+        "workId": "grieg-peer-gynt-suite-no-1-op-46",
+        "recordingId": "grieg-peer-gynt-suite-no-1-op-46-iii-anitra-s-dance-musopen-symphony",
+        "title": "페르 귄트 모음곡 1번 Op.46 — 아니트라의 춤",
+        "originalTitle": "Peer Gynt Suite No. 1, Op. 46 - III. Anitra's Dance",
+        "composer": "그리그",
+        "composerOriginal": "Edvard Grieg",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "playful"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 240
+      },
+      "source": {
+        "trackId": "grieg-peer-gynt-suite-no-1-op-46-iii-anitra-s-dance-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/4a/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_III._Anitra%27s_Dance_%28Musopen_Symphony%29.flac/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_III._Anitra%27s_Dance_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/4a/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_III._Anitra%27s_Dance_%28Musopen_Symphony%29.flac/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_III._Anitra%27s_Dance_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 6189893,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "grieg-peer-gynt-suite-no-1-op-46-iii-anitra-s-dance-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Edvard Grieg. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_III._Anitra's_Dance_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_III._Anitra's_Dance_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 38.0MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "grieg-peer-gynt-suite-no-1-op-46-iii-anitra-s-dance-musopen-symphony",
+        "language": "ko",
+        "shortNote": "현악기와 트라이앵글만으로 추는 가벼운 춤.",
+        "fullNote": "관악기를 쓰지 않고 현악기에 트라이앵글만 더해 얇고 투명한 소리를 냅니다. 마주르카 풍의 3박자가 살짝 비껴가며 장난스럽게 흐릅니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_III._Anitra's_Dance_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "grieg-peer-gynt-suite-no-1-op-46-iv-in-the-hall-of-the-mountain-king-musopen-symphony",
+        "workId": "grieg-peer-gynt-suite-no-1-op-46",
+        "recordingId": "grieg-peer-gynt-suite-no-1-op-46-iv-in-the-hall-of-the-mountain-king-musopen-symphony",
+        "title": "페르 귄트 모음곡 1번 Op.46 — 산왕의 궁전에서",
+        "originalTitle": "Peer Gynt Suite No. 1, Op. 46 - IV. In the Hall of the Mountain King",
+        "composer": "그리그",
+        "composerOriginal": "Edvard Grieg",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "tense",
+          "playful"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 154
+      },
+      "source": {
+        "trackId": "grieg-peer-gynt-suite-no-1-op-46-iv-in-the-hall-of-the-mountain-king-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/84/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_%28Musopen_Symphony%29.flac/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/84/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_%28Musopen_Symphony%29.flac/Grieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 3768621,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "grieg-peer-gynt-suite-no-1-op-46-iv-in-the-hall-of-the-mountain-king-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Edvard Grieg. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 25.8MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "grieg-peer-gynt-suite-no-1-op-46-iv-in-the-hall-of-the-mountain-king-musopen-symphony",
+        "language": "ko",
+        "shortNote": "같은 선율이 점점 빨라지고 커지다 끝내 무너집니다.",
+        "fullNote": "낮은 현악기가 발끝으로 걷듯 시작한 선율이 반복될 때마다 악기와 속도를 더해 갑니다. 마지막에는 전체가 한꺼번에 몰아쳐 끝나는데, 배경음악보다는 귀를 두고 듣는 쪽이 어울립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AGrieg_-_Peer_Gynt_Suite_No._1%2C_Op._46_-_IV._In_the_Hall_of_the_Mountain_King_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-ii-adagio-cantabile-musopen-string-qua",
+        "workId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark",
+        "recordingId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-ii-adagio-cantabile-musopen-string-qua",
+        "title": "현악 4중주 Op.64 No.5 ‘종달새’ — 2악장 Adagio cantabile",
+        "originalTitle": "String Quartet, Op. 64 No. 5 in D major 'The Lark' - II. Adagio. Cantabile",
+        "composer": "하이든",
+        "composerOriginal": "Joseph Haydn",
+        "performer": "Musopen String Quartet",
+        "era": "classical",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "calm"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 292
+      },
+      "source": {
+        "trackId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-ii-adagio-cantabile-musopen-string-qua",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/45/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_II._Adagio._Cantabile_%28Musopen_String_Quartet%29.flac/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_II._Adagio._Cantabile_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/45/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_II._Adagio._Cantabile_%28Musopen_String_Quartet%29.flac/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_II._Adagio._Cantabile_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 6287248,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-ii-adagio-cantabile-musopen-string-qua",
+        "targetKind": "track",
+        "workRights": "작곡: Joseph Haydn. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AHaydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_'The_Lark'_-_II._Adagio._Cantabile_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AHaydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_'The_Lark'_-_II._Adagio._Cantabile_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 43.5MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-ii-adagio-cantabile-musopen-string-qua",
+        "language": "ko",
+        "shortNote": "느리게, 그러나 노래하듯.",
+        "fullNote": "별명 ‘종달새’는 1악장에서 제1바이올린이 높이 떠오르는 대목에서 왔습니다. 이 느린 악장은 그 대신 차분한 선율을 길게 늘여 놓아, 책을 읽는 동안 틀어 두기에 무난합니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AHaydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_'The_Lark'_-_II._Adagio._Cantabile_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-iv-finale-vivace-musopen-string-quarte",
+        "workId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark",
+        "recordingId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-iv-finale-vivace-musopen-string-quarte",
+        "title": "현악 4중주 Op.64 No.5 ‘종달새’ — 4악장 Finale. Vivace",
+        "originalTitle": "String Quartet, Op. 64 No. 5 in D major 'The Lark' - IV. Finale. Vivace",
+        "composer": "하이든",
+        "composerOriginal": "Joseph Haydn",
+        "performer": "Musopen String Quartet",
+        "era": "classical",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "playful",
+          "bright"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 91
+      },
+      "source": {
+        "trackId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-iv-finale-vivace-musopen-string-quarte",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/ba/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_IV._Finale._Vivace_%28Musopen_String_Quartet%29.flac/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_IV._Finale._Vivace_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/ba/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_IV._Finale._Vivace_%28Musopen_String_Quartet%29.flac/Haydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_%27The_Lark%27_-_IV._Finale._Vivace_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 2138675,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-iv-finale-vivace-musopen-string-quarte",
+        "targetKind": "track",
+        "workRights": "작곡: Joseph Haydn. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AHaydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_'The_Lark'_-_IV._Finale._Vivace_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AHaydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_'The_Lark'_-_IV._Finale._Vivace_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 14.7MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "haydn-string-quartet-op-64-no-5-in-d-major-the-lark-iv-finale-vivace-musopen-string-quarte",
+        "language": "ko",
+        "shortNote": "1분 반 만에 끝나는 숨 가쁜 마무리.",
+        "fullNote": "쉬지 않고 굴러가는 음형 때문에 흔히 ‘무궁동’이라 불리는 종결 악장입니다. 네 대가 같은 속도로 맞물려 달리다가 갑자기 끝나 버립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AHaydn_-_String_Quartet%2C_Op._64_No._5_in_D_major_'The_Lark'_-_IV._Finale._Vivace_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "mendelssohn-hebrides-overture-op-26-musopen-symphony",
+        "workId": "mendelssohn-hebrides-overture-op-26",
+        "recordingId": "mendelssohn-hebrides-overture-op-26-musopen-symphony",
+        "title": "헤브리디스 서곡 Op.26 ‘핑갈의 동굴’",
+        "originalTitle": "Hebrides Overture, Op. 26",
+        "composer": "멘델스존",
+        "composerOriginal": "Felix Mendelssohn",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "grand",
+          "melancholy"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 683
+      },
+      "source": {
+        "trackId": "mendelssohn-hebrides-overture-op-26-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/24/Mendelssohn_-_Hebrides_Overture%2C_Op._26_%28Musopen_Symphony%29.flac/Mendelssohn_-_Hebrides_Overture%2C_Op._26_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/24/Mendelssohn_-_Hebrides_Overture%2C_Op._26_%28Musopen_Symphony%29.flac/Mendelssohn_-_Hebrides_Overture%2C_Op._26_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 15633901,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "mendelssohn-hebrides-overture-op-26-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Felix Mendelssohn. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Hebrides_Overture%2C_Op._26_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Hebrides_Overture%2C_Op._26_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 104.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "mendelssohn-hebrides-overture-op-26-musopen-symphony",
+        "language": "ko",
+        "shortNote": "파도가 밀려왔다 빠지는 움직임이 곡 전체를 이룹니다.",
+        "fullNote": "스코틀랜드 서쪽 섬을 찾았던 인상에서 출발한 연주회용 서곡입니다. 낮은 현악기의 짧은 동기가 계속 되돌아오며 물결처럼 오르내리고, 관악기가 그 위로 넓은 선율을 얹습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Hebrides_Overture%2C_Op._26_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "mendelssohn-symphony-no-3-in-a-minor-op-56-scottish-ii-vivace-non-troppo-musopen-symphony",
+        "workId": "mendelssohn-symphony-no-3-in-a-minor-op-56-scottish",
+        "recordingId": "mendelssohn-symphony-no-3-in-a-minor-op-56-scottish-ii-vivace-non-troppo-musopen-symphony",
+        "title": "교향곡 3번 ‘스코틀랜드’ Op.56 — 2악장 Vivace non troppo",
+        "originalTitle": "Symphony No. 3 in A minor, Op. 56 'Scottish' - II. Vivace non troppo",
+        "composer": "멘델스존",
+        "composerOriginal": "Felix Mendelssohn",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "bright",
+          "playful"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 264
+      },
+      "source": {
+        "trackId": "mendelssohn-symphony-no-3-in-a-minor-op-56-scottish-ii-vivace-non-troppo-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/3/30/Mendelssohn_-_Symphony_No._3_in_A_minor%2C_Op._56_%27Scottish%27_-_II._Vivace_non_troppo_%28Musopen_Symphony%29.flac/Mendelssohn_-_Symphony_No._3_in_A_minor%2C_Op._56_%27Scottish%27_-_II._Vivace_non_troppo_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/3/30/Mendelssohn_-_Symphony_No._3_in_A_minor%2C_Op._56_%27Scottish%27_-_II._Vivace_non_troppo_%28Musopen_Symphony%29.flac/Mendelssohn_-_Symphony_No._3_in_A_minor%2C_Op._56_%27Scottish%27_-_II._Vivace_non_troppo_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 5831280,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "mendelssohn-symphony-no-3-in-a-minor-op-56-scottish-ii-vivace-non-troppo-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Felix Mendelssohn. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Symphony_No._3_in_A_minor%2C_Op._56_'Scottish'_-_II._Vivace_non_troppo_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Symphony_No._3_in_A_minor%2C_Op._56_'Scottish'_-_II._Vivace_non_troppo_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 38.3MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "mendelssohn-symphony-no-3-in-a-minor-op-56-scottish-ii-vivace-non-troppo-musopen-symphony",
+        "language": "ko",
+        "shortNote": "클라리넷이 먼저 뛰어나가는 민속풍 악장.",
+        "fullNote": "전체가 어두운 색조인 교향곡에서 유일하게 환한 악장입니다. 클라리넷이 제시하는 선율이 스코틀랜드 민요의 음계를 닮아 있어 별명과 잘 맞습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Symphony_No._3_in_A_minor%2C_Op._56_'Scottish'_-_II._Vivace_non_troppo_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "mendelssohn-symphony-no-4-in-a-major-op-90-italian-ii-andante-con-moto-musopen-symphony",
+        "workId": "mendelssohn-symphony-no-4-in-a-major-op-90-italian",
+        "recordingId": "mendelssohn-symphony-no-4-in-a-major-op-90-italian-ii-andante-con-moto-musopen-symphony",
+        "title": "교향곡 4번 ‘이탈리아’ Op.90 — 2악장 Andante con moto",
+        "originalTitle": "Symphony No. 4 in A major, Op. 90 'Italian' - II. Andante con moto",
+        "composer": "멘델스존",
+        "composerOriginal": "Felix Mendelssohn",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "calm",
+          "melancholy"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 348
+      },
+      "source": {
+        "trackId": "mendelssohn-symphony-no-4-in-a-major-op-90-italian-ii-andante-con-moto-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/82/Mendelssohn_-_Symphony_No._4_in_A_major%2C_Op._90_%27Italian%27_-_II._Andante_con_moto_%28Musopen_Symphony%29.flac/Mendelssohn_-_Symphony_No._4_in_A_major%2C_Op._90_%27Italian%27_-_II._Andante_con_moto_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/82/Mendelssohn_-_Symphony_No._4_in_A_major%2C_Op._90_%27Italian%27_-_II._Andante_con_moto_%28Musopen_Symphony%29.flac/Mendelssohn_-_Symphony_No._4_in_A_major%2C_Op._90_%27Italian%27_-_II._Andante_con_moto_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 7586828,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "mendelssohn-symphony-no-4-in-a-major-op-90-italian-ii-andante-con-moto-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Felix Mendelssohn. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Symphony_No._4_in_A_major%2C_Op._90_'Italian'_-_II._Andante_con_moto_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Symphony_No._4_in_A_major%2C_Op._90_'Italian'_-_II._Andante_con_moto_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 51.5MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "mendelssohn-symphony-no-4-in-a-major-op-90-italian-ii-andante-con-moto-musopen-symphony",
+        "language": "ko",
+        "shortNote": "일정한 걸음으로 줄지어 지나가는 행렬 같은 악장.",
+        "fullNote": "낮은 현악기가 한 걸음씩 짚는 위로 선율이 얹혀 끝까지 같은 속도로 나아갑니다. 밝은 1악장과 대비되어 이 교향곡에서 가장 차분한 자리입니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AMendelssohn_-_Symphony_No._4_in_A_major%2C_Op._90_'Italian'_-_II._Andante_con_moto_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "mozart-le-nozze-di-figaro-k492-overture-musopen-symphony",
+        "workId": "mozart-le-nozze-di-figaro-k492",
+        "recordingId": "mozart-le-nozze-di-figaro-k492-overture-musopen-symphony",
+        "title": "피가로의 결혼 K.492 — 서곡",
+        "originalTitle": "Le nozze di Figaro, K492 - Overture",
+        "composer": "모차르트",
+        "composerOriginal": "Wolfgang Amadeus Mozart",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "classical",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "bright",
+          "playful"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 241
+      },
+      "source": {
+        "trackId": "mozart-le-nozze-di-figaro-k492-overture-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d2/Mozart_-_Le_nozze_di_Figaro%2C_K492_-_Overture_%28Musopen_Symphony%29.flac/Mozart_-_Le_nozze_di_Figaro%2C_K492_-_Overture_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/d2/Mozart_-_Le_nozze_di_Figaro%2C_K492_-_Overture_%28Musopen_Symphony%29.flac/Mozart_-_Le_nozze_di_Figaro%2C_K492_-_Overture_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 6506601,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "mozart-le-nozze-di-figaro-k492-overture-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Wolfgang Amadeus Mozart. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_Le_nozze_di_Figaro%2C_K492_-_Overture_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_Le_nozze_di_Figaro%2C_K492_-_Overture_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 44.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "mozart-le-nozze-di-figaro-k492-overture-musopen-symphony",
+        "language": "ko",
+        "shortNote": "막이 오르기 전부터 이미 소동이 시작된 4분.",
+        "fullNote": "현악기가 소곤거리듯 빠르게 달리기 시작해 관악기가 받아치며 순식간에 전체가 달아오릅니다. 오페라 본편의 선율을 미리 들려주는 대신 하루 동안 벌어질 소동의 속도감만 압축해 놓았습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AMozart_-_Le_nozze_di_Figaro%2C_K492_-_Overture_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "mozart-string-quartet-no-19-in-c-major-k465-dissonance-ii-andante-cantabile-musopen-string",
+        "workId": "mozart-string-quartet-no-19-in-c-major-k465-dissonance",
+        "recordingId": "mozart-string-quartet-no-19-in-c-major-k465-dissonance-ii-andante-cantabile-musopen-string",
+        "title": "현악 4중주 19번 C장조 K.465 ‘불협화음’ — 2악장 Andante cantabile",
+        "originalTitle": "String Quartet No. 19 in C major, K465 'Dissonance' - II. Andante cantabile",
+        "composer": "모차르트",
+        "composerOriginal": "Wolfgang Amadeus Mozart",
+        "performer": "Musopen String Quartet",
+        "era": "classical",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "calm"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 461
+      },
+      "source": {
+        "trackId": "mozart-string-quartet-no-19-in-c-major-k465-dissonance-ii-andante-cantabile-musopen-string",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/7f/Mozart_-_String_Quartet_No._19_in_C_major%2C_K465_%27Dissonance%27_-_II._Andante_cantabile_%28Musopen_String_Quartet%29.flac/Mozart_-_String_Quartet_No._19_in_C_major%2C_K465_%27Dissonance%27_-_II._Andante_cantabile_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/7f/Mozart_-_String_Quartet_No._19_in_C_major%2C_K465_%27Dissonance%27_-_II._Andante_cantabile_%28Musopen_String_Quartet%29.flac/Mozart_-_String_Quartet_No._19_in_C_major%2C_K465_%27Dissonance%27_-_II._Andante_cantabile_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 10382287,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "mozart-string-quartet-no-19-in-c-major-k465-dissonance-ii-andante-cantabile-musopen-string",
+        "targetKind": "track",
+        "workRights": "작곡: Wolfgang Amadeus Mozart. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_String_Quartet_No._19_in_C_major%2C_K465_'Dissonance'_-_II._Andante_cantabile_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_String_Quartet_No._19_in_C_major%2C_K465_'Dissonance'_-_II._Andante_cantabile_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 72.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "mozart-string-quartet-no-19-in-c-major-k465-dissonance-ii-andante-cantabile-musopen-string",
+        "language": "ko",
+        "shortNote": "네 대의 현이 서로에게 낮은 목소리로 말을 건넵니다.",
+        "fullNote": "‘불협화음’이라는 별명은 1악장 도입부의 낯선 화음에서 왔고, 이 2악장은 그와 달리 처음부터 노래하듯 흐릅니다. 제1바이올린이 선율을 이끄는 동안 나머지 세 대가 받쳐 주며 대화하듯 이어집니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AMozart_-_String_Quartet_No._19_in_C_major%2C_K465_'Dissonance'_-_II._Andante_cantabile_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "mozart-symphony-no-40-in-g-minor-k550-i-molto-allegro-musopen-symphony",
+        "workId": "mozart-symphony-no-40-in-g-minor-k550",
+        "recordingId": "mozart-symphony-no-40-in-g-minor-k550-i-molto-allegro-musopen-symphony",
+        "title": "교향곡 40번 G단조 K.550 — 1악장 Molto allegro",
+        "originalTitle": "Symphony No. 40 in G minor, K550 - I. Molto allegro",
+        "composer": "모차르트",
+        "composerOriginal": "Wolfgang Amadeus Mozart",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "classical",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "tense",
+          "melancholy"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 359
+      },
+      "source": {
+        "trackId": "mozart-symphony-no-40-in-g-minor-k550-i-molto-allegro-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/a/a8/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_%28Musopen_Symphony%29.flac/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/a/a8/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_%28Musopen_Symphony%29.flac/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 9672152,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "mozart-symphony-no-40-in-g-minor-k550-i-molto-allegro-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Wolfgang Amadeus Mozart. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 65.3MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "mozart-symphony-no-40-in-g-minor-k550-i-molto-allegro-musopen-symphony",
+        "language": "ko",
+        "shortNote": "쉴 틈 없이 밀려오는 그 유명한 시작.",
+        "fullNote": "반주가 먼저 깔리고 곧바로 바이올린이 짧은 한숨 같은 동기를 반복합니다. 이 동기 하나가 악장 내내 모양을 바꿔 가며 돌아오는데, 멈추지 않고 앞으로 밀리는 느낌이 끝까지 이어집니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AMozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "mozart-symphony-no-40-in-g-minor-k550-iii-menuetto-allegretto-musopen-symphony",
+        "workId": "mozart-symphony-no-40-in-g-minor-k550",
+        "recordingId": "mozart-symphony-no-40-in-g-minor-k550-iii-menuetto-allegretto-musopen-symphony",
+        "title": "교향곡 40번 G단조 K.550 — 3악장 메뉴엣",
+        "originalTitle": "Symphony No. 40 in G minor, K550 - III. Menuetto. Allegretto",
+        "composer": "모차르트",
+        "composerOriginal": "Wolfgang Amadeus Mozart",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "classical",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "tense"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 273
+      },
+      "source": {
+        "trackId": "mozart-symphony-no-40-in-g-minor-k550-iii-menuetto-allegretto-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/e/ed/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_III._Menuetto._Allegretto_%28Musopen_Symphony%29.flac/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_III._Menuetto._Allegretto_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/e/ed/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_III._Menuetto._Allegretto_%28Musopen_Symphony%29.flac/Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_III._Menuetto._Allegretto_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 7113923,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "mozart-symphony-no-40-in-g-minor-k550-iii-menuetto-allegretto-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Wolfgang Amadeus Mozart. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_Symphony_No._40_in_G_minor%2C_K550_-_III._Menuetto._Allegretto_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3AMozart_-_Symphony_No._40_in_G_minor%2C_K550_-_III._Menuetto._Allegretto_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 46.6MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "mozart-symphony-no-40-in-g-minor-k550-iii-menuetto-allegretto-musopen-symphony",
+        "language": "ko",
+        "shortNote": "춤곡 자리에 놓였지만 춤추기 어려운 메뉴엣.",
+        "fullNote": "메뉴엣은 원래 우아한 3박자 춤곡인데, 이 곡은 박자가 어긋나듯 강세가 밀려 각지게 들립니다. 가운데 트리오에서만 장조로 풀려 잠시 숨을 돌립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3AMozart_-_Symphony_No._40_in_G_minor%2C_K550_-_III._Menuetto._Allegretto_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "rimsky-korsakov-russian-easter-festival-overture-op-36-musopen-symphony",
+        "workId": "rimsky-korsakov-russian-easter-festival-overture-op-36",
+        "recordingId": "rimsky-korsakov-russian-easter-festival-overture-op-36-musopen-symphony",
+        "title": "러시아 부활절 축제 서곡 Op.36",
+        "originalTitle": "Russian Easter Festival Overture, Op. 36",
+        "composer": "림스키코르사코프",
+        "composerOriginal": "Nikolai Rimsky-Korsakov",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "grand",
+          "bright"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 936
+      },
+      "source": {
+        "trackId": "rimsky-korsakov-russian-easter-festival-overture-op-36-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/21/Rimsky_Korsakov_-_Russian_Easter_Festival_Overture%2C_Op._36_%28Musopen_Symphony%29.flac/Rimsky_Korsakov_-_Russian_Easter_Festival_Overture%2C_Op._36_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/2/21/Rimsky_Korsakov_-_Russian_Easter_Festival_Overture%2C_Op._36_%28Musopen_Symphony%29.flac/Rimsky_Korsakov_-_Russian_Easter_Festival_Overture%2C_Op._36_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 25027419,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "rimsky-korsakov-russian-easter-festival-overture-op-36-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Nikolai Rimsky-Korsakov. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ARimsky_Korsakov_-_Russian_Easter_Festival_Overture%2C_Op._36_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ARimsky_Korsakov_-_Russian_Easter_Festival_Overture%2C_Op._36_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 163.0MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "rimsky-korsakov-russian-easter-festival-overture-op-36-musopen-symphony",
+        "language": "ko",
+        "shortNote": "성가의 낭송조로 시작해 종소리로 끝나는 15분.",
+        "fullNote": "러시아 정교회 성가에서 가져온 선율로 시작해, 독주 악기들이 낭송하듯 주고받는 대목을 지나 점차 축제의 소리로 바뀝니다. 후반에는 관악기와 타악기가 종소리를 흉내 내며 크게 울립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ARimsky_Korsakov_-_Russian_Easter_Festival_Overture%2C_Op._36_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "schubert-piano-sonata-no-13-in-a-major-d664-ii-andante-paul-pitman",
+        "workId": "schubert-piano-sonata-no-13-in-a-major-d664",
+        "recordingId": "schubert-piano-sonata-no-13-in-a-major-d664-ii-andante-paul-pitman",
+        "title": "피아노 소나타 13번 A장조 D.664 — 2악장 Andante",
+        "originalTitle": "Piano Sonata No. 13 in A major, D664 - II. Andante",
+        "composer": "슈베르트",
+        "composerOriginal": "Franz Schubert",
+        "performer": "Paul Pitman (피아노)",
+        "era": "romantic",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "calm",
+          "melancholy"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 291
+      },
+      "source": {
+        "trackId": "schubert-piano-sonata-no-13-in-a-major-d664-ii-andante-paul-pitman",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/df/Schubert_-_Piano_Sonata_No._13_in_A_major%2C_D664_-_II._Andante_%28Paul_Pitman%29.flac/Schubert_-_Piano_Sonata_No._13_in_A_major%2C_D664_-_II._Andante_%28Paul_Pitman%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/d/df/Schubert_-_Piano_Sonata_No._13_in_A_major%2C_D664_-_II._Andante_%28Paul_Pitman%29.flac/Schubert_-_Piano_Sonata_No._13_in_A_major%2C_D664_-_II._Andante_%28Paul_Pitman%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 6991127,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "schubert-piano-sonata-no-13-in-a-major-d664-ii-andante-paul-pitman",
+        "targetKind": "track",
+        "workRights": "작곡: Franz Schubert. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Paul Pitman (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._13_in_A_major%2C_D664_-_II._Andante_(Paul_Pitman).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._13_in_A_major%2C_D664_-_II._Andante_(Paul_Pitman).flac",
+        "originalFormat": "audio/flac, 15.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "schubert-piano-sonata-no-13-in-a-major-d664-ii-andante-paul-pitman",
+        "language": "ko",
+        "shortNote": "같은 화음을 짚으며 천천히 걷는 5분.",
+        "fullNote": "슈베르트의 소나타 가운데 규모가 작고 단정한 편에 드는 작품의 느린 악장입니다. 화려한 기교 없이 화음의 색이 조금씩 바뀌는 것으로만 이야기를 끌고 갑니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._13_in_A_major%2C_D664_-_II._Andante_(Paul_Pitman).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "schubert-piano-sonata-no-14-in-a-minor-d784-ii-andante-paul-pitman",
+        "workId": "schubert-piano-sonata-no-14-in-a-minor-d784",
+        "recordingId": "schubert-piano-sonata-no-14-in-a-minor-d784-ii-andante-paul-pitman",
+        "title": "피아노 소나타 14번 A단조 D.784 — 2악장 Andante",
+        "originalTitle": "Piano Sonata No. 14 in A minor, D784 - II. Andante",
+        "composer": "슈베르트",
+        "composerOriginal": "Franz Schubert",
+        "performer": "Paul Pitman (피아노)",
+        "era": "romantic",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "calm",
+          "melancholy"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 230
+      },
+      "source": {
+        "trackId": "schubert-piano-sonata-no-14-in-a-minor-d784-ii-andante-paul-pitman",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/41/Schubert_-_Piano_Sonata_No._14_in_A_minor%2C_D784_-_II._Andante_%28Paul_Pitman%29.flac/Schubert_-_Piano_Sonata_No._14_in_A_minor%2C_D784_-_II._Andante_%28Paul_Pitman%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/4/41/Schubert_-_Piano_Sonata_No._14_in_A_minor%2C_D784_-_II._Andante_%28Paul_Pitman%29.flac/Schubert_-_Piano_Sonata_No._14_in_A_minor%2C_D784_-_II._Andante_%28Paul_Pitman%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 5623314,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "schubert-piano-sonata-no-14-in-a-minor-d784-ii-andante-paul-pitman",
+        "targetKind": "track",
+        "workRights": "작곡: Franz Schubert. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Paul Pitman (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._14_in_A_minor%2C_D784_-_II._Andante_(Paul_Pitman).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._14_in_A_minor%2C_D784_-_II._Andante_(Paul_Pitman).flac",
+        "originalFormat": "audio/flac, 12.2MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "schubert-piano-sonata-no-14-in-a-minor-d784-ii-andante-paul-pitman",
+        "language": "ko",
+        "shortNote": "여백이 많은 느린 악장.",
+        "fullNote": "음을 촘촘히 채우는 대신 소리와 침묵을 나란히 놓습니다. 단순한 선율이 반복되는 동안 화성만 조금씩 달라져, 조용한 시간대에 어울립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._14_in_A_minor%2C_D784_-_II._Andante_(Paul_Pitman).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "schubert-piano-sonata-no-19-in-c-minor-d958-iii-menuetto-allegro-paul-pitman",
+        "workId": "schubert-piano-sonata-no-19-in-c-minor-d958",
+        "recordingId": "schubert-piano-sonata-no-19-in-c-minor-d958-iii-menuetto-allegro-paul-pitman",
+        "title": "피아노 소나타 19번 C단조 D.958 — 3악장 메뉴엣",
+        "originalTitle": "Piano Sonata No. 19 in C minor, D958 - III. Menuetto. Allegro",
+        "composer": "슈베르트",
+        "composerOriginal": "Franz Schubert",
+        "performer": "Paul Pitman (피아노)",
+        "era": "romantic",
+        "instruments": [
+          "piano"
+        ],
+        "moods": [
+          "melancholy"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 195
+      },
+      "source": {
+        "trackId": "schubert-piano-sonata-no-19-in-c-minor-d958-iii-menuetto-allegro-paul-pitman",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b9/Schubert_-_Piano_Sonata_No._19_in_C_minor%2C_D958_-_III._Menuetto._Allegro_%28Paul_Pitman%29.flac/Schubert_-_Piano_Sonata_No._19_in_C_minor%2C_D958_-_III._Menuetto._Allegro_%28Paul_Pitman%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b9/Schubert_-_Piano_Sonata_No._19_in_C_minor%2C_D958_-_III._Menuetto._Allegro_%28Paul_Pitman%29.flac/Schubert_-_Piano_Sonata_No._19_in_C_minor%2C_D958_-_III._Menuetto._Allegro_%28Paul_Pitman%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 5040947,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "schubert-piano-sonata-no-19-in-c-minor-d958-iii-menuetto-allegro-paul-pitman",
+        "targetKind": "track",
+        "workRights": "작곡: Franz Schubert. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Paul Pitman (피아노). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._19_in_C_minor%2C_D958_-_III._Menuetto._Allegro_(Paul_Pitman).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._19_in_C_minor%2C_D958_-_III._Menuetto._Allegro_(Paul_Pitman).flac",
+        "originalFormat": "audio/flac, 10.8MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "schubert-piano-sonata-no-19-in-c-minor-d958-iii-menuetto-allegro-paul-pitman",
+        "language": "ko",
+        "shortNote": "3분 남짓, 그늘이 진 춤곡.",
+        "fullNote": "세상을 떠나던 해에 쓴 세 곡의 소나타 가운데 첫 곡에 든 메뉴엣입니다. 춤곡의 형식을 쓰면서도 중간에 선율이 툭 끊기는 대목이 있어 가볍게만 들리지는 않습니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ASchubert_-_Piano_Sonata_No._19_in_C_minor%2C_D958_-_III._Menuetto._Allegro_(Paul_Pitman).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "smetana-ma-vlast-vltava-musopen-symphony",
+        "workId": "smetana-ma-vlast",
+        "recordingId": "smetana-ma-vlast-vltava-musopen-symphony",
+        "title": "나의 조국 — 블타바(몰다우)",
+        "originalTitle": "Má Vlast - Vltava",
+        "composer": "스메타나",
+        "composerOriginal": "Bedřich Smetana",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "grand",
+          "calm"
+        ],
+        "focus": [
+          "foreground"
+        ],
+        "durationSec": 771
+      },
+      "source": {
+        "trackId": "smetana-ma-vlast-vltava-musopen-symphony",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/3/39/Smetana_-_M%C3%A1_Vlast_-_Vltava_%28Musopen_Symphony%29.flac/Smetana_-_M%C3%A1_Vlast_-_Vltava_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/3/39/Smetana_-_M%C3%A1_Vlast_-_Vltava_%28Musopen_Symphony%29.flac/Smetana_-_M%C3%A1_Vlast_-_Vltava_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 21228416,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "smetana-ma-vlast-vltava-musopen-symphony",
+        "targetKind": "track",
+        "workRights": "작곡: Bedřich Smetana. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ASmetana_-_M%C3%A1_Vlast_-_Vltava_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ASmetana_-_M%C3%A1_Vlast_-_Vltava_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 143.7MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "smetana-ma-vlast-vltava-musopen-symphony",
+        "language": "ko",
+        "shortNote": "두 줄기 샘에서 시작한 물이 강이 되어 흘러갑니다.",
+        "fullNote": "플루트 두 대가 그리는 작은 물줄기로 시작해, 합쳐진 강의 선율이 여러 차례 되돌아옵니다. 사냥 나팔, 시골 혼례, 달빛 아래 물결 같은 장면이 차례로 지나간 뒤 강이 도시를 통과하며 크게 열립니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ASmetana_-_M%C3%A1_Vlast_-_Vltava_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "suk-meditation-on-the-old-czech-chorale-saint-wenceslas-op-35a-musopen-string-quartet",
+        "workId": "suk-meditation-on-the-old-czech-chorale-saint-wenceslas-op-35a",
+        "recordingId": "suk-meditation-on-the-old-czech-chorale-saint-wenceslas-op-35a-musopen-string-quartet",
+        "title": "옛 체코 성가 ‘성 바츨라프’에 의한 명상 Op.35a",
+        "originalTitle": "Meditation on the Old Czech Chorale Saint Wenceslas, Op. 35a",
+        "composer": "수크",
+        "composerOriginal": "Josef Suk",
+        "performer": "Musopen String Quartet",
+        "era": "romantic",
+        "instruments": [
+          "string quartet"
+        ],
+        "moods": [
+          "calm",
+          "grand"
+        ],
+        "focus": [
+          "background",
+          "foreground"
+        ],
+        "durationSec": 405
+      },
+      "source": {
+        "trackId": "suk-meditation-on-the-old-czech-chorale-saint-wenceslas-op-35a-musopen-string-quartet",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1f/Suk_-_Meditation_on_the_Old_Czech_Chorale_Saint_Wenceslas%2C_Op._35a_%28Musopen_String_Quartet%29.flac/Suk_-_Meditation_on_the_Old_Czech_Chorale_Saint_Wenceslas%2C_Op._35a_%28Musopen_String_Quartet%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/1/1f/Suk_-_Meditation_on_the_Old_Czech_Chorale_Saint_Wenceslas%2C_Op._35a_%28Musopen_String_Quartet%29.flac/Suk_-_Meditation_on_the_Old_Czech_Chorale_Saint_Wenceslas%2C_Op._35a_%28Musopen_String_Quartet%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 9706624,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "suk-meditation-on-the-old-czech-chorale-saint-wenceslas-op-35a-musopen-string-quartet",
+        "targetKind": "track",
+        "workRights": "작곡: Josef Suk. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen String Quartet. Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ASuk_-_Meditation_on_the_Old_Czech_Chorale_Saint_Wenceslas%2C_Op._35a_(Musopen_String_Quartet).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ASuk_-_Meditation_on_the_Old_Czech_Chorale_Saint_Wenceslas%2C_Op._35a_(Musopen_String_Quartet).flac",
+        "originalFormat": "audio/flac, 65.8MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "suk-meditation-on-the-old-czech-chorale-saint-wenceslas-op-35a-musopen-string-quartet",
+        "language": "ko",
+        "shortNote": "오래된 성가 한 줄을 천천히 되짚어 갑니다.",
+        "fullNote": "체코에서 오래 불려 온 성가 선율을 재료로 삼은 현악 작품입니다. 낮은 소리로 조용히 시작해 중간에 한 번 크게 부풀었다가 다시 가라앉으며 마칩니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ASuk_-_Meditation_on_the_Old_Czech_Chorale_Saint_Wenceslas%2C_Op._35a_(Musopen_String_Quartet).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    },
+    {
+      "track": {
+        "id": "tchaikovsky-symphony-no-6-in-b-minor-op-74-pathetique-ii-allegro-con-grazia-musopen-sympho",
+        "workId": "tchaikovsky-symphony-no-6-in-b-minor-op-74-pathetique",
+        "recordingId": "tchaikovsky-symphony-no-6-in-b-minor-op-74-pathetique-ii-allegro-con-grazia-musopen-sympho",
+        "title": "교향곡 6번 ‘비창’ Op.74 — 2악장 Allegro con grazia",
+        "originalTitle": "Symphony No. 6 in B minor, Op. 74 'Pathétique' - II. Allegro con grazia",
+        "composer": "차이코프스키",
+        "composerOriginal": "Pyotr Ilyich Tchaikovsky",
+        "performer": "Musopen Symphony (체코 국립 교향악단)",
+        "era": "romantic",
+        "instruments": [
+          "orchestra"
+        ],
+        "moods": [
+          "melancholy",
+          "bright"
+        ],
+        "focus": [
+          "background"
+        ],
+        "durationSec": 496
+      },
+      "source": {
+        "trackId": "tchaikovsky-symphony-no-6-in-b-minor-op-74-pathetique-ii-allegro-con-grazia-musopen-sympho",
+        "provider": "file",
+        "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Tchaikovsky_-_Symphony_No._6_in_B_minor%2C_Op._74_%27Path%C3%A9tique%27_-_II._Allegro_con_grazia_%28Musopen_Symphony%29.flac/Tchaikovsky_-_Symphony_No._6_in_B_minor%2C_Op._74_%27Path%C3%A9tique%27_-_II._Allegro_con_grazia_%28Musopen_Symphony%29.flac.mp3",
+        "altUrls": [
+          "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b3/Tchaikovsky_-_Symphony_No._6_in_B_minor%2C_Op._74_%27Path%C3%A9tique%27_-_II._Allegro_con_grazia_%28Musopen_Symphony%29.flac/Tchaikovsky_-_Symphony_No._6_in_B_minor%2C_Op._74_%27Path%C3%A9tique%27_-_II._Allegro_con_grazia_%28Musopen_Symphony%29.flac.ogg"
+        ],
+        "mimeType": "audio/mpeg",
+        "byteSize": 10716730,
+        "acceptsRange": true,
+        "availability": "ok",
+        "lastCheckedAt": "2026-09-12"
+      },
+      "rights": {
+        "targetId": "tchaikovsky-symphony-no-6-in-b-minor-op-74-pathetique-ii-allegro-con-grazia-musopen-sympho",
+        "targetKind": "track",
+        "workRights": "작곡: Pyotr Ilyich Tchaikovsky. 저작권 보호기간 만료로 퍼블릭 도메인.",
+        "recordingRights": "연주: Musopen Symphony (체코 국립 교향악단). Musopen 이 이 녹음을 퍼블릭 도메인으로 공개.",
+        "licenseId": "Public domain",
+        "licenseUrl": null,
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ATchaikovsky_-_Symphony_No._6_in_B_minor%2C_Op._74_'Path%C3%A9tique'_-_II._Allegro_con_grazia_(Musopen_Symphony).flac",
+        "rightsHolder": "Musopen",
+        "attribution": null,
+        "modifications": "Wikimedia Commons 가 만든 MP3 변환본을 그대로 재생. 이 서비스는 음원을 저장하거나 변형하지 않음.",
+        "evidenceUrl": "https://commons.wikimedia.org/wiki/File%3ATchaikovsky_-_Symphony_No._6_in_B_minor%2C_Op._74_'Path%C3%A9tique'_-_II._Allegro_con_grazia_(Musopen_Symphony).flac",
+        "originalFormat": "audio/flac, 72.1MB",
+        "checkedAt": "2026-09-12",
+        "reviewStatus": "confirmed"
+      },
+      "note": {
+        "trackId": "tchaikovsky-symphony-no-6-in-b-minor-op-74-pathetique-ii-allegro-con-grazia-musopen-sympho",
+        "language": "ko",
+        "shortNote": "왈츠처럼 들리지만 한 박이 모자란 5박자.",
+        "fullNote": "3박자 왈츠에 익숙한 귀에는 계속 발이 어긋나는 춤곡입니다. 첼로가 이끄는 밝은 선율로 시작했다가 가운데 부분에서 같은 박자 위에 어두운 선율이 얹힙니다.",
+        "references": [
+          "https://commons.wikimedia.org/wiki/File%3ATchaikovsky_-_Symphony_No._6_in_B_minor%2C_Op._74_'Path%C3%A9tique'_-_II._Allegro_con_grazia_(Musopen_Symphony).flac"
+        ],
+        "reviewStatus": "draft"
+      }
+    }
+  ]
+}

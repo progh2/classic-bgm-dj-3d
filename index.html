@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>세바스티안의 음악 응접실 — Classic BGM DJ 3D</title>
+<meta name="description" content="VRM 집사가 안내하는 3D 클래식 음악 응접실. 권리가 확인된 음원만 재생합니다.">
+<link rel="stylesheet" href="/src/ui/style.css">
+</head>
+<body>
+  <div id="scene" class="scene" aria-hidden="true"></div>
+
+  <!-- 소리 있는 자동 재생은 브라우저 정책에 막힌다. 첫 조작을 여기서 받는다. -->
+  <div id="gate" class="gate">
+    <div class="gate__card">
+      <p class="gate__eyebrow">Classic BGM DJ</p>
+      <h1 class="gate__title">세바스티안의 음악 응접실</h1>
+      <p class="gate__lead">
+        권리가 확인된 클래식 음원만 골라 둔 응접실입니다.
+        집사가 취향을 묻거나, 맡기시면 알아서 골라 틀어 드립니다.
+      </p>
+      <div class="gate__actions">
+        <button id="enter-voice" class="btn btn--primary" type="button">응접실 입장 · 음성 켜기</button>
+        <button id="enter-quiet" class="btn" type="button">조용히 입장</button>
+      </div>
+      <p class="gate__note">
+        음성은 기기에 설치된 한국어 음성을 사용합니다. 없으면 자막으로 진행합니다.
+      </p>
+    </div>
+  </div>
+
+  <noscript>
+    <p>이 서비스는 자바스크립트가 필요합니다.
+      <a href="https://progh2.github.io/classic-bgm-dj/">2D 버전</a>을 이용해 주세요.</p>
+  </noscript>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
