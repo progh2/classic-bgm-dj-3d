@@ -60,8 +60,10 @@ export function createSalon(host: HTMLElement): Salon {
   scene.fog = new Fog(0x17110c, 4.5, 11)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
-  camera.position.set(0, 1.66, 3.05)
-  camera.lookAt(0, 1.06, -0.3)
+  // 아래쪽 절반은 자막과 조작부가 덮는다. 조금 내려다보게 두어 테이블 상판과
+  // 그 위에 놓을 물건이 화면 위쪽에 남도록 한다.
+  camera.position.set(0, 2.05, 2.95)
+  camera.lookAt(0, 1.02, -0.45)
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
   const table = new Group()

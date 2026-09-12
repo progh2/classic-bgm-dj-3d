@@ -53,6 +53,18 @@ export function createSpeech(opts: SpeechOptions): Speech {
   let voicesReady = false
   /** 발화마다 번호를 매겨, 취소된 뒤 도착한 이벤트를 무시한다. */
   let token = 0
+  let subtitleTimer: ReturnType<typeof setTimeout> | undefined
+
+  /** 글자 수에 맞춰 읽을 시간을 준 뒤 자막을 내린다. */
+  const holdSubtitle = (text: string, my: number): void => {
+    clearTimeout(subtitleTimer)
+    subtitleTimer = setTimeout(
+      () => {
+        if (my === token) opts.onSubtitle(null)
+      },
+      2500 + text.length * 90,
+    )
+  }
 
   if (synth) {
     void loadVoices(synth).then((vs) => {
@@ -70,10 +82,12 @@ export function createSpeech(opts: SpeechOptions): Speech {
 
     async say(text) {
       const my = ++token
+      clearTimeout(subtitleTimer)
       opts.onSubtitle(text)
 
       if (!speech.enabled || !synth) {
-        // 자막만으로 진행한다. 읽는 시간만큼은 자막을 남겨 둔다.
+        // 자막만으로 진행한다. 읽을 시간만큼 두었다가 내린다.
+        holdSubtitle(text, my)
         return
       }
       synth.cancel()
@@ -99,7 +113,10 @@ export function createSpeech(opts: SpeechOptions): Speech {
           if (settled) return
           settled = true
           clearTimeout(guard)
-          if (my === token) stopTalking()
+          if (my === token) {
+            stopTalking()
+            holdSubtitle(text, my)
+          }
           resolve()
         }
         // 일부 브라우저에서 end 가 오지 않는 경우가 있어 시간 제한을 둔다.
@@ -115,6 +132,7 @@ export function createSpeech(opts: SpeechOptions): Speech {
 
     cancel() {
       token++
+      clearTimeout(subtitleTimer)
       synth?.cancel()
       opts.onTalking(false)
       opts.onSubtitle(null)
@@ -126,6 +144,7 @@ export function createSpeech(opts: SpeechOptions): Speech {
 
     dispose() {
       token++
+      clearTimeout(subtitleTimer)
       synth?.cancel()
     },
   }
