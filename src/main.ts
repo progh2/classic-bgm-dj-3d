@@ -1,9 +1,9 @@
 import type { Butler } from './butler/butler'
 import { LINES } from './butler/lines'
 import { createSpeech } from './butler/speech'
-import { CATALOG } from './catalog/catalog'
+import { CATALOG, formatTime } from './catalog/catalog'
 import { buildQueue, DEFAULT_ANSWERS, type Answers } from './catalog/select'
-import { createSession, type Session } from './core/session'
+import { createSession, type Session, type SessionState } from './core/session'
 import { AudioFileAdapter } from './playback/audioFileAdapter'
 import { createSalon, WebGLUnavailableError, type Salon } from './scene/salon'
 import { createPlayerUI } from './ui/player'
@@ -62,6 +62,7 @@ const player = createPlayerUI({
   root: el('player'),
   titleEl: el('now-title'),
   metaEl: el('now-meta'),
+  announceEl: el('now-announce'),
   timeEl: el('now-time'),
   durationEl: el('now-duration'),
   seekEl: el<HTMLInputElement>('seek'),
@@ -87,7 +88,44 @@ const player = createPlayerUI({
   },
 })
 
-session.subscribe((state) => player.render(state))
+session.subscribe((state) => {
+  player.render(state)
+  updateScene(state)
+})
+
+/** 안내판과 재생기에 지금 상태를 옮긴다. */
+function updateScene(state: SessionState): void {
+  if (!salon) return
+  const { playback, current } = state
+  const playing = playback.state === 'playing'
+  const duration = playback.durationSec
+  const progress = duration ? playback.currentTimeSec / duration : null
+
+  salon.screen.set({
+    title: current
+      ? current.track.title
+      : playback.state === 'loading'
+        ? '곡을 준비하고 있습니다'
+        : '세바스티안의 음악 응접실',
+    subtitle: current
+      ? `${current.track.composer} · ${current.track.performer}`
+      : '취향을 고르시거나 제게 맡기십시오.',
+    progress,
+    elapsed: formatTime(current ? playback.currentTimeSec : null),
+    duration: formatTime(duration),
+    notice:
+      playback.state === 'blocked'
+        ? '브라우저가 자동 재생을 막았습니다. 아래 재생 단추를 눌러 주십시오.'
+        : (state.problem ?? ''),
+    playing,
+  })
+
+  salon.turntable.set({
+    spinning: playing,
+    armDown: current !== null && playback.state !== 'idle' && playback.state !== 'ended',
+    progress: progress ?? 0,
+  })
+}
 
 const ask = createAskPanel({
   root: el('ask'),
@@ -203,6 +241,7 @@ function enter(withVoice: boolean): void {
   el<HTMLInputElement>('volume').value = String(Math.round(volume * 100))
 
   startScene()
+  updateScene(session.state)
   void dressRoom()
   void bringInButler()
 }

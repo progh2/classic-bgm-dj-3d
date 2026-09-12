@@ -47,22 +47,21 @@
     </div>
 
     <div id="player" class="player" hidden>
-      <div class="player__now">
-        <p class="player__title" id="now-title">준비 중</p>
-        <p class="player__meta" id="now-meta"></p>
-      </div>
-      <div class="player__seek">
+      <!-- 지금 흐르는 곡은 집사 뒤 안내판에 띄운다. 화면 낭독기를 위해 같은 내용을 여기 둔다. -->
+      <p class="sr-only" id="now-announce" role="status" aria-live="polite"></p>
+      <p class="sr-only" id="now-title"></p>
+      <p class="sr-only" id="now-meta"></p>
+      <div class="player__bar">
+        <button id="prev" class="btn btn--small" type="button" aria-label="이전 곡">◀</button>
+        <button id="play" class="btn btn--primary btn--small" type="button">재생</button>
+        <button id="next" class="btn btn--small" type="button" aria-label="다음 곡">▶</button>
         <span class="player__time" id="now-time">--:--</span>
         <input id="seek" class="player__range" type="range" min="0" max="1000" value="0"
                aria-label="재생 위치">
         <span class="player__time" id="now-duration">--:--</span>
-      </div>
-      <div class="player__buttons">
-        <button id="prev" class="btn btn--small" type="button">◀ 이전</button>
-        <button id="play" class="btn btn--primary btn--small" type="button">재생</button>
-        <button id="next" class="btn btn--small" type="button">다음 ▶</button>
         <label class="player__volume">
-          음량
+          <span class="sr-only">음량</span>
+          <span aria-hidden="true">음량</span>
           <input id="volume" type="range" min="0" max="100" value="80" aria-label="음량">
         </label>
       </div>

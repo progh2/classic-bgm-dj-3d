@@ -11,6 +11,7 @@ export interface PlayerUIOptions {
   root: HTMLElement
   titleEl: HTMLElement
   metaEl: HTMLElement
+  announceEl: HTMLElement
   timeEl: HTMLElement
   durationEl: HTMLElement
   seekEl: HTMLInputElement
@@ -40,6 +41,7 @@ const LABEL: Record<string, string> = {
 export function createPlayerUI(o: PlayerUIOptions): PlayerUI {
   /** 사용자가 손잡이를 잡고 있는 동안에는 재생 위치가 밀어내지 않게 한다. */
   let scrubbing = false
+  let lastAnnounced = ''
 
   o.playBtn.addEventListener('click', o.onToggle)
   o.prevBtn.addEventListener('click', o.onPrev)
@@ -65,6 +67,7 @@ export function createPlayerUI(o: PlayerUIOptions): PlayerUI {
       const { playback, current } = state
       const entry = current
 
+      // 보이는 곡 정보는 집사 뒤 안내판에 있다. 여기 글자는 낭독기를 위한 것이다.
       if (playback.state === 'loading' && !entry) {
         o.titleEl.textContent = '곡을 준비하고 있습니다'
         o.metaEl.textContent = ''
@@ -73,6 +76,13 @@ export function createPlayerUI(o: PlayerUIOptions): PlayerUI {
         const bits = [entry.track.composer, entry.track.performer]
         if (playback.loadingTrackId) bits.push('다음 곡 준비 중')
         o.metaEl.textContent = bits.join(' · ')
+      }
+
+      // 곡이 바뀔 때만 낭독한다. 진행 시간까지 읽으면 계속 떠든다.
+      const announce = entry ? `${entry.track.title} — ${entry.track.composer}` : ''
+      if (announce !== lastAnnounced) {
+        lastAnnounced = announce
+        o.announceEl.textContent = announce
       }
 
       // 색만으로 상태를 구분하지 않는다. 버튼 글자가 곧 상태다.

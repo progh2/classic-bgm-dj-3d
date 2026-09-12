@@ -15,6 +15,9 @@ import {
   WebGLRenderer,
 } from 'three'
 
+import { createScreen, type Screen } from './screen'
+import { createTurntable, type Turntable } from './turntable'
+
 export interface Salon {
   /** 한 프레임 갱신. deltaSec 는 마지막 프레임과의 간격. */
   tick(nowMs: number, deltaSec: number): void
@@ -25,6 +28,10 @@ export interface Salon {
   removePlaceholderTable(): void
   /** 집사가 바라볼 대상. 카메라 앞에 둔 빈 오브젝트다. */
   readonly viewerAnchor: Object3D
+  /** 집사 뒤에 걸린 안내판 */
+  readonly screen: Screen
+  /** 테이블 위의 레코드 재생기 */
+  readonly turntable: Turntable
   dispose(): void
 }
 
@@ -60,10 +67,9 @@ export function createSalon(host: HTMLElement): Salon {
   scene.fog = new Fog(0x17110c, 4.5, 11)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
-  // 아래쪽 절반은 자막과 조작부가 덮는다. 조금 내려다보게 두어 테이블 상판과
-  // 그 위에 놓을 물건이 화면 위쪽에 남도록 한다.
-  camera.position.set(0, 2.05, 2.95)
-  camera.lookAt(0, 1.02, -0.45)
+  // 안내판(뒤)·집사·테이블 위 재생기가 한 화면에 들어오도록 잡는다.
+  camera.position.set(0, 1.72, 2.85)
+  camera.lookAt(0, 1.3, -0.7)
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
   const table = new Group()
@@ -122,6 +128,17 @@ export function createSalon(host: HTMLElement): Salon {
   viewerAnchor.position.set(0, 1.5, 2.9)
   scene.add(viewerAnchor)
 
+  // 집사 뒤 안내판 — 지금 흐르는 곡을 여기에 띄운다.
+  const screen = createScreen()
+  screen.root.position.set(0, 1.8, -2.35)
+  scene.add(screen.root)
+
+  // 테이블 위의 레코드 재생기. 콘솔 상판(0.95m) 위에 놓는다.
+  const turntable = createTurntable()
+  turntable.root.position.set(-0.34, 0.95, 0.0)
+  turntable.root.rotation.y = 0.18
+  scene.add(turntable.root)
+
   const resize = (): void => {
     const w = host.clientWidth || window.innerWidth
     const h = host.clientHeight || window.innerHeight
@@ -135,15 +152,18 @@ export function createSalon(host: HTMLElement): Salon {
 
   return {
     viewerAnchor,
+    screen,
+    turntable,
     add(object) {
       scene.add(object)
     },
     removePlaceholderTable() {
       scene.remove(table)
     },
-    tick(nowMs) {
+    tick(nowMs, deltaSec) {
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
       candle.intensity = reduceMotion ? 2.2 : 2.2 + Math.sin(nowMs / 240) * 0.18
+      turntable.tick(deltaSec)
       renderer.render(scene, camera)
     },
     resize,

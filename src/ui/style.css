@@ -203,7 +203,7 @@ html, body {
 
 .player {
   width: min(40rem, 100%);
-  padding: 14px 18px;
+  padding: 10px 16px;
   border: 1px solid rgba(201, 162, 39, .28);
   border-radius: 4px;
   background: rgba(20, 13, 9, .86);
@@ -212,29 +212,34 @@ html, body {
 }
 .player[hidden] { display: none; }
 
-.player__title { margin: 0; font-size: 1.05rem; font-weight: 600; line-height: 1.5; }
-.player__meta { margin: 2px 0 10px; font-size: .85rem; color: #bfae95; line-height: 1.6; }
-
-.player__seek { display: flex; align-items: center; gap: 10px; }
-.player__time { font-size: .8rem; color: #b7a68f; font-variant-numeric: tabular-nums; }
-.player__range { flex: 1; min-width: 0; accent-color: var(--brass); }
-
-.player__buttons {
+.player__bar {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-top: 10px;
 }
+.player__time { font-size: .8rem; color: #b7a68f; font-variant-numeric: tabular-nums; }
+.player__range { flex: 1; min-width: 6rem; accent-color: var(--brass); }
 .player__volume { display: flex; align-items: center; gap: 6px; font-size: .85rem; color: #bfae95; }
 .player__volume input { width: 6rem; accent-color: var(--brass); }
 
 .player__problem { margin: 10px 0 0; font-size: .85rem; color: #e6b98a; line-height: 1.6; }
 .player__problem:empty { display: none; }
 
+/* 화면에 보이지 않지만 낭독기는 읽는다. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @media (min-width: 1600px) {
-  .player__title { font-size: 1.5rem; }
-  .player__meta { font-size: 1.1rem; }
   .ask__question { font-size: 1.8rem; }
   .ask__option { min-height: 64px; font-size: 1.1rem; }
 }
