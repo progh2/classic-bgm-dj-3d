@@ -152,3 +152,89 @@ html, body {
   .subtitle__text { font-size: 1.5rem; }
   .btn--small { min-height: 56px; font-size: 1.05rem; }
 }
+
+/* ---- 질답 패널 ---- */
+
+.ask {
+  width: min(40rem, 100%);
+  padding: 20px 22px;
+  border: 1px solid rgba(201, 162, 39, .32);
+  border-radius: 4px;
+  background: rgba(20, 13, 9, .88);
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow);
+}
+.ask[hidden] { display: none; }
+
+.ask__step {
+  margin: 0 0 4px;
+  font-size: .75rem;
+  letter-spacing: .2em;
+  color: var(--brass-soft);
+}
+.ask__question { margin: 0 0 4px; font-size: clamp(1.1rem, 3vw, 1.35rem); font-weight: 600; }
+.ask__hint { margin: 0 0 14px; font-size: .85rem; color: #b7a68f; }
+
+.ask__options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 8px;
+}
+
+.ask__option {
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid rgba(201, 162, 39, .3);
+  border-radius: 3px;
+  background: rgba(59, 33, 24, .5);
+  color: var(--ivory);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.ask__option:hover { background: rgba(201, 162, 39, .16); }
+.ask__option:focus-visible { outline: 3px solid var(--brass-soft); outline-offset: 2px; }
+.ask__option b { display: block; font-weight: 600; }
+.ask__option span { display: block; margin-top: 2px; font-size: .8rem; color: #c0ad93; }
+
+.ask__nav { display: flex; gap: 8px; margin-top: 14px; }
+
+/* ---- 재생 조작부 ---- */
+
+.player {
+  width: min(40rem, 100%);
+  padding: 14px 18px;
+  border: 1px solid rgba(201, 162, 39, .28);
+  border-radius: 4px;
+  background: rgba(20, 13, 9, .86);
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow);
+}
+.player[hidden] { display: none; }
+
+.player__title { margin: 0; font-size: 1.05rem; font-weight: 600; line-height: 1.5; }
+.player__meta { margin: 2px 0 10px; font-size: .85rem; color: #bfae95; line-height: 1.6; }
+
+.player__seek { display: flex; align-items: center; gap: 10px; }
+.player__time { font-size: .8rem; color: #b7a68f; font-variant-numeric: tabular-nums; }
+.player__range { flex: 1; min-width: 0; accent-color: var(--brass); }
+
+.player__buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.player__volume { display: flex; align-items: center; gap: 6px; font-size: .85rem; color: #bfae95; }
+.player__volume input { width: 6rem; accent-color: var(--brass); }
+
+.player__problem { margin: 10px 0 0; font-size: .85rem; color: #e6b98a; line-height: 1.6; }
+.player__problem:empty { display: none; }
+
+@media (min-width: 1600px) {
+  .player__title { font-size: 1.5rem; }
+  .player__meta { font-size: 1.1rem; }
+  .ask__question { font-size: 1.8rem; }
+  .ask__option { min-height: 64px; font-size: 1.1rem; }
+}

@@ -35,7 +35,43 @@
       <p class="subtitle__who">세바스티안</p>
       <p id="subtitle-text" class="subtitle__text" aria-live="polite"></p>
     </div>
+    <div id="ask" class="ask" hidden>
+      <p class="ask__step" id="ask-step"></p>
+      <h2 class="ask__question" id="ask-question"></h2>
+      <p class="ask__hint" id="ask-hint"></p>
+      <div class="ask__options" id="ask-options"></div>
+      <div class="ask__nav">
+        <button id="ask-back" class="btn btn--small" type="button">뒤로</button>
+        <button id="ask-skip" class="btn btn--small" type="button">이건 맡길게요</button>
+      </div>
+    </div>
+
+    <div id="player" class="player" hidden>
+      <div class="player__now">
+        <p class="player__title" id="now-title">준비 중</p>
+        <p class="player__meta" id="now-meta"></p>
+      </div>
+      <div class="player__seek">
+        <span class="player__time" id="now-time">--:--</span>
+        <input id="seek" class="player__range" type="range" min="0" max="1000" value="0"
+               aria-label="재생 위치">
+        <span class="player__time" id="now-duration">--:--</span>
+      </div>
+      <div class="player__buttons">
+        <button id="prev" class="btn btn--small" type="button">◀ 이전</button>
+        <button id="play" class="btn btn--primary btn--small" type="button">재생</button>
+        <button id="next" class="btn btn--small" type="button">다음 ▶</button>
+        <label class="player__volume">
+          음량
+          <input id="volume" type="range" min="0" max="100" value="80" aria-label="음량">
+        </label>
+      </div>
+      <p class="player__problem" id="problem" role="status" aria-live="polite"></p>
+    </div>
+
     <div class="hud__controls">
+      <button id="start-ask" class="btn btn--small" type="button">취향 고르기</button>
+      <button id="start-auto" class="btn btn--small" type="button">맡길게</button>
       <button id="repeat-greeting" class="btn btn--small" type="button">인사 다시 듣기</button>
       <button id="voice-toggle" class="btn btn--small" type="button" aria-pressed="false">음성 켜기</button>
     </div>

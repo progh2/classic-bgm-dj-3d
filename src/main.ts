@@ -1,18 +1,26 @@
 import type { Butler } from './butler/butler'
 import { LINES } from './butler/lines'
 import { createSpeech } from './butler/speech'
+import { CATALOG } from './catalog/catalog'
+import { buildQueue, DEFAULT_ANSWERS, type Answers } from './catalog/select'
+import { createSession, type Session } from './core/session'
+import { AudioFileAdapter } from './playback/audioFileAdapter'
 import { createSalon, WebGLUnavailableError, type Salon } from './scene/salon'
+import { createPlayerUI } from './ui/player'
+import { createAskPanel } from './ui/questions'
 
-const sceneHost = document.getElementById('scene')
-const gate = document.getElementById('gate')
-const enterVoice = document.getElementById('enter-voice')
-const enterQuiet = document.getElementById('enter-quiet')
-const subtitleBox = document.getElementById('subtitle')
-const subtitleText = document.getElementById('subtitle-text')
-const hud = document.getElementById('hud')
-const voiceToggle = document.getElementById('voice-toggle')
-const repeatBtn = document.getElementById('repeat-greeting')
-const status = document.getElementById('butler-status')
+const el = <T extends HTMLElement>(id: string): T => {
+  const node = document.getElementById(id)
+  if (!node) throw new Error(`화면 요소를 찾을 수 없습니다: ${id}`)
+  return node as T
+}
+
+const sceneHost = el('scene')
+const gate = el('gate')
+const hud = el('hud')
+const subtitleBox = el('subtitle')
+const subtitleText = el('subtitle-text')
+const status = el('butler-status')
 
 let salon: Salon | null = null
 let butler: Butler | null = null
@@ -21,35 +29,107 @@ let lastMs = 0
 
 const speech = createSpeech({
   onSubtitle: (text) => {
-    if (!subtitleBox || !subtitleText) return
     subtitleText.textContent = text ?? ''
     subtitleBox.toggleAttribute('hidden', text === null)
   },
   onTalking: (on) => {
     butler?.setTalking(on)
-    butler?.setPose(on ? 'speak' : 'idle')
+    butler?.setPose(on ? 'speak' : listening ? 'listen' : 'idle')
   },
 })
 
-function say(text: string): void {
+/** 음악이 흐르는 동안에는 집사가 조용히 선다. */
+let listening = false
+
+const say = (text: string): void => {
   void speech.say(text)
 }
 
-function setStatus(text: string): void {
-  if (status) status.textContent = text
+const adapter = new AudioFileAdapter()
+const session: Session = createSession(adapter, {
+  // 큐가 끝나면 마지막 답변으로 다음 묶음을 만들어 이어 붙인다.
+  refill: (recent) => buildQueue(lastAnswers, CATALOG, { size: 12, exclude: recent }).entries,
+  onTrackChange: (entry) => {
+    if (!entry) return
+    listening = true
+    butler?.setPose('listen')
+  },
+})
+
+let lastAnswers: Answers = DEFAULT_ANSWERS
+
+const player = createPlayerUI({
+  root: el('player'),
+  titleEl: el('now-title'),
+  metaEl: el('now-meta'),
+  timeEl: el('now-time'),
+  durationEl: el('now-duration'),
+  seekEl: el<HTMLInputElement>('seek'),
+  playBtn: el<HTMLButtonElement>('play'),
+  prevBtn: el<HTMLButtonElement>('prev'),
+  nextBtn: el<HTMLButtonElement>('next'),
+  volumeEl: el<HTMLInputElement>('volume'),
+  problemEl: el('problem'),
+  onToggle: () => {
+    // 연속 실패로 멈춘 뒤의 재생 단추는 '다시 시도'다.
+    if (session.state.halted) void session.resume()
+    else void session.toggle()
+  },
+  onPrev: () => void session.previous(),
+  onNext: () => void session.next(),
+  onSeek: (frac) => {
+    const d = session.state.playback.durationSec
+    if (d) session.seek(frac * d)
+  },
+  onVolume: (v) => {
+    session.setVolume(v)
+    localStorage.setItem('salon.volume', String(v))
+  },
+})
+
+session.subscribe((state) => player.render(state))
+
+const ask = createAskPanel({
+  root: el('ask'),
+  stepEl: el('ask-step'),
+  questionEl: el('ask-question'),
+  hintEl: el('ask-hint'),
+  optionsEl: el('ask-options'),
+  backBtn: el<HTMLButtonElement>('ask-back'),
+  skipBtn: el<HTMLButtonElement>('ask-skip'),
+  defaults: DEFAULT_ANSWERS,
+  onAsk: (text) => {
+    listening = false
+    butler?.setPose('speak')
+    say(text)
+  },
+  onDone: (answers) => void begin(answers),
+})
+
+async function begin(answers: Answers): Promise<void> {
+  lastAnswers = answers
+  const queue = buildQueue(answers, CATALOG, { size: 20, exclude: session.recentIds() })
+  if (queue.entries.length === 0) {
+    say('죄송합니다. 지금 틀어 드릴 수 있는 곡이 없습니다.')
+    return
+  }
+  butler?.setPose('present')
+  say(queue.summary)
+  player.show()
+  await session.setQueue(queue.entries)
 }
 
 function startScene(): void {
-  if (!sceneHost || salon) return
+  if (salon) return
   try {
     salon = createSalon(sceneHost)
   } catch (err) {
     if (err instanceof WebGLUnavailableError) {
-      // 단계 6에서 2D 응접실로 대체한다. 그때까지는 사실대로 알린다.
+      // 단계 6에서 2D 응접실로 대체한다. 그때까지는 사실대로 알리고 음악은 계속 쓴다.
       sceneHost.removeAttribute('aria-hidden')
       sceneHost.innerHTML =
         '<p class="fallback">이 기기에서는 3D 응접실을 열 수 없습니다. ' +
-        '음악과 출처 안내는 준비 중인 2D 화면에서 제공할 예정입니다.</p>'
+        '음악과 선곡은 아래 조작부로 그대로 이용하실 수 있습니다.</p>'
       return
     }
     throw err
@@ -66,7 +146,6 @@ function startScene(): void {
   window.addEventListener('resize', () => salon?.resize())
 }
 
-/** 콘솔 테이블을 불러와 임시 상판과 바꾼다. 실패하면 임시 상판을 그대로 둔다. */
 async function dressRoom(): Promise<void> {
   if (!salon) return
   try {
@@ -81,69 +160,95 @@ async function dressRoom(): Promise<void> {
 
 async function bringInButler(): Promise<void> {
   if (!salon) return
-  setStatus('집사가 오는 중입니다…')
+  status.textContent = '집사가 오는 중입니다…'
   try {
     // 입장 화면이 먼저 뜨도록 three-vrm 과 집사 코드는 이때 받는다.
     const { loadButler } = await import('./butler/butler')
     butler = await loadButler(`${import.meta.env.BASE_URL}models/sebastian.vrm`, (frac) => {
-      setStatus(`집사가 오는 중입니다… ${Math.round(frac * 100)}%`)
+      status.textContent = `집사가 오는 중입니다… ${Math.round(frac * 100)}%`
     })
   } catch (err) {
-    // 집사가 없어도 음악과 책자는 쓸 수 있어야 한다.
+    // 집사가 없어도 음악은 그대로 쓸 수 있어야 한다.
     console.warn('집사 모델을 불러오지 못했습니다', err)
-    setStatus('집사가 자리를 비웠습니다. 음악은 그대로 이용하실 수 있습니다.')
+    status.textContent = '집사가 자리를 비웠습니다. 음악은 그대로 이용하실 수 있습니다.'
     say(LINES.greetQuiet)
     return
   }
 
-  // 자세를 화면에서 맞춰 보기 위한 통로. 개발 빌드에서만 연다.
   if (import.meta.env.DEV) {
+    // 자세를 화면에서 맞춰 보기 위한 통로.
     ;(window as unknown as Record<string, unknown>).__butler = butler
   }
   butler.root.position.set(0, 0, -1.05)
   butler.lookAt(salon.viewerAnchor)
   salon.add(butler.root)
-  setStatus('')
+  status.textContent = ''
 
   butler.bow()
   say(speech.enabled ? LINES.greetVoice : LINES.greetQuiet)
-  if (speech.enabled && !speech.hasKoreanVoice()) setStatus(LINES.noVoice)
+  if (speech.enabled && !speech.hasKoreanVoice()) status.textContent = LINES.noVoice
 }
 
 function enter(withVoice: boolean): void {
   speech.enabled = withVoice
   sessionStorage.setItem('salon.voice', withVoice ? 'on' : 'off')
-  gate?.setAttribute('hidden', '')
-  hud?.removeAttribute('hidden')
+  gate.setAttribute('hidden', '')
+  hud.removeAttribute('hidden')
   updateVoiceToggle()
+
+  // 기기에 저장해 둔 음량을 되살린다. 소리는 이 조작으로 이미 허락받았다.
+  const saved = Number(localStorage.getItem('salon.volume'))
+  const volume = Number.isFinite(saved) && saved > 0 ? saved : 0.8
+  session.setVolume(volume)
+  el<HTMLInputElement>('volume').value = String(Math.round(volume * 100))
+
   startScene()
   void dressRoom()
   void bringInButler()
 }
 
 function updateVoiceToggle(): void {
-  if (!voiceToggle) return
-  voiceToggle.textContent = speech.enabled ? '음성 끄기' : '음성 켜기'
-  voiceToggle.setAttribute('aria-pressed', String(speech.enabled))
+  const btn = el('voice-toggle')
+  btn.textContent = speech.enabled ? '음성 끄기' : '음성 켜기'
+  btn.setAttribute('aria-pressed', String(speech.enabled))
 }
 
-enterVoice?.addEventListener('click', () => enter(true))
-enterQuiet?.addEventListener('click', () => enter(false))
+el('enter-voice').addEventListener('click', () => enter(true))
+el('enter-quiet').addEventListener('click', () => enter(false))
 
-voiceToggle?.addEventListener('click', () => {
+el('voice-toggle').addEventListener('click', () => {
   speech.enabled = !speech.enabled
   if (!speech.enabled) speech.cancel()
   updateVoiceToggle()
 })
 
-repeatBtn?.addEventListener('click', () => {
+el('repeat-greeting').addEventListener('click', () => {
   butler?.bow()
   say(speech.enabled ? LINES.greetVoice : LINES.greetQuiet)
+})
+
+el('start-ask').addEventListener('click', () => ask.start())
+el('start-auto').addEventListener('click', () => void begin(DEFAULT_ANSWERS))
+
+// 키보드만으로 감상할 수 있게 한다. 입력창 안에서는 동작하지 않는다.
+window.addEventListener('keydown', (e) => {
+  const target = e.target as HTMLElement | null
+  if (target && (target.tagName === 'INPUT' || target.isContentEditable)) return
+  if (gate.hasAttribute('hidden') === false) return
+  if (e.key === ' ') {
+    e.preventDefault()
+    void session.toggle()
+  } else if (e.key === 'ArrowRight' && e.altKey) {
+    void session.next()
+  } else if (e.key === 'ArrowLeft' && e.altKey) {
+    void session.previous()
+  }
 })
 
 window.addEventListener('pagehide', () => {
   cancelAnimationFrame(frame)
   speech.dispose()
+  session.dispose()
   butler?.dispose()
   butler = null
   salon?.dispose()
