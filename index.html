@@ -24,14 +24,6 @@
     <p id="now-meta"></p>
     <p id="problem" role="status" aria-live="polite"></p>
 
-    <button id="start-ask" type="button">취향 고르기</button>
-    <button id="start-auto" type="button">맡길게 — 알아서 골라 재생</button>
-    <button id="prev" type="button">이전 곡</button>
-    <button id="play" type="button">재생</button>
-    <button id="next" type="button">다음 곡</button>
-    <button id="repeat-greeting" type="button">인사 다시 듣기</button>
-    <button id="voice-toggle" type="button" aria-pressed="false">음성 켜기</button>
-
     <label for="seek">재생 위치</label>
     <input id="seek" type="range" min="0" max="1000" value="0">
     <label for="volume">음량</label>
@@ -45,6 +37,26 @@
       <button id="ask-back" type="button">뒤로</button>
       <button id="ask-skip" type="button">이건 맡길게요</button>
     </div>
+  </div>
+
+  <!--
+    조작판만 3D 밖으로 뺀다. 장면 안에 두면 화면 비율이 바뀔 때마다 위치가
+    흔들리고, 가로 모드에서는 화면 아래로 내려가 손이 닿지 않았다.
+    브라우저 아래에 붙여 두는 편이 어느 기기에서나 같은 자리에 있다.
+  -->
+  <div id="console" class="console">
+    <div class="console__row">
+      <button id="prev" class="led led--icon" type="button" aria-label="이전 곡">◀</button>
+      <button id="play" class="led led--main" type="button">재생</button>
+      <button id="next" class="led led--icon" type="button" aria-label="다음 곡">▶</button>
+    </div>
+    <div class="console__row">
+      <button id="start-ask" class="led" type="button">취향 고르기</button>
+      <button id="start-auto" class="led" type="button">맡길게</button>
+      <button id="repeat-greeting" class="led" type="button">인사</button>
+      <button id="voice-toggle" class="led" type="button" aria-pressed="false">음성 켜기</button>
+    </div>
+    <p id="console-notice" class="console__notice" role="status" aria-live="polite"></p>
   </div>
 
   <noscript>

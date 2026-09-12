@@ -10,7 +10,7 @@
  * 다른 출처(cross-origin)의 응답에는 손대지 않는다.
  */
 
-const VERSION = 'v1'
+const VERSION = 'v2'
 const CACHE = `salon-assets-${VERSION}`
 
 /** 이 경로 아래의 것만 오래 담아 둔다. */

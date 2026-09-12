@@ -15,19 +15,6 @@ import {
  * 화면 앞에 2D 를 덮지 않기 위해 전부 장면 안의 판으로 그린다.
  */
 
-export interface Hud3DContent {
-  /** 집사의 말. 없으면 명판을 감춘다. */
-  subtitle: string | null
-  /** 재생 단추에 쓸 글자 */
-  playLabel: string
-  /** 음성 단추에 쓸 글자 */
-  voiceLabel: string
-  /** 곡이 걸려 있으면 이전·다음·재생을 쓸 수 있다. */
-  hasTrack: boolean
-  /** 아래쪽 한 줄 안내 */
-  notice: string
-}
-
 export interface AskContent {
   step: string
   question: string
@@ -39,11 +26,8 @@ export interface AskContent {
 export interface Hud3D {
   readonly root: Group
   readonly panels: Panel[]
-  /** 좁은 화면에서는 단추를 두 줄로 접는다. */
-  setCompact(compact: boolean): void
   /** 화면에 담기는 가로 폭에 맞춰 조작판과 질답 카드를 줄인다. */
   fitWidth(visibleWidth: number): void
-  setContent(c: Hud3DContent): void
   showAsk(c: AskContent | null): void
   /** 판 위 uv 에 있는 칸의 id */
   hit(panel: Panel, uv: Vector2): string | null
@@ -57,85 +41,12 @@ export function createHud3D(): Hud3D {
   const root = new Group()
   let handler: ((id: string) => void) | null = null
 
-  // 조작판 — 상판 앞쪽에 보면대처럼 세워 둔다. 눕히면 위에서 봐도 글자가
-  // 납작해져 읽히지 않는다. 좁은 화면에서는 두 줄로 접어 단추를 키운다.
-  const CONTROLS_W = 1.94
-  const controls = createPanel({ width: CONTROLS_W, height: 0.66, canvasWidth: 1400 })
-  // 상판 앞면 아래, 테이블 다리 높이에 건다. 상판 위를 가리지 않는다.
-  controls.mesh.position.set(0, -0.46, 0.52)
-  controls.mesh.rotation.x = -0.12
-  root.add(controls.mesh)
-
   // 질답 카드 — 물을 때만 나타난다
   const ASK_W = 2.2
   const ask = createPanel({ width: ASK_W, height: 1.12, canvasWidth: 1380 })
   ask.mesh.position.set(0, 0.8, -0.26)
   ask.setVisible(false)
   root.add(ask.mesh)
-
-  let compact = false
-  let content: Hud3DContent = {
-    subtitle: null,
-    playLabel: '재생',
-    voiceLabel: '음성 켜기',
-    hasTrack: false,
-    notice: '',
-  }
-
-  const drawControls = (): void => {
-    controls.draw((ctx, { w, h }, hovered) => {
-      const regions: Region[] = []
-      const cells: { id: string; label: string; span: number; primary?: boolean; off?: boolean }[] = [
-        { id: 'ask', label: '취향 고르기', span: 1.5 },
-        { id: 'auto', label: '맡길게', span: 1.1 },
-        { id: 'prev', label: '◀', span: 0.62, off: !content.hasTrack },
-        { id: 'play', label: content.playLabel, span: 1.2, primary: true, off: !content.hasTrack },
-        { id: 'next', label: '▶', span: 0.62, off: !content.hasTrack },
-        { id: 'greet', label: '인사', span: 0.85 },
-        { id: 'voice', label: content.voiceLabel, span: 1.4 },
-      ]
-      // 좁은 화면에서는 재생 조작을 아랫줄로 내려 단추를 키운다.
-      const rows = compact
-        ? [cells.filter((c) => ['prev', 'play', 'next'].includes(c.id)),
-           cells.filter((c) => !['prev', 'play', 'next'].includes(c.id))]
-        : [cells]
-
-      const pad = compact ? 16 : 20
-      const bh = compact ? 128 : 104
-      const gap = 18
-      const usableH = rows.length * bh + (rows.length - 1) * gap
-      let y = (h - usableH) / 2 - (content.notice ? 22 : 0)
-
-      plateBackground(ctx, w, h, 0.9)
-
-      for (const row of rows) {
-        const spans = row.reduce((n, c) => n + c.span, 0)
-        const unit = (w - pad * 2 - pad * (row.length - 1)) / spans
-        ctx.font = `500 ${compact ? 40 : 36}px ${F}`
-        let x = pad
-        for (const c of row) {
-          const bw = unit * c.span
-          plateButton(ctx, c.label, x, y, bw, bh, {
-            hovered: hovered === c.id && !c.off,
-            ...(c.primary === undefined ? {} : { primary: c.primary }),
-            ...(c.off === undefined ? {} : { disabled: c.off }),
-          })
-          regions.push({ id: c.id, x, y, w: bw, h: bh })
-          x += bw + pad
-        }
-        y += bh + gap
-      }
-
-      if (content.notice) {
-        ctx.fillStyle = '#e6b98a'
-        ctx.font = `400 28px ${F}`
-        ctx.textAlign = 'center'
-        ctx.fillText(content.notice, w / 2, y + 18)
-        ctx.textAlign = 'left'
-      }
-      return regions
-    })
-  }
 
   const drawAsk = (c: AskContent): void => {
     ask.draw((ctx, { w, h }, hovered) => {
@@ -191,28 +102,13 @@ export function createHud3D(): Hud3D {
     })
   }
 
-  drawControls()
 
   return {
     root,
-    panels: [controls, ask],
+    panels: [ask],
 
     fitWidth(visibleWidth) {
-      // 화면 폭의 92% 안에 들어오게 줄인다. 넓은 화면에서는 키우지 않는다.
-      const k = Math.min(1, (visibleWidth * 0.92) / CONTROLS_W)
-      controls.mesh.scale.setScalar(k)
       ask.mesh.scale.setScalar(Math.min(1, (visibleWidth * 0.94) / ASK_W))
-    },
-
-    setCompact(next) {
-      if (compact === next) return
-      compact = next
-      drawControls()
-    },
-
-    setContent(c) {
-      content = c
-      drawControls()
     },
 
     showAsk(c) {

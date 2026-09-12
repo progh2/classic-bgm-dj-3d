@@ -5,7 +5,6 @@ import { CATALOG, formatTime } from './catalog/catalog'
 import { buildQueue, DEFAULT_ANSWERS, QUESTIONS, type Answers } from './catalog/select'
 import { createSession, type SessionState } from './core/session'
 import { AudioFileAdapter } from './playback/audioFileAdapter'
-import type { Hud3DContent } from './scene/hud3d'
 import { createSalon, TABLE_TOP, WebGLUnavailableError, type Salon } from './scene/salon'
 
 const el = <T extends HTMLElement>(id: string): T => {
@@ -36,19 +35,14 @@ let browsedId: string | null = null
 /** 곡목의 첫 줄 */
 let listOffset = 0
 
-let hudContent: Hud3DContent = {
-  subtitle: null,
-  playLabel: '재생',
-  voiceLabel: '음성 켜기',
-  hasTrack: false,
-  notice: '',
-}
+/** 안내판 아래에 싣는 집사의 말. */
+let speechLine: string | null = null
 
 const speech = createSpeech({
   onSubtitle: (text) => {
     subtitleText.textContent = text ?? ''
-    hudContent = { ...hudContent, subtitle: text }
-    salon?.hud.setContent(hudContent)
+    speechLine = text
+    updateScene(session.state)
   },
   onTalking: (on) => {
     butler?.setTalking(on)
@@ -96,6 +90,24 @@ function renderAccessible(state: SessionState): void {
 
 // ---- 3D 안의 조작부와 안내판 ----
 
+/** 결마다의 빛깔. 조작부 글자와 테두리에 쓴다. */
+const MOOD_COLOUR: Record<string, string> = {
+  calm: '#8fd6c4',
+  bright: '#f2c14e',
+  melancholy: '#9aa8e6',
+  grand: '#e0c76a',
+  playful: '#f0a3ac',
+  tense: '#e08a63',
+}
+
+function moodColour(moods: readonly string[]): string {
+  for (const m of moods) {
+    const c = MOOD_COLOUR[m]
+    if (c) return c
+  }
+  return '#e0c76a'
+}
+
 const PLAY_LABEL: Record<string, string> = {
   idle: '재생',
   loading: '준비 중',
@@ -120,19 +132,18 @@ function updateScene(state: SessionState): void {
         ? `${state.problem ?? ''} 재생을 누르면 다시 시도합니다.`
         : (state.problem ?? '')
 
-  hudContent = {
-    ...hudContent,
-    playLabel: PLAY_LABEL[playback.state] ?? '재생',
-    voiceLabel: speech.enabled ? '음성 끄기' : '음성 켜기',
-    hasTrack: current !== null || playback.state === 'loading',
-    notice,
-  }
-  el('play').textContent = hudContent.playLabel
-  el('voice-toggle').textContent = hudContent.voiceLabel
+  const hasTrack = current !== null || playback.state === 'loading'
+  el('play').textContent = PLAY_LABEL[playback.state] ?? '재생'
+  el<HTMLButtonElement>('play').disabled = !hasTrack
+  el<HTMLButtonElement>('prev').disabled = !hasTrack
+  el<HTMLButtonElement>('next').disabled = !hasTrack
+  el('voice-toggle').textContent = speech.enabled ? '음성 끄기' : '음성 켜기'
   el('voice-toggle').setAttribute('aria-pressed', String(speech.enabled))
+  el('console-notice').textContent = notice
+  // 곡의 결에 따라 조작부의 빛깔이 바뀐다.
+  document.documentElement.style.setProperty('--mood', moodColour(current?.track.moods ?? []))
 
   if (!salon) return
-  salon.hud.setContent(hudContent)
 
   salon.screen.set({
     title: current
@@ -147,7 +158,7 @@ function updateScene(state: SessionState): void {
     elapsed: formatTime(current ? playback.currentTimeSec : null),
     duration: formatTime(duration),
     notice,
-    speech: hudContent.subtitle,
+    speech: speechLine,
     playing,
   })
 

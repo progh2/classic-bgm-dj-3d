@@ -1,4 +1,10 @@
+/*
+ * --mood 는 지금 흐르는 곡의 결에 따라 바뀐다. 조작부는 어두운 판에 이 색으로
+ * 글자만 밝게 띄우는 역LED 로 쓴다. 금색 단추 하나만 밝게 빛나던 것보다
+ * 방의 어둠과 잘 어울리고, 곡이 바뀌는 것이 손끝에서도 보인다.
+ */
 :root {
+  --mood: #e0c76a;
   --mahogany: #3b2118;
   --walnut: #5a3524;
   --brass: #c9a227;
@@ -52,4 +58,78 @@ html, body {
   border-radius: 4px;
   color: var(--ivory);
   font: inherit;
+}
+
+/* ---- 브라우저 아래에 붙는 조작부 ---- */
+
+.console {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  z-index: 10;
+  width: min(44rem, calc(100% - 20px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--mood) 34%, transparent);
+  border-radius: 10px;
+  background: rgba(12, 9, 7, .74);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow);
+}
+
+.console__row { display: flex; gap: 8px; }
+
+.led {
+  flex: 1;
+  min-height: 52px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--mood) 30%, transparent);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, .42);
+  color: color-mix(in srgb, var(--mood) 86%, #fff);
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.led:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--mood) 14%, rgba(0, 0, 0, .42));
+  border-color: color-mix(in srgb, var(--mood) 60%, transparent);
+}
+.led:focus-visible { outline: 3px solid var(--mood); outline-offset: 2px; }
+.led:disabled { opacity: .38; cursor: default; }
+
+/* 가운데 재생 단추 — 글자만 더 밝게. 바탕을 채우지 않는다. */
+.led--main {
+  flex: 1.4;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--mood) 50%, #fff);
+  border-color: color-mix(in srgb, var(--mood) 55%, transparent);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--mood) 55%, transparent);
+}
+.led--icon { flex: .5; font-size: 1.1rem; }
+
+.console__notice {
+  margin: 0;
+  text-align: center;
+  font-size: .85rem;
+  line-height: 1.5;
+  color: #e6b98a;
+}
+.console__notice:empty { display: none; }
+
+/* 가로로 넓으면 한 줄로 편다. */
+@media (min-width: 40rem) {
+  .console { flex-direction: row; align-items: center; width: min(52rem, calc(100% - 24px)); }
+  .console__row { flex: 1; }
+  .console__notice { display: none; }
+}
+
+/* 전자칠판처럼 큰 화면에서는 손이 닿는 크기로 키운다. */
+@media (min-width: 1600px) {
+  .led { min-height: 64px; font-size: 1.15rem; }
 }

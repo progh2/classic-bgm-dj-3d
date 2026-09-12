@@ -121,8 +121,8 @@ export function createSalon(host: HTMLElement): Salon {
    * 여기서 생겼다.
    */
   const SHOTS = {
-    wide: { at: new Vector3(0.1, 1.55, -0.9), box: { w: 5.0, h: 3.1 } },
-    close: { at: new Vector3(0.12, 1.46, -0.75), box: { w: 3.9, h: 2.35 } },
+    wide: { at: new Vector3(0.1, 1.62, -1.0), box: { w: 5.0, h: 3.1 } },
+    close: { at: new Vector3(0.1, 1.58, -1.1), box: { w: 3.9, h: 2.4 } },
   } as const
   type ShotName = keyof typeof SHOTS
 
@@ -147,7 +147,9 @@ export function createSalon(host: HTMLElement): Salon {
       Math.max(s.box.w / 2 / (half * camera.aspect), s.box.h / 2 / half),
     )
     // 상판이 보이도록 거리에 비례해 눈높이를 올린다.
-    return out.set(s.at.x, s.at.y + d * 0.19, s.at.z + d)
+    // 눈높이를 높이면 안내판이 사다리꼴로 일그러진다. 판의 가운데 높이에
+    // 가깝게 서서 반듯하게 본다.
+    return out.set(s.at.x, s.at.y + d * 0.07, s.at.z + d)
   }
 
   /** 어떤 z 평면에서 화면에 담기는 가로 폭(m) */
@@ -226,12 +228,17 @@ export function createSalon(host: HTMLElement): Salon {
 
   // 집사가 이쪽을 보게 할 기준점. 카메라보다 살짝 아래에 둬야 눈이 마주친다.
   const viewerAnchor = new Object3D()
-  const HOME = new Vector3(0, 1.46, 2.1)
-  viewerAnchor.position.copy(HOME)
+  // 가리키는 것이 없으면 보는 사람 쪽 — 곧 카메라 쪽을 본다. 손가락으로 쓰는
+  // 기기에는 포인터가 없어서, 이 기본값이 곧 평소 얼굴 방향이 된다.
+  const HOME = new Vector3()
+  const homeFromCamera = (): Vector3 => HOME.copy(camera.position).setY(camera.position.y - 0.12)
+  viewerAnchor.position.copy(homeFromCamera())
   scene.add(viewerAnchor)
 
   // 마우스·손가락이 가리키는 곳을 집사가 본다. 포인터가 없으면 정면으로 돌아온다.
   const wanted = HOME.clone()
+  /** 포인터가 움직인 적이 있는가. 터치 기기에서는 끝까지 거짓이다. */
+  let pointerSeen = false
   const ndc = new Vector2()
   const pointerPlane = new Vector3()
 
@@ -270,6 +277,7 @@ export function createSalon(host: HTMLElement): Salon {
   }
 
   const onPointerMove = (e: PointerEvent): void => {
+    pointerSeen = true
     aimAt(e.clientX, e.clientY)
     const found = pickAt(e.clientX, e.clientY)
     clearHover()
@@ -283,7 +291,7 @@ export function createSalon(host: HTMLElement): Salon {
   }
   window.addEventListener('pointerdown', onPointerDown)
   const onPointerLeave = (): void => {
-    wanted.copy(HOME)
+    pointerSeen = false
     clearHover()
   }
   window.addEventListener('pointermove', onPointerMove, { passive: true })
@@ -320,7 +328,6 @@ export function createSalon(host: HTMLElement): Salon {
     // 세로로 긴 화면에서는 위아래로 더 담아야 옆이 덜 잘린다.
     camera.fov = camera.aspect < 1 ? 46 : 38
     camera.updateProjectionMatrix()
-    hud.setCompact(camera.aspect < 1.05)
     applyShot()
   }
   resize()
@@ -385,6 +392,8 @@ export function createSalon(host: HTMLElement): Salon {
       }
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
       candle.intensity = reduceMotion ? 2.2 : 2.2 + Math.sin(nowMs / 240) * 0.18
+      // 가리키는 것이 없으면 정면(보는 사람)을 본다. 카메라가 움직이면 함께 따라온다.
+      if (!pointerSeen) wanted.copy(homeFromCamera())
       // 시선은 조금 늦게 따라온다. 그래야 눈이 홱홱 돌지 않는다.
       viewerAnchor.position.lerp(wanted, Math.min(1, deltaSec * 4))
       turntable.tick(deltaSec)
