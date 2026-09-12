@@ -43,6 +43,46 @@ let listOffset = 0
 let announceNext = false
 /** 인사를 자막으로만 건넸는가. 첫 조작 때 소리로 다시 건넨다. */
 let greetedSilently = false
+/** 집사가 지금 어디에 있는가. 자리를 옮기는 동안 겹쳐 부르지 않도록 센다. */
+let butlerPlace: 'console' | 'piano' = 'console'
+let moveToken = 0
+
+/** 집사가 서는 콘솔 뒤 자리 */
+const CONSOLE_SPOT = { x: 0.62, z: -1.0 }
+
+function isPianoTrack(entry: { track: { instruments: readonly string[] } }): boolean {
+  return entry.track.instruments.includes('piano')
+}
+
+/**
+ * 곡의 편성에 따라 집사가 자리를 옮긴다.
+ *
+ * 피아노곡이면 피아노 앞에 앉아 친다. 관현악이나 4중주가 흐르는데 집사가
+ * 건반을 두드리고 있으면 소리와 그림이 어긋난다.
+ */
+async function placeButler(toPiano: boolean): Promise<void> {
+  if (!salon || !butler) return
+  const place = toPiano ? 'piano' : 'console'
+  if (butlerPlace === place) return
+  butlerPlace = place
+  const my = ++moveToken
+
+  if (toPiano) {
+    salon.lookAt('piano', 2.4)
+    const seat = salon.piano.seat
+    await butler.walkTo(seat.x, seat.z + 0.34, playFootstep)
+    if (my !== moveToken) return
+    butler.sit(true, salon.piano.seatHeight, salon.piano.facing)
+    butler.setPlaying(true)
+  } else {
+    butler.setPlaying(false)
+    butler.sit(false)
+    salon.lookAt('close', 2.4)
+    await butler.walkTo(CONSOLE_SPOT.x, CONSOLE_SPOT.z, playFootstep)
+    if (my !== moveToken) return
+    butler.setPose(listening ? 'listen' : 'idle')
+  }
+}
 
 /** 안내판 아래에 싣는 집사의 말. */
 let speechLine: string | null = null
@@ -68,7 +108,8 @@ const session = createSession(adapter, {
   refill: (recent) => buildQueue(lastAnswers, CATALOG, { size: 12, exclude: recent }).entries,
   onTrackChange: (entry) => {
     listening = true
-    butler?.setPose('listen')
+    if (entry) void placeButler(isPianoTrack(entry))
+    if (butlerPlace === 'console') butler?.setPose('listen')
     if (announceNext && entry) {
       announceNext = false
       say(introduce(entry.track, entry.note?.shortNote))
@@ -181,7 +222,9 @@ function updateScene(state: SessionState): void {
     listOffset,
   })
 
-  butler?.setGroove(playing)
+  butler?.setGroove(playing && butlerPlace === 'console')
+  // 피아노 앞에서는 멈추면 손을 내린다.
+  if (butlerPlace === 'piano') butler?.setPlaying(playing)
 
   salon.turntable.set({
     spinning: playing,

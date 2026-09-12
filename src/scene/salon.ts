@@ -27,6 +27,7 @@ import { createFurnishings, type Furnishings } from './furnishings'
 import { BACK_Z, createRoom, WALL_X, type Room } from './room'
 import { createBooks, type Books } from './books'
 import type { Panel } from './panel'
+import { createPiano, type Piano } from './piano'
 import { createTabletop, type Tabletop } from './tabletop'
 import { createScreen, type Screen } from './screen'
 import { createTurntable, type Turntable } from './turntable'
@@ -55,10 +56,12 @@ export interface Salon {
   readonly furnishings: Furnishings
   /** 프로그램북과 출처 안내서 */
   readonly books: Books
+  /** 그랜드 피아노와 의자 */
+  readonly piano: Piano
   /** 누를 수 있는 판을 장면에 더한다. 레이캐스트 대상이 된다. */
   addPanel(panel: Panel, pick: (id: string) => void): void
   /** 구도를 옮긴다. seconds 를 주면 그 시간에 걸쳐 움직인다. */
-  lookAt(shot: 'wide' | 'door' | 'close', seconds?: number): void
+  lookAt(shot: 'wide' | 'door' | 'close' | 'piano', seconds?: number): void
   dispose(): void
 }
 
@@ -126,6 +129,8 @@ export function createSalon(host: HTMLElement): Salon {
     // 아니라 바라보는 방향이다. 사람이 고개를 돌리는 것에 가깝다.
     wide: { at: new Vector3(0, 1.6, -1.05), box: { w: 4.2, h: 2.6 } },
     door: { at: new Vector3(1.55, 1.48, -1.35), box: { w: 4.2, h: 2.6 } },
+    // 집사가 피아노에 앉으면 그쪽으로 고개를 돌린다.
+    piano: { at: new Vector3(-1.15, 1.42, -0.9), box: { w: 4.4, h: 2.7 } },
     close: { at: new Vector3(0, 1.58, -1.1), box: { w: 4.2, h: 2.6 } },
   } as const
   type ShotName = keyof typeof SHOTS
@@ -214,6 +219,10 @@ export function createSalon(host: HTMLElement): Salon {
 
   const furnishings = createFurnishings(BACK_Z, WALL_X)
   scene.add(furnishings.root)
+
+  // 콘솔 왼쪽에 피아노를 놓는다. 피아노곡이 걸리면 집사가 여기 앉아 친다.
+  const piano = createPiano(new Vector3(-1.72, 0, -0.55), 0.62)
+  scene.add(piano.root)
 
   scene.add(new AmbientLight(0xffd9a8, 0.26))
 
@@ -369,6 +378,7 @@ export function createSalon(host: HTMLElement): Salon {
     tabletop,
     furnishings,
     books,
+    piano,
     addPanel(panel, pick) {
       pickable.push({ panel, pick })
     },

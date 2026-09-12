@@ -39,6 +39,13 @@ export interface Butler {
   setTalking(on: boolean): void
   /** 음악에 맞춰 고개를 아주 조금 흔든다. 재생 중에만 켠다. */
   setGroove(on: boolean): void
+  /**
+   * 의자에 앉힌다. 앉으면 걷지 않고 다리를 굽힌 채로 있는다.
+   * seatY 는 앉는 면의 높이, facing 은 몸이 향할 방향이다.
+   */
+  sit(on: boolean, seatY?: number, facing?: number): void
+  /** 앉은 채로 건반을 친다. */
+  setPlaying(on: boolean): void
   /** 목례하고 돌아온다. */
   bow(): void
   /**
@@ -104,6 +111,13 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   let pose: Pose = POSES.idle
   let talking = false
   let groove = false
+  let seated = false
+  let seatY = 0
+  /** 서 있을 때 몸이 향할 방향. 걷지 않을 때 이쪽으로 돌아온다. */
+  let standFacing = 0
+  let playingKeys = false
+  /** 건반을 치는 정도. 갑자기 팔을 뻗지 않도록 천천히 오른다. */
+  let playAmount = 0
   /** 리듬을 타는 정도. 갑자기 흔들지 않도록 천천히 오르내린다. */
   let grooveAmount = 0
   let bowUntil = 0
@@ -171,6 +185,24 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       groove = on
     },
 
+    sit(on, y = 0, facing = 0) {
+      seated = on
+      if (on) {
+        seatY = y
+        standFacing = facing
+        pose = POSES.sit
+      } else {
+        standFacing = 0
+        playingKeys = false
+        pose = POSES.idle
+      }
+    },
+
+    setPlaying(on) {
+      playingKeys = on
+      pose = on ? POSES.keys : seated ? POSES.sit : POSES.idle
+    },
+
     setTalking(on) {
       talking = on
       if (!on) {
@@ -188,6 +220,13 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
     },
 
     walkTo(x, z, onFootstep) {
+      // 걸으려면 먼저 일어서야 한다.
+      if (seated) {
+        seated = false
+        playingKeys = false
+        standFacing = 0
+        pose = POSES.idle
+      }
       return new Promise<void>((resolve) => {
         // 걷는 도중 다시 부르면 앞의 약속을 먼저 매듭짓는다.
         walk?.resolve()
@@ -232,22 +271,26 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
           }
         }
       } else {
-        facing += (0 - facing) * Math.min(1, deltaSec * 3)
+        facing += (standFacing - facing) * Math.min(1, deltaSec * 3)
       }
       root.rotation.y = facing
 
-      // 다리 — 걸을 때만 움직이고, 서 있으면 곧게 편다.
+      // 다리 — 걸을 때는 번갈아 내딛고, 앉으면 굽힌 채로, 서면 곧게 편다.
       const swing = walk ? Math.sin(walk.phase) : 0
       const lift = walk ? Math.max(0, -Math.cos(walk.phase)) : 0
       const legK = Math.min(1, deltaSec * 12)
-      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, swing * 0.42), legK)
-      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, -swing * 0.42), legK)
-      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, -Math.max(0, -swing) * 0.75), legK)
-      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, -Math.max(0, swing) * 0.75), legK)
-      slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, lift * 0.2), legK)
-      slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, lift * 0.2), legK)
-      // 걸을 때 몸이 조금 오르내린다.
-      root.position.y = walk ? Math.abs(Math.sin(walk.phase)) * 0.018 : 0
+      const sitHip = pose.hip ?? 0
+      const sitKnee = pose.knee ?? 0
+      const sitFoot = pose.foot ?? 0
+      // 앉은 다리는 좌우를 조금 어긋나게 둔다. 딱 붙이면 인형처럼 보인다.
+      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.42), legK)
+      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.42), legK)
+      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.75), legK)
+      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.75), legK)
+      slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.2), legK)
+      slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.2), legK)
+      // 걸을 때 몸이 조금 오르내리고, 앉으면 의자 높이에 얹힌다.
+      root.position.y = seated && !walk ? seatY : walk ? Math.abs(Math.sin(walk.phase)) * 0.018 : 0
 
       if (bowUntil > 0 && nowMs > bowUntil) {
         bowUntil = 0
@@ -263,12 +306,21 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const twistR = pose.armTwistR ?? pose.armTwist
       const elbowR = pose.elbowR ?? pose.elbow
 
+      // 건반을 치는 동안 두 팔이 번갈아 오르내린다.
+      playAmount += ((playingKeys ? 1 : 0) - playAmount) * Math.min(1, deltaSec * 2)
+      const keysL = reduceMotion ? 0 : Math.sin(nowMs / 430) * 0.09 * playAmount
+      const keysR = reduceMotion ? 0 : Math.sin(nowMs / 430 + 1.7) * 0.09 * playAmount
+
       // 걸을 때는 모은 손을 풀고 팔을 조금 흔든다.
       const gaitL = walk ? Math.sin(walk.phase) * 0.26 : 0
-      slerp(joints.upperArmL, armQuat(qArmL, 1, pose.armDown, pose.armSwing - gaitL, pose.armTwist), k)
-      slerp(joints.upperArmR, armQuat(qArmR, -1, downR, swingR + gaitL, twistR), k)
-      slerp(joints.lowerArmL, qElbowL.setFromAxisAngle(AX_Y, -pose.elbow), k)
-      slerp(joints.lowerArmR, qElbowR.setFromAxisAngle(AX_Y, elbowR), k)
+      slerp(
+        joints.upperArmL,
+        armQuat(qArmL, 1, pose.armDown + keysL, pose.armSwing - gaitL, pose.armTwist),
+        k,
+      )
+      slerp(joints.upperArmR, armQuat(qArmR, -1, downR + keysR, swingR + gaitL, twistR), k)
+      slerp(joints.lowerArmL, qElbowL.setFromAxisAngle(AX_Y, -(pose.elbow + keysL * 0.6)), k)
+      slerp(joints.lowerArmR, qElbowR.setFromAxisAngle(AX_Y, elbowR + keysR * 0.6), k)
       slerp(joints.spine, qTorso.setFromAxisAngle(AX_X, pose.torso + breath), k)
 
       // 눈만 굴리면 노려보는 것처럼 보인다. 고개도 조금 따라 돌린다.

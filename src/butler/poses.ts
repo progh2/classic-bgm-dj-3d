@@ -17,6 +17,10 @@ export interface Pose {
   elbow: number
   torso: number
   head: number
+  /** 앉은 자세에서만 쓴다. 허벅지·무릎·발목을 굽힌 정도 */
+  hip?: number
+  knee?: number
+  foot?: number
   /** 좌우를 따로 줄 때만 사용한다. */
   armDownR?: number
   armSwingR?: number
@@ -71,6 +75,12 @@ export const POSES = {
   /** 감상 중 — 손을 모으고 조용히 선다 */
   listen: { armDown: 1.26, armSwing: 0.32, armTwist: -1.26, elbow: 1.1, torso: 0.03, head: 0.05,
             armDownR: 1.22, armSwingR: 0.36, armTwistR: -1.36, elbowR: 1.02 },
+  /** 피아노 의자에 앉아 손을 무릎에 둔 자세 */
+  sit: { armDown: 1.24, armSwing: 0.34, armTwist: -1.2, elbow: 0.9, torso: 0.06, head: 0.02,
+         hip: -1.45, knee: 1.35, foot: -0.18 },
+  /** 연주 — 팔을 건반 쪽으로 내밀고 팔꿈치를 벌린다 */
+  keys: { armDown: 1.1, armSwing: 0.62, armTwist: -0.95, elbow: 1.0, torso: 0.14, head: 0.12,
+          hip: -1.45, knee: 1.35, foot: -0.18 },
 } satisfies Record<string, Pose>
 
 export type PoseName = keyof typeof POSES
