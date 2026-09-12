@@ -3,7 +3,6 @@ import {
   CanvasTexture,
   CylinderGeometry,
   DoubleSide,
-  ExtrudeGeometry,
   Group,
   LatheGeometry,
   Mesh,
@@ -11,7 +10,6 @@ import {
   MeshStandardMaterial,
   PlaneGeometry,
   PointLight,
-  Shape,
   SphereGeometry,
   SpotLight,
   SRGBColorSpace,
@@ -28,7 +26,6 @@ import {
 const WOOD_DARK = 0x2a1a0e
 const WOOD = 0x3d2614
 const BRASS = 0x8a6a1e
-const IVORY = 0xe8e0d0
 
 export interface Furnishings {
   readonly root: Group
@@ -44,7 +41,6 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
   const brass = new MeshStandardMaterial({ color: BRASS, roughness: 0.34, metalness: 0.8 })
   const velvet = new MeshStandardMaterial({ color: 0x6b1a1c, roughness: 0.95, metalness: 0 })
   const marble = new MeshStandardMaterial({ color: 0xd8d2c4, roughness: 0.42, metalness: 0.02 })
-  const lacquer = new MeshStandardMaterial({ color: 0x0d0b0a, roughness: 0.18, metalness: 0.1 })
 
   // ---- 왼쪽 벽: 창과 커튼 ----
   const window = new Group()
@@ -211,61 +207,77 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
     root.add(frame)
   }
 
-  // ---- 오른쪽 뒤: 그랜드 피아노 ----
-  const piano = new Group()
-  piano.position.set(wallX - 1.15, 0, backZ + 1.5)
-  piano.rotation.y = -0.42
+  // ---- 오른쪽 뒤: 나팔 축음기 ----
+  // 그랜드 피아노를 세워 봤지만 이 거리에서는 검은 덩어리로만 보였다.
+  // 나팔이 달린 축음기는 실루엣만으로 무엇인지 바로 읽힌다.
+  const stand = new Group()
+  stand.position.set(wallX - 0.85, 0, backZ + 1.5)
+  stand.rotation.y = -0.5
 
-  const shape = new Shape()
-  shape.moveTo(-0.72, -0.62)
-  shape.lineTo(0.72, -0.62)
-  shape.bezierCurveTo(0.86, 0.1, 0.62, 0.78, 0.12, 0.92)
-  shape.lineTo(-0.72, 0.92)
-  shape.closePath()
-  const body = new Mesh(
-    new ExtrudeGeometry(shape, { depth: 0.26, bevelEnabled: true, bevelSize: 0.012, bevelThickness: 0.012 }),
-    lacquer,
-  )
-  body.rotation.x = -Math.PI / 2
-  body.position.y = 0.98
-  body.castShadow = true
-  piano.add(body)
-
-  // 열린 뚜껑
-  const lid = new Mesh(
-    new ExtrudeGeometry(shape, { depth: 0.02, bevelEnabled: false }),
-    lacquer,
-  )
-  lid.rotation.set(-Math.PI / 2, 0, 0)
-  lid.position.y = 1.26
-  lid.rotation.z = 0
-  lid.rotation.y = 0
-  lid.rotateX(-0.55)
-  piano.add(lid)
-
-  // 건반
-  const keys = new Mesh(new BoxGeometry(1.32, 0.035, 0.18), new MeshStandardMaterial({ color: IVORY, roughness: 0.35 }))
-  keys.position.set(0, 0.99, -0.66)
-  piano.add(keys)
-  const fallboard = new Mesh(new BoxGeometry(1.4, 0.12, 0.06), lacquer)
-  fallboard.position.set(0, 1.05, -0.74)
-  piano.add(fallboard)
-
-  for (const [x, z] of [
-    [-0.56, -0.42],
-    [0.56, -0.42],
-    [0.1, 0.7],
+  const standTop = new Mesh(new BoxGeometry(0.62, 0.05, 0.5), wood)
+  standTop.position.y = 0.78
+  standTop.castShadow = true
+  stand.add(standTop)
+  for (const [lx, lz] of [
+    [-0.25, -0.19],
+    [0.25, -0.19],
+    [-0.25, 0.19],
+    [0.25, 0.19],
   ] as const) {
-    const leg = new Mesh(new BoxGeometry(0.085, 0.98, 0.085), lacquer)
-    leg.position.set(x, 0.49, z)
-    piano.add(leg)
+    const leg = new Mesh(new CylinderGeometry(0.022, 0.028, 0.78, 12), woodDark)
+    leg.position.set(lx, 0.39, lz)
+    stand.add(leg)
   }
-  root.add(piano)
 
-  // 피아노 위 촛대 대신 작은 놋쇠 보면대 불빛
-  const pianoLight = new PointLight(0xffdca8, 1.1, 2.4, 2)
-  pianoLight.position.set(wallX - 1.2, 1.5, backZ + 1.4)
-  root.add(pianoLight)
+  const box = new Mesh(new BoxGeometry(0.4, 0.14, 0.34), woodDark)
+  box.position.y = 0.875
+  box.castShadow = true
+  stand.add(box)
+  const platter = new Mesh(new CylinderGeometry(0.14, 0.14, 0.012, 32), brass)
+  platter.position.y = 0.951
+  stand.add(platter)
+  const disc = new Mesh(
+    new CylinderGeometry(0.132, 0.132, 0.004, 40),
+    new MeshStandardMaterial({ color: 0x0d0b0a, roughness: 0.35 }),
+  )
+  disc.position.y = 0.959
+  stand.add(disc)
+
+  // 나팔 — 아래에서 위로 벌어지는 원뿔
+  const horn = new Mesh(
+    new LatheGeometry(
+      [
+        new Vector2(0.012, 0),
+        new Vector2(0.03, 0.1),
+        new Vector2(0.075, 0.21),
+        new Vector2(0.16, 0.31),
+        new Vector2(0.235, 0.36),
+      ],
+      28,
+      0,
+      Math.PI * 2,
+    ),
+    new MeshStandardMaterial({ color: BRASS, roughness: 0.3, metalness: 0.82, side: DoubleSide }),
+  )
+  horn.position.set(0.02, 0.97, -0.04)
+  horn.rotation.x = 0.42
+  horn.castShadow = true
+  stand.add(horn)
+
+  const arm = new Mesh(new CylinderGeometry(0.008, 0.008, 0.22, 10), brass)
+  arm.position.set(0.06, 0.985, 0.06)
+  arm.rotation.z = Math.PI / 2.6
+  stand.add(arm)
+
+  const crank = new Mesh(new CylinderGeometry(0.007, 0.007, 0.13, 10), brass)
+  crank.position.set(-0.22, 0.9, 0.06)
+  crank.rotation.z = Math.PI / 2
+  stand.add(crank)
+  root.add(stand)
+
+  const cornerLight = new PointLight(0xffdca8, 1.0, 2.6, 2)
+  cornerLight.position.set(wallX - 0.9, 1.35, backZ + 1.5)
+  root.add(cornerLight)
 
   return {
     root,

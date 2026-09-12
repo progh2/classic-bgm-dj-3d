@@ -43,14 +43,14 @@ export function createTabletop(): Tabletop {
     fall.position.set(0, -0.13, z)
     runner.add(fall)
   }
-  runner.position.set(0.02, 0, 0)
+  runner.position.set(-0.02, 0, -0.04)
   root.add(runner)
 
   // 악보집 더미 — 아래로 갈수록 조금씩 크다. 책등에 금박 띠를 두른다.
   const spineColours = [0x3c2418, 0x2a3626, 0x412028, 0x2b2a3c]
   let stackY = 0
   const stack = new Group()
-  stack.position.set(0.46, 0, -0.02)
+  stack.position.set(-0.72, 0, -0.06)
   stack.rotation.y = -0.12
   for (let i = 0; i < 4; i++) {
     const h = 0.032
@@ -79,7 +79,7 @@ export function createTabletop(): Tabletop {
 
   // 황동 호출벨 — 눌러 집사를 부르는 종. 단계 4에서 손이 닿는다.
   const bell = new Group()
-  bell.position.set(0.74, 0, 0.17)
+  bell.position.set(0.42, 0, 0.16)
   const dome = new Mesh(
     new LatheGeometry(
       [
@@ -105,7 +105,7 @@ export function createTabletop(): Tabletop {
 
   // 찻잔과 받침
   const tea = new Group()
-  tea.position.set(-0.68, 0, 0.2)
+  tea.position.set(-0.5, 0, 0.17)
   const saucer = new Mesh(new CylinderGeometry(0.058, 0.052, 0.006, 28), porcelain)
   saucer.position.y = 0.003
   saucer.castShadow = true

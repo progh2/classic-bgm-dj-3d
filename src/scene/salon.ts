@@ -60,12 +60,17 @@ export interface Salon {
   readonly books: Books
   /** 누를 수 있는 판을 장면에 더한다. 레이캐스트 대상이 된다. */
   addPanel(panel: Panel, pick: (id: string) => void): void
+  /** 조작할 수 있는 거리로 다가간다. 집사가 자리를 잡은 뒤에 부른다. */
+  moveIn(): void
   dispose(): void
 }
 
 /** WebGL 초기화 실패를 호출부에서 구분할 수 있게 던지는 오류. */
 /** 상판 높이(m). 집사의 손이 이 뒤로 가려지도록 원래 콘솔보다 높게 잡는다. */
 export const TABLE_TOP = 1.14
+
+/** 구도를 옮길 때 쓰는 임시 벡터. 매 프레임 새로 만들지 않는다. */
+const TARGET_POS = new Vector3()
 
 export class WebGLUnavailableError extends Error {
   constructor(cause?: unknown) {
@@ -106,10 +111,40 @@ export function createSalon(host: HTMLElement): Salon {
   scene.fog = new Fog(0x17110c, 6, 16)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
-  // 상판 높이쯤에서 살짝 올려다본다. 눈높이가 상판보다 높으면 집사의 배와
-  // 손이 상판 위로 비어져 나온다.
-  camera.position.set(0, 1.66, 2.5)
-  camera.lookAt(0, 1.3, -0.95)
+
+  /**
+   * 구도는 두 단계다. 처음에는 방을 넓게 보여 주고(wide), 집사가 자리를 잡으면
+   * 조작할 수 있는 거리(close)로 다가간다. 두 구도 모두 화면 비율에 맞춰 거리를
+   * 다시 계산한다. 세로로 긴 휴대폰에서 옆이 잘려 단추를 누를 수 없던 문제가
+   * 여기서 생겼다.
+   */
+  const SHOTS = {
+    wide: { at: new Vector3(0.1, 1.46, -0.7), box: { w: 6.4, h: 3.5 } },
+    close: { at: new Vector3(0.12, 1.36, -0.5), box: { w: 4.1, h: 2.4 } },
+  } as const
+  type ShotName = keyof typeof SHOTS
+
+  let shot: ShotName = 'wide'
+  /** 구도를 옮기는 중이면 0~1 로 진행한다. 끝나면 null. */
+  let shotMove: { from: Vector3; fromAt: Vector3; t: number } | null = null
+  const camAt = SHOTS.wide.at.clone()
+
+  /** 그 구도를 담으려면 카메라가 어디에 서야 하는가. */
+  const placeFor = (name: ShotName, out: Vector3): Vector3 => {
+    const s = SHOTS[name]
+    const half = Math.tan((camera.fov * Math.PI) / 360)
+    // 가로와 세로 중 더 멀리 물러나야 하는 쪽을 따른다.
+    const d = Math.max(s.box.w / 2 / (half * camera.aspect), s.box.h / 2 / half)
+    // 상판이 보이도록 거리에 비례해 눈높이를 올린다.
+    return out.set(s.at.x, s.at.y + d * 0.2, s.at.z + d)
+  }
+
+  const applyShot = (): void => {
+    if (shotMove) return
+    placeFor(shot, camera.position)
+    camAt.copy(SHOTS[shot].at)
+    camera.lookAt(camAt)
+  }
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
   const table = new Group()
@@ -244,7 +279,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   // 테이블 위의 물건들. 상판 높이에 맞춰 한 묶음으로 올린다.
   const turntable = createTurntable()
-  turntable.root.position.set(-0.42, 0, -0.02)
+  turntable.root.position.set(-0.33, 0, 0.11)
   turntable.root.rotation.y = 0.22
 
   const tabletop = createTabletop()
@@ -263,11 +298,26 @@ export function createSalon(host: HTMLElement): Salon {
     const h = host.clientHeight || window.innerHeight
     renderer.setSize(w, h, false)
     camera.aspect = w / h
+    // 세로로 긴 화면에서는 위아래로 더 담아야 옆이 덜 잘린다.
+    camera.fov = camera.aspect < 1 ? 46 : 38
     camera.updateProjectionMatrix()
+    hud.setCompact(camera.aspect < 1.05)
+    applyShot()
   }
   resize()
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const goTo = (name: ShotName): void => {
+    if (shot === name) return
+    shot = name
+    if (reduceMotion) {
+      shotMove = null
+      applyShot()
+      return
+    }
+    shotMove = { from: camera.position.clone(), fromAt: camAt.clone(), t: 0 }
+  }
 
   return {
     viewerAnchor,
@@ -280,6 +330,9 @@ export function createSalon(host: HTMLElement): Salon {
     books,
     addPanel(panel, pick) {
       pickable.push({ panel, pick })
+    },
+    moveIn() {
+      goTo('close')
     },
     add(object) {
       scene.add(object)
@@ -296,6 +349,18 @@ export function createSalon(host: HTMLElement): Salon {
       texture.dispose()
     },
     tick(nowMs, deltaSec) {
+      if (shotMove) {
+        shotMove.t = Math.min(1, shotMove.t + deltaSec / 2.2)
+        // 부드럽게 들어가고 부드럽게 멈춘다.
+        const e = shotMove.t < 0.5
+          ? 4 * shotMove.t ** 3
+          : 1 - (-2 * shotMove.t + 2) ** 3 / 2
+        placeFor(shot, TARGET_POS)
+        camera.position.lerpVectors(shotMove.from, TARGET_POS, e)
+        camAt.lerpVectors(shotMove.fromAt, SHOTS[shot].at, e)
+        camera.lookAt(camAt)
+        if (shotMove.t >= 1) shotMove = null
+      }
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
       candle.intensity = reduceMotion ? 2.2 : 2.2 + Math.sin(nowMs / 240) * 0.18
       // 시선은 조금 늦게 따라온다. 그래야 눈이 홱홱 돌지 않는다.

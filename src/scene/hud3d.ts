@@ -39,6 +39,8 @@ export interface AskContent {
 export interface Hud3D {
   readonly root: Group
   readonly panels: Panel[]
+  /** 좁은 화면에서는 단추를 두 줄로 접는다. */
+  setCompact(compact: boolean): void
   setContent(c: Hud3DContent): void
   showAsk(c: AskContent | null): void
   /** 판 위 uv 에 있는 칸의 id */
@@ -53,17 +55,11 @@ export function createHud3D(): Hud3D {
   const root = new Group()
   let handler: ((id: string) => void) | null = null
 
-  // 자막 명판 — 테이블 위, 안내판 아래
-  const subtitle = createPanel({ width: 2.3, height: 0.44, canvasWidth: 1500 })
-  subtitle.mesh.position.set(0, 0.62, -0.62)
-  subtitle.setVisible(false)
-  root.add(subtitle.mesh)
-
   // 조작판 — 상판 앞쪽에 보면대처럼 세워 둔다. 눕히면 위에서 봐도 글자가
-  // 납작해져 읽히지 않는다.
-  const controls = createPanel({ width: 1.98, height: 0.34, canvasWidth: 1440 })
-  controls.mesh.position.set(0, 0.16, 0.42)
-  controls.mesh.rotation.x = -0.34
+  // 납작해져 읽히지 않는다. 좁은 화면에서는 두 줄로 접어 단추를 키운다.
+  const controls = createPanel({ width: 1.94, height: 0.66, canvasWidth: 1400 })
+  controls.mesh.position.set(0, 0.3, 0.44)
+  controls.mesh.rotation.x = -0.3
   root.add(controls.mesh)
 
   // 질답 카드 — 물을 때만 나타난다
@@ -72,6 +68,7 @@ export function createHud3D(): Hud3D {
   ask.setVisible(false)
   root.add(ask.mesh)
 
+  let compact = false
   let content: Hud3DContent = {
     subtitle: null,
     playLabel: '재생',
@@ -80,56 +77,55 @@ export function createHud3D(): Hud3D {
     notice: '',
   }
 
-  const drawSubtitle = (): void => {
-    subtitle.draw((ctx, { w, h }) => {
-      if (!content.subtitle) return []
-      plateBackground(ctx, w, h, 0.86)
-      ctx.fillStyle = PLATE.brassSoft
-      ctx.font = `500 26px ${F}`
-      ctx.fillText('세바스티안', 40, 54)
-      ctx.fillStyle = PLATE.ink
-      ctx.font = `400 40px ${F}`
-      wrap(ctx, content.subtitle, 40, 76, w - 80, 50, 2)
-      return []
-    })
-  }
-
   const drawControls = (): void => {
     controls.draw((ctx, { w, h }, hovered) => {
-      plateBackground(ctx, w, h, 0.92)
-      ctx.font = `500 34px ${F}`
       const regions: Region[] = []
-      const pad = 22
-      const y = 26
-      const bh = 84
-
-      const cells: { id: string; label: string; width: number; primary?: boolean; off?: boolean }[] = [
-        { id: 'ask', label: '취향 고르기', width: 222 },
-        { id: 'auto', label: '맡길게', width: 160 },
-        { id: 'prev', label: '◀', width: 88, off: !content.hasTrack },
-        { id: 'play', label: content.playLabel, width: 178, primary: true, off: !content.hasTrack },
-        { id: 'next', label: '▶', width: 88, off: !content.hasTrack },
-        { id: 'greet', label: '인사', width: 126 },
-        { id: 'voice', label: content.voiceLabel, width: 206 },
+      const cells: { id: string; label: string; span: number; primary?: boolean; off?: boolean }[] = [
+        { id: 'ask', label: '취향 고르기', span: 1.5 },
+        { id: 'auto', label: '맡길게', span: 1.1 },
+        { id: 'prev', label: '◀', span: 0.62, off: !content.hasTrack },
+        { id: 'play', label: content.playLabel, span: 1.2, primary: true, off: !content.hasTrack },
+        { id: 'next', label: '▶', span: 0.62, off: !content.hasTrack },
+        { id: 'greet', label: '인사', span: 0.85 },
+        { id: 'voice', label: content.voiceLabel, span: 1.4 },
       ]
-      const total = cells.reduce((n, c) => n + c.width, 0) + pad * (cells.length - 1)
-      let x = (w - total) / 2
+      // 좁은 화면에서는 재생 조작을 아랫줄로 내려 단추를 키운다.
+      const rows = compact
+        ? [cells.filter((c) => ['prev', 'play', 'next'].includes(c.id)),
+           cells.filter((c) => !['prev', 'play', 'next'].includes(c.id))]
+        : [cells]
 
-      for (const c of cells) {
-        plateButton(ctx, c.label, x, y, c.width, bh, {
-          hovered: hovered === c.id && !c.off,
-          ...(c.primary === undefined ? {} : { primary: c.primary }),
-          ...(c.off === undefined ? {} : { disabled: c.off }),
-        })
-        regions.push({ id: c.id, x, y, w: c.width, h: bh })
-        x += c.width + pad
+      const pad = compact ? 16 : 20
+      const bh = compact ? 128 : 104
+      const gap = 18
+      const usableH = rows.length * bh + (rows.length - 1) * gap
+      let y = (h - usableH) / 2 - (content.notice ? 22 : 0)
+
+      plateBackground(ctx, w, h, 0.9)
+
+      for (const row of rows) {
+        const spans = row.reduce((n, c) => n + c.span, 0)
+        const unit = (w - pad * 2 - pad * (row.length - 1)) / spans
+        ctx.font = `500 ${compact ? 40 : 36}px ${F}`
+        let x = pad
+        for (const c of row) {
+          const bw = unit * c.span
+          plateButton(ctx, c.label, x, y, bw, bh, {
+            hovered: hovered === c.id && !c.off,
+            ...(c.primary === undefined ? {} : { primary: c.primary }),
+            ...(c.off === undefined ? {} : { disabled: c.off }),
+          })
+          regions.push({ id: c.id, x, y, w: bw, h: bh })
+          x += bw + pad
+        }
+        y += bh + gap
       }
 
       if (content.notice) {
         ctx.fillStyle = '#e6b98a'
-        ctx.font = `400 26px ${F}`
+        ctx.font = `400 28px ${F}`
         ctx.textAlign = 'center'
-        ctx.fillText(content.notice, w / 2, y + bh + 40)
+        ctx.fillText(content.notice, w / 2, y + 18)
         ctx.textAlign = 'left'
       }
       return regions
@@ -190,20 +186,20 @@ export function createHud3D(): Hud3D {
     })
   }
 
-  drawSubtitle()
   drawControls()
 
   return {
     root,
-    panels: [subtitle, controls, ask],
+    panels: [controls, ask],
+
+    setCompact(next) {
+      if (compact === next) return
+      compact = next
+      drawControls()
+    },
 
     setContent(c) {
-      const subtitleChanged = c.subtitle !== content.subtitle
       content = c
-      if (subtitleChanged) {
-        subtitle.setVisible(c.subtitle !== null)
-        drawSubtitle()
-      }
       drawControls()
     },
 
@@ -228,31 +224,4 @@ export function createHud3D(): Hud3D {
       handler?.(id)
     },
   }
-}
-
-/** 긴 줄을 폭에 맞춰 자른다. */
-function wrap(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  x: number,
-  y: number,
-  maxWidth: number,
-  lineHeight: number,
-  maxLines: number,
-): void {
-  const words = text.split(' ')
-  const lines: string[] = []
-  let line = ''
-  for (const word of words) {
-    const candidate = line ? `${line} ${word}` : word
-    if (ctx.measureText(candidate).width > maxWidth && line) {
-      lines.push(line)
-      line = word
-      if (lines.length === maxLines) break
-    } else {
-      line = candidate
-    }
-  }
-  if (lines.length < maxLines && line) lines.push(line)
-  lines.forEach((l, i) => ctx.fillText(l, x, y + (i + 1) * lineHeight - 10))
 }

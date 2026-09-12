@@ -54,7 +54,7 @@ export function createBooks(): Books {
 
   // ---- 펼쳐진 프로그램북 ----
   const open = new Group()
-  open.position.set(0.02, 0, -0.06)
+  open.position.set(0.06, 0, 0.08)
   open.rotation.y = 0.04
 
   const openCover = new Mesh(new BoxGeometry(0.62, 0.022, 0.4), leather)
@@ -77,7 +77,7 @@ export function createBooks(): Books {
 
   // ---- 두꺼운 출처 안내서 ----
   const thick = new Group()
-  thick.position.set(0.62, 0, 0.12)
+  thick.position.set(0.66, 0, -0.02)
   thick.rotation.y = -0.22
 
   const thickCover = new Mesh(new BoxGeometry(0.26, 0.085, 0.34), leatherRed)
@@ -100,7 +100,7 @@ export function createBooks(): Books {
 
   // ---- 펼친 안내서 (공중에 띄운 큰 판) ----
   const sourceView = createPanel({ width: 2.3, height: 1.3, canvasWidth: 1840 })
-  sourceView.mesh.position.set(0, 0.78, -0.22)
+  sourceView.mesh.position.set(0, 0.86, -0.2)
   sourceView.setVisible(false)
   root.add(sourceView.mesh)
 

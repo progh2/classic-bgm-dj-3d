@@ -30,6 +30,8 @@ export interface ScreenContent {
   duration: string
   /** 아래쪽 한 줄 안내. 없으면 빈 문자열 */
   notice: string
+  /** 집사의 말. 따로 명판을 띄우면 화면을 가리므로 안내판 아래에 싣는다. */
+  speech: string | null
   /** 재생 중이면 참 — 표시등에 쓴다 */
   playing: boolean
 }
@@ -166,9 +168,16 @@ export function createScreen(): Screen {
     ctx.fillText(c.duration, W - 72, barY + 26)
     ctx.textAlign = 'left'
 
-    if (c.notice) {
+    // 집사의 말과 안내는 같은 자리를 쓴다. 말이 있으면 말을 먼저 싣는다.
+    if (c.speech) {
+      ctx.fillStyle = 'rgba(224, 199, 106, .8)'
+      ctx.font = `500 24px ${FONT}`
+      ctx.fillText('세바스티안', 72, 566)
+      ctx.fillStyle = '#f4ece0'
+      wrap(ctx, c.speech, 72, 596, W - 144, 38, `400 30px ${FONT}`, 3)
+    } else if (c.notice) {
       ctx.fillStyle = '#e6b98a'
-      wrap(ctx, c.notice, 72, 590, W - 144, 40, `400 30px ${FONT}`, 2)
+      wrap(ctx, c.notice, 72, 596, W - 144, 38, `400 30px ${FONT}`, 2)
     }
 
     texture.needsUpdate = true
@@ -181,6 +190,7 @@ export function createScreen(): Screen {
     elapsed: '--:--',
     duration: '--:--',
     notice: '',
+    speech: null,
     playing: false,
   })
 
@@ -209,6 +219,7 @@ function changed(a: ScreenContent, b: ScreenContent): boolean {
     a.title !== b.title ||
     a.subtitle !== b.subtitle ||
     a.notice !== b.notice ||
+    a.speech !== b.speech ||
     a.playing !== b.playing ||
     a.elapsed !== b.elapsed ||
     a.duration !== b.duration

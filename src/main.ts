@@ -147,6 +147,7 @@ function updateScene(state: SessionState): void {
     elapsed: formatTime(current ? playback.currentTimeSec : null),
     duration: formatTime(duration),
     notice,
+    speech: hudContent.subtitle,
     playing,
   })
 
@@ -438,14 +439,16 @@ async function bringInButler(): Promise<void> {
     ;(window as unknown as Record<string, unknown>).__butler = butler
   }
   // 오른쪽 문에서 걸어 들어온다. 이미 서 있는 것보다 사람이 온 느낌이 난다.
-  butler.root.position.set(2.35, 0, -1.45)
+  butler.root.position.set(2.6, 0, -1.5)
   butler.lookAt(salon.viewerAnchor)
   salon.add(butler.root)
   status.textContent = ''
 
-  await butler.walkTo(0.06, -1.05, playFootstep)
+  await butler.walkTo(0.62, -1.0, playFootstep)
   butler.bow()
   say(LINES.greetQuiet)
+  // 자리를 잡으면 조작할 수 있는 거리로 다가간다.
+  salon.moveIn()
 }
 
 // ---- 감춰진 층의 단추도 같은 일을 한다 ----
