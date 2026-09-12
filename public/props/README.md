@@ -4,6 +4,9 @@
 |---|---|---|
 | `classic-console/` | 응접실 콘솔 테이블 | [Poly Haven — Classic Console 01](https://polyhaven.com/a/ClassicConsole_01) (제작: Kirill Sannikov) |
 
+코드로 세운 소품(파일이 없는 것): 레코드 재생기 `src/scene/turntable.ts`, 집사 뒤
+안내판 `src/scene/screen.ts`. 아래 «직접 만든 소품» 참고.
+
 ## 라이선스
 
 Poly Haven 의 모든 에셋은 **CC0 1.0** 입니다.
@@ -35,3 +38,22 @@ classic-console/
 ## 이 저장소에서 가한 수정
 
 없습니다. 내려받은 파일 그대로입니다.
+
+## 직접 만든 소품
+
+### 레코드 재생기 — `src/scene/turntable.ts`
+
+CC0 로 쓸 만한 재생기 모델을 찾지 못했습니다. Poly Haven 에는 축음기·턴테이블이
+아예 없고, Poly Pizza 에서 찾은 것들(Gramophone / Record Player / Turntable)은 모두
+**CC-BY** 였습니다. Sketchfab 에 CC0 표기된 것이 하나 있었지만 400만 삼각형이라
+웹에서 쓸 수 없습니다.
+
+게다가 이 소품은 **판이 돌고 톤암이 오르내려야** 재생 상태를 보여 줄 수 있어서,
+뼈대 없는 정적 모델로는 어차피 부족합니다. 그래서 Three.js 기본 도형으로 직접
+세웠습니다. 외부 에셋이 아니므로 라이선스 문제가 없습니다.
+
+CC-BY 모델을 쓰기로 바꾼다면 출처 안내서에 제작자 표기를 반드시 넣어야 합니다.
+
+### 안내판 — `src/scene/screen.ts`
+
+황동 액자에 캔버스 텍스처를 붙인 판입니다. 역시 직접 세웠습니다.
