@@ -37,6 +37,8 @@ export interface Butler {
   setExpression(name: ExpressionName): void
   /** 말하는 동안 입을 움직인다. 정밀 립싱크가 아니라 발화 시작/종료에 맞춘 움직임이다. */
   setTalking(on: boolean): void
+  /** 음악에 맞춰 고개를 아주 조금 흔든다. 재생 중에만 켠다. */
+  setGroove(on: boolean): void
   /** 목례하고 돌아온다. */
   bow(): void
   /**
@@ -101,9 +103,13 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
 
   let pose: Pose = POSES.idle
   let talking = false
+  let groove = false
+  /** 리듬을 타는 정도. 갑자기 흔들지 않도록 천천히 오르내린다. */
+  let grooveAmount = 0
   let bowUntil = 0
   let poseBeforeBow: Pose = POSES.idle
   /** 다음 눈 깜빡임까지 남은 시간(초). */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   let nextBlink = 1 + Math.random() * 3
   let blinkT = -1
   /** 눈이 좇는 대상. 고개도 여기를 향해 조금 돌린다. */
@@ -159,6 +165,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
 
     setExpression(name) {
       setExpressionValues(name)
+    },
+
+    setGroove(on) {
+      groove = on
     },
 
     setTalking(on) {
@@ -277,8 +287,13 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       // 이 모델은 VRM 0.x 라 rotateVRM0 으로 180° 돌려 세운다. 그래서 머리 뼈의
       // +X 회전은 고개를 드는 쪽이 된다. 자세 값은 "앞으로(+) 숙임"으로 읽히도록
       // 적어 두고, 적용할 때 한 번에 뒤집는다.
-      qHead.setFromAxisAngle(AX_X, -(pose.head - breath * 0.5 + headPitch))
-      qHeadYaw.setFromAxisAngle(AX_Y_WORLD, headYaw)
+      // 리듬 타기 — 고개를 좌우로 아주 조금, 위아래로는 그보다 더 조금.
+      grooveAmount += ((groove ? 1 : 0) - grooveAmount) * Math.min(1, deltaSec * 1.4)
+      const swayYaw = reduceMotion ? 0 : Math.sin(nowMs / 940) * 0.055 * grooveAmount
+      const swayPitch = reduceMotion ? 0 : Math.sin(nowMs / 1490) * 0.03 * grooveAmount
+
+      qHead.setFromAxisAngle(AX_X, -(pose.head - breath * 0.5 + headPitch + swayPitch))
+      qHeadYaw.setFromAxisAngle(AX_Y_WORLD, headYaw + swayYaw)
       slerp(joints.head, qHead.multiply(qHeadYaw), k)
 
       // 눈 깜빡임 — 불규칙한 간격으로 짧게.

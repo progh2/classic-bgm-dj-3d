@@ -24,6 +24,10 @@
     <p id="now-meta"></p>
     <p id="problem" role="status" aria-live="polite"></p>
 
+    <!-- 화면의 조작부에서는 뺐지만 키보드와 낭독기로는 여전히 쓸 수 있어야 한다. -->
+    <button id="repeat-greeting" type="button">인사 다시 듣기</button>
+    <button id="voice-toggle" type="button" aria-pressed="false">음성 끄기</button>
+
     <label for="seek">재생 위치</label>
     <input id="seek" type="range" min="0" max="1000" value="0">
     <label for="volume">음량</label>

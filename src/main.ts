@@ -1,5 +1,5 @@
 import type { Butler } from './butler/butler'
-import { LINES } from './butler/lines'
+import { introduce, LINES } from './butler/lines'
 import { createSpeech } from './butler/speech'
 import { CATALOG, formatTime } from './catalog/catalog'
 import { buildQueue, DEFAULT_ANSWERS, QUESTIONS, type Answers } from './catalog/select'
@@ -34,6 +34,13 @@ let listening = false
 let browsedId: string | null = null
 /** 곡목의 첫 줄 */
 let listOffset = 0
+/**
+ * 다음 곡이 시작될 때 집사가 소개할 것인가.
+ *
+ * 자동으로 넘어갈 때마다 떠들면 배경으로 깔아 두기 어렵다. 이전·다음을
+ * 누르거나 곡목에서 고른 경우에만 켠다.
+ */
+let announceNext = false
 
 /** 안내판 아래에 싣는 집사의 말. */
 let speechLine: string | null = null
@@ -60,6 +67,10 @@ const session = createSession(adapter, {
   onTrackChange: (entry) => {
     listening = true
     butler?.setPose('listen')
+    if (announceNext && entry) {
+      announceNext = false
+      say(introduce(entry.track, entry.note?.shortNote))
+    }
     // 다른 곡을 펼쳐 읽는 중이면 억지로 옮기지 않는다. 리본으로만 알린다.
     if (browsedId === null && entry) {
       const at = session.state.queue.findIndex((e) => e.track.id === entry.track.id)
@@ -169,6 +180,8 @@ function updateScene(state: SessionState): void {
     listOffset,
   })
 
+  butler?.setGroove(playing)
+
   salon.turntable.set({
     spinning: playing,
     armDown: current !== null && playback.state !== 'idle' && playback.state !== 'ended',
@@ -270,7 +283,10 @@ function act(id: string): void {
     const trackId = id.slice(6)
     const entry = session.state.queue.find((e) => e.track.id === trackId)
     // 한 번 누르면 펼쳐 읽고, 이미 펼친 곡을 다시 누르면 그 곡을 튼다.
-    if (browsedId === trackId && entry) void session.playEntry(entry)
+    if (browsedId === trackId && entry) {
+      announceNext = true
+      void session.playEntry(entry)
+    }
     else browsedId = trackId
     updateScene(session.state)
     return
@@ -290,14 +306,22 @@ function act(id: string): void {
       void begin(DEFAULT_ANSWERS)
       break
     case 'prev':
+      announceNext = true
       void session.previous()
       break
     case 'next':
+      announceNext = true
       void session.next()
       break
     case 'play':
-      if (session.state.halted) void session.resume()
-      else void session.toggle()
+      if (session.state.halted) {
+        void session.resume()
+      } else {
+        // 멈추고 트는 것을 말로도 알린다. 무엇이 일어났는지 화면을 안 봐도 안다.
+        const wasPlaying = session.state.playback.state === 'playing'
+        say(wasPlaying ? LINES.paused : LINES.resumed)
+        void session.toggle()
+      }
       break
     case 'greet':
       butler?.bow()
