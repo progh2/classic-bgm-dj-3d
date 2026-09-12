@@ -2,6 +2,7 @@ import { VRMLoaderPlugin, VRMUtils, type VRM } from '@pixiv/three-vrm'
 import { Box3, Group, Object3D, Quaternion, Vector3 } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { armQuat, POSES, type Pose, type PoseName } from './poses'
+import { dressAsButler } from './recolour'
 
 /** 집사 키를 이 값으로 맞춘다. 모델을 바꿔도 테이블과의 비례가 유지된다. */
 const TARGET_HEIGHT = 1.72
@@ -57,6 +58,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
     obj.castShadow = true
     obj.frustumCulled = false
   })
+
+  // 임시 모델은 교복 차림이라 옷과 머리색을 정장 톤으로 낮춰 둔다.
+  // 전용 집사 모델로 갈아 끼우면 이 호출을 지운다.
+  dressAsButler(vrm.scene)
 
   const bone = (n: Parameters<NonNullable<VRM['humanoid']>['getNormalizedBoneNode']>[0]) =>
     vrm.humanoid?.getNormalizedBoneNode(n) ?? null

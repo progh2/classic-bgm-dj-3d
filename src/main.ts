@@ -66,6 +66,19 @@ function startScene(): void {
   window.addEventListener('resize', () => salon?.resize())
 }
 
+/** 콘솔 테이블을 불러와 임시 상판과 바꾼다. 실패하면 임시 상판을 그대로 둔다. */
+async function dressRoom(): Promise<void> {
+  if (!salon) return
+  try {
+    const { loadTable } = await import('./scene/table')
+    const table = await loadTable(`${import.meta.env.BASE_URL}props/classic-console/ClassicConsole_01_1k.gltf`)
+    salon.add(table.root)
+    salon.removePlaceholderTable()
+  } catch (err) {
+    console.warn('콘솔 테이블을 불러오지 못했습니다', err)
+  }
+}
+
 async function bringInButler(): Promise<void> {
   if (!salon) return
   setStatus('집사가 오는 중입니다…')
@@ -100,6 +113,7 @@ function enter(withVoice: boolean): void {
   hud?.removeAttribute('hidden')
   updateVoiceToggle()
   startScene()
+  void dressRoom()
   void bringInButler()
 }
 

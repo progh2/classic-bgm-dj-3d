@@ -21,6 +21,8 @@ export interface Salon {
   resize(): void
   /** 응접실에 물건이나 사람을 놓는다. */
   add(object: Object3D): void
+  /** 콘솔 테이블 모델이 도착하면 임시 상판을 치운다. */
+  removePlaceholderTable(): void
   /** 집사가 바라볼 대상. 카메라 앞에 둔 빈 오브젝트다. */
   readonly viewerAnchor: Object3D
   dispose(): void
@@ -61,7 +63,9 @@ export function createSalon(host: HTMLElement): Salon {
   camera.position.set(0, 1.66, 3.05)
   camera.lookAt(0, 1.06, -0.3)
 
+  // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
   const table = new Group()
+  table.name = 'placeholder-table'
   const topMat = new MeshStandardMaterial({ color: 0x4a2a1b, roughness: 0.42, metalness: 0.08 })
   const top = new Mesh(new BoxGeometry(2.2, 0.07, 1.15), topMat)
   top.position.y = 0.78
@@ -131,6 +135,9 @@ export function createSalon(host: HTMLElement): Salon {
     viewerAnchor,
     add(object) {
       scene.add(object)
+    },
+    removePlaceholderTable() {
+      scene.remove(table)
     },
     tick(nowMs) {
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
