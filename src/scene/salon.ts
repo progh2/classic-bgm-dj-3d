@@ -130,7 +130,7 @@ export function createSalon(host: HTMLElement): Salon {
     wide: { at: new Vector3(0, 1.6, -1.05), box: { w: 4.2, h: 2.6 } },
     door: { at: new Vector3(1.55, 1.48, -1.35), box: { w: 4.2, h: 2.6 } },
     // 집사가 피아노에 앉으면 그쪽으로 고개를 돌린다.
-    piano: { at: new Vector3(-1.0, 1.45, -1.1), box: { w: 4.4, h: 2.7 } },
+    piano: { at: new Vector3(-0.55, 1.42, -1.35), box: { w: 4.3, h: 2.6 } },
     close: { at: new Vector3(0, 1.58, -1.1), box: { w: 4.2, h: 2.6 } },
   } as const
   type ShotName = keyof typeof SHOTS
@@ -221,9 +221,12 @@ export function createSalon(host: HTMLElement): Salon {
   scene.add(furnishings.root)
 
   // 콘솔 왼쪽에 피아노를 놓는다. 피아노곡이 걸리면 집사가 여기 앉아 친다.
-  // 연주자가 악기 너머에서 이쪽을 보도록 돌려 놓는다. 옆으로 두었더니
-  // 열린 뚜껑이 앉은 집사를 가렸다.
-  const piano = createPiano(new Vector3(-1.5, 0, -0.6), 0.22)
+  // 앉은 안내인의 왼편이 이쪽을 향하도록 돌려 놓는다.
+  //
+  // 건반 쪽을 이쪽으로 두면 몸통과 뚜껑에 가려 다리만 보이고, 반대로 두면
+  // 등만 보인다. 건반을 왼쪽 벽으로 돌려 놓으면 연주자는 피아노 오른편에
+  // 앉아 왼쪽 옆모습을 보인다.
+  const piano = createPiano(new Vector3(-1.6, 0, -1.5), -Math.PI / 2)
   scene.add(piano.root)
 
   scene.add(new AmbientLight(0xffd9a8, 0.26))
