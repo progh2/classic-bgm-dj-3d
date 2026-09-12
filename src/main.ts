@@ -104,7 +104,9 @@ const speech = createSpeech({
   },
   onTalking: (on) => {
     butler?.setTalking(on)
-    butler?.setPose(on ? 'speak' : listening ? 'listen' : 'idle')
+    if (on) butler?.setPose('speak')
+    else if (butlerSeated) butler?.restPose()
+    else butler?.setPose(listening ? 'listen' : 'idle')
   },
 })
 

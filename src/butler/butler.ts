@@ -48,6 +48,8 @@ export interface Butler {
   placeAt(x: number, z: number): void
   /** 앉은 채로 건반을 친다. */
   setPlaying(on: boolean): void
+  /** 말이 끝난 뒤 등 지금 처지에 맞는 자세로 돌아간다. */
+  restPose(): void
   /** 목례하고 돌아온다. */
   bow(): void
   /**
@@ -154,6 +156,15 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   const gazeWorld = new Vector3()
   const headWorld = new Vector3()
   const headNode = vrm.humanoid?.getRawBoneNode('head') ?? joints.head
+
+  // 서 있을 때 엉덩이 뼈가 발밑에서 얼마나 높은가. 앉힐 때 이만큼 내린다.
+  const hipRestY = (() => {
+    const hips = vrm.humanoid?.getRawBoneNode('hips')
+    if (!hips) return TARGET_HEIGHT * 0.53
+    const world = new Vector3()
+    hips.getWorldPosition(world)
+    return world.y - root.position.y
+  })()
   const AX_X = new Vector3(1, 0, 0)
   // 팔을 내린 뒤의 국소 좌표에서 팔꿈치 굽힘은 Y축 회전이고, 좌우가 서로 반대다.
   const AX_Y = new Vector3(0, 1, 0)
@@ -208,6 +219,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
     setPlaying(on) {
       playingKeys = on
       pose = on ? POSES.keys : seated ? POSES.sit : POSES.idle
+    },
+
+    restPose() {
+      pose = seated ? (playingKeys ? POSES.keys : POSES.sit) : POSES.idle
     },
 
     setTalking(on) {
@@ -286,9 +301,12 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const swing = walk ? Math.sin(walk.phase) : 0
       const lift = walk ? Math.max(0, -Math.cos(walk.phase)) : 0
       const legK = Math.min(1, deltaSec * 12)
-      const sitHip = pose.hip ?? 0
-      const sitKnee = pose.knee ?? 0
-      const sitFoot = pose.foot ?? 0
+      // 앉아 있으면 어떤 자세를 짓든 다리는 접은 채로 둔다. 말을 하거나
+      // 인사를 하느라 자세가 바뀌어도 다리가 펴지면 의자에서 일어난 꼴이 된다.
+      const legPose = seated ? (playingKeys ? POSES.keys : POSES.sit) : pose
+      const sitHip = legPose.hip ?? 0
+      const sitKnee = legPose.knee ?? 0
+      const sitFoot = legPose.foot ?? 0
       // 앉은 다리는 좌우를 조금 어긋나게 둔다. 딱 붙이면 인형처럼 보인다.
       slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.42), legK)
       slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.42), legK)
@@ -297,7 +315,13 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.2), legK)
       slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.2), legK)
       // 걸을 때 몸이 조금 오르내리고, 앉으면 의자 높이에 얹힌다.
-      root.position.y = seated && !walk ? seatY : walk ? Math.abs(Math.sin(walk.phase)) * 0.018 : 0
+      // 뿌리는 발밑이다. 앉는 면 높이를 그대로 주면 엉덩이가 그만큼 더 올라가
+      // 공중에 뜬다. 서 있을 때의 엉덩이 높이만큼 내려 앉혀야 한다.
+      root.position.y = seated && !walk
+        ? seatY - hipRestY
+        : walk
+          ? Math.abs(Math.sin(walk.phase)) * 0.018
+          : 0
 
       if (bowUntil > 0 && nowMs > bowUntil) {
         bowUntil = 0
