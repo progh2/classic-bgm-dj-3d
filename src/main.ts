@@ -501,6 +501,15 @@ window.addEventListener('pagehide', () => {
   salon = null
 })
 
+// ---- 무거운 자료는 기기에 한 번만 받는다 ----
+
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  // 등록이 실패해도 서비스는 그대로 돌아간다. 매번 받을 뿐이다.
+  void navigator.serviceWorker
+    .register(`${import.meta.env.BASE_URL}sw.js`, { scope: import.meta.env.BASE_URL })
+    .catch((err: unknown) => console.warn('자료 캐시를 등록하지 못했습니다', err))
+}
+
 // ---- 시작 ----
 
 const saved = Number(localStorage.getItem('salon.volume'))
