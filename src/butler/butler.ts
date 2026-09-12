@@ -21,6 +21,8 @@ export type ExpressionName = keyof typeof EXPRESSIONS
 
 export interface Butler {
   readonly root: Object3D
+  /** 자세를 눈으로 맞춰 보기 위한 통로. 화면에서 직접 값을 바꿔 확인한다. */
+  readonly debug: { joints: Record<string, Object3D | null>; pose(): Pose }
   setPose(name: PoseName): void
   setExpression(name: ExpressionName): void
   /** 말하는 동안 입을 움직인다. 정밀 립싱크가 아니라 발화 시작/종료에 맞춘 움직임이다. */
@@ -108,6 +110,7 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
 
   return {
     root,
+    debug: { joints, pose: () => pose },
 
     setPose(name) {
       pose = POSES[name]
