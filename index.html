@@ -29,6 +29,18 @@
     </div>
   </div>
 
+  <div id="hud" class="hud" hidden>
+    <p id="butler-status" class="hud__status" role="status" aria-live="polite"></p>
+    <div id="subtitle" class="subtitle" hidden>
+      <p class="subtitle__who">세바스티안</p>
+      <p id="subtitle-text" class="subtitle__text" aria-live="polite"></p>
+    </div>
+    <div class="hud__controls">
+      <button id="repeat-greeting" class="btn btn--small" type="button">인사 다시 듣기</button>
+      <button id="voice-toggle" class="btn btn--small" type="button" aria-pressed="false">음성 켜기</button>
+    </div>
+  </div>
+
   <noscript>
     <p>이 서비스는 자바스크립트가 필요합니다.
       <a href="https://progh2.github.io/classic-bgm-dj/">2D 버전</a>을 이용해 주세요.</p>

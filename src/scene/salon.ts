@@ -1,5 +1,6 @@
 import {
   AmbientLight,
+  Object3D,
   BoxGeometry,
   Color,
   CylinderGeometry,
@@ -15,9 +16,13 @@ import {
 } from 'three'
 
 export interface Salon {
-  /** 한 프레임 갱신. */
-  tick(nowMs: number): void
+  /** 한 프레임 갱신. deltaSec 는 마지막 프레임과의 간격. */
+  tick(nowMs: number, deltaSec: number): void
   resize(): void
+  /** 응접실에 물건이나 사람을 놓는다. */
+  add(object: Object3D): void
+  /** 집사가 바라볼 대상. 카메라 앞에 둔 빈 오브젝트다. */
+  readonly viewerAnchor: Object3D
   dispose(): void
 }
 
@@ -53,8 +58,8 @@ export function createSalon(host: HTMLElement): Salon {
   scene.fog = new Fog(0x17110c, 4.5, 11)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
-  camera.position.set(0, 1.72, 3.1)
-  camera.lookAt(0, 0.85, 0)
+  camera.position.set(0, 1.66, 3.05)
+  camera.lookAt(0, 1.06, -0.3)
 
   const table = new Group()
   const topMat = new MeshStandardMaterial({ color: 0x4a2a1b, roughness: 0.42, metalness: 0.08 })
@@ -100,6 +105,17 @@ export function createSalon(host: HTMLElement): Salon {
   candle.position.set(0.78, 1.02, 0.28)
   scene.add(candle)
 
+  // 테이블 너머에 선 집사의 얼굴이 어둠에 묻히지 않도록 한 단계 더.
+  const butlerKey = new SpotLight(0xffe0bb, 9, 6, Math.PI / 5.5, 0.6, 1.5)
+  butlerKey.position.set(0.5, 2.7, 0.9)
+  butlerKey.target.position.set(0, 1.35, -1.05)
+  scene.add(butlerKey, butlerKey.target)
+
+  // 집사가 이쪽을 보게 할 기준점. 카메라보다 살짝 아래에 둬야 눈이 마주친다.
+  const viewerAnchor = new Object3D()
+  viewerAnchor.position.set(0, 1.5, 2.9)
+  scene.add(viewerAnchor)
+
   const resize = (): void => {
     const w = host.clientWidth || window.innerWidth
     const h = host.clientHeight || window.innerHeight
@@ -112,6 +128,10 @@ export function createSalon(host: HTMLElement): Salon {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   return {
+    viewerAnchor,
+    add(object) {
+      scene.add(object)
+    },
     tick(nowMs) {
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
       candle.intensity = reduceMotion ? 2.2 : 2.2 + Math.sin(nowMs / 240) * 0.18

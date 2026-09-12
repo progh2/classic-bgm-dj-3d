@@ -91,3 +91,64 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* ---- 집사 자막과 조작부 ---- */
+
+.hud {
+  position: fixed;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+.hud[hidden] { display: none; }
+.hud > * { pointer-events: auto; }
+
+.hud__status {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: .9rem;
+  color: #cbb99e;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .8);
+}
+.hud__status:empty { display: none; }
+
+.subtitle {
+  max-width: min(46rem, 100%);
+  padding: 14px 20px;
+  border: 1px solid rgba(201, 162, 39, .32);
+  border-radius: 4px;
+  background: rgba(20, 13, 9, .82);
+  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow);
+}
+.subtitle[hidden] { display: none; }
+
+.subtitle__who {
+  margin: 0 0 6px;
+  font-size: .75rem;
+  letter-spacing: .22em;
+  color: var(--brass-soft);
+}
+
+.subtitle__text {
+  margin: 0;
+  font-size: clamp(1rem, 2.4vw, 1.15rem);
+  line-height: 1.75;
+  color: var(--ivory);
+}
+
+.hud__controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+
+.btn--small { min-height: 44px; padding: 8px 16px; font-size: .9rem; }
+
+.fallback { padding: 24px; line-height: 1.8; }
+
+/* 전자칠판·큰 화면에서는 멀리서도 읽히도록 자막을 키운다. */
+@media (min-width: 1600px) {
+  .subtitle__text { font-size: 1.5rem; }
+  .btn--small { min-height: 56px; font-size: 1.05rem; }
+}
