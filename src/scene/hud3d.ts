@@ -61,8 +61,9 @@ export function createHud3D(): Hud3D {
   // 납작해져 읽히지 않는다. 좁은 화면에서는 두 줄로 접어 단추를 키운다.
   const CONTROLS_W = 1.94
   const controls = createPanel({ width: CONTROLS_W, height: 0.66, canvasWidth: 1400 })
-  controls.mesh.position.set(0, 0.2, 0.5)
-  controls.mesh.rotation.x = -0.22
+  // 상판 앞면 아래, 테이블 다리 높이에 건다. 상판 위를 가리지 않는다.
+  controls.mesh.position.set(0, -0.46, 0.52)
+  controls.mesh.rotation.x = -0.12
   root.add(controls.mesh)
 
   // 질답 카드 — 물을 때만 나타난다

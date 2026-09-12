@@ -39,6 +39,13 @@ export interface ScreenContent {
 export interface Screen {
   readonly root: Group
   set(content: ScreenContent): void
+  /**
+   * 화면에 담기는 가로 폭에 맞춰 안내판을 줄인다.
+   *
+   * 세로로 긴 휴대폰에서 3.5m 짜리 안내판을 다 담으려면 카메라가 방 밖까지
+   * 물러나야 한다. 카메라를 빼는 대신 판을 줄인다.
+   */
+  fitWidth(visibleWidth: number): void
   /** 액자 목재에 결을 입힌다. */
   applyTextures(base: string): Promise<void>
 }
@@ -194,8 +201,14 @@ export function createScreen(): Screen {
     playing: false,
   })
 
+  const FRAME_W = 3.48
+
   return {
     root,
+
+    fitWidth(visibleWidth) {
+      root.scale.setScalar(Math.min(1, (visibleWidth * 0.96) / FRAME_W))
+    },
 
     async applyTextures(base) {
       await applyTextureSet(frameWood, `${base}dark-wooden-planks/`, 'dark_wooden_planks', {

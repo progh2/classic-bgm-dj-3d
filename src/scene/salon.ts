@@ -121,8 +121,8 @@ export function createSalon(host: HTMLElement): Salon {
    * 여기서 생겼다.
    */
   const SHOTS = {
-    wide: { at: new Vector3(0.1, 1.5, -0.8), box: { w: 4.6, h: 2.9 } },
-    close: { at: new Vector3(0.12, 1.38, -0.55), box: { w: 3.2, h: 2.0 } },
+    wide: { at: new Vector3(0.1, 1.55, -0.9), box: { w: 5.0, h: 3.1 } },
+    close: { at: new Vector3(0.12, 1.46, -0.75), box: { w: 3.9, h: 2.35 } },
   } as const
   type ShotName = keyof typeof SHOTS
 
@@ -138,7 +138,7 @@ export function createSalon(host: HTMLElement): Salon {
    * (비율 0.5 에서는 9m 가 나왔다.) 그래서 물러나는 거리에 상한을 두고,
    * 좁아서 못 담는 가로는 조작판을 줄여 맞춘다.
    */
-  const MAX_BACK = 4.3
+  const MAX_BACK = 5.2
   const placeFor = (name: ShotName, out: Vector3): Vector3 => {
     const s = SHOTS[name]
     const half = Math.tan((camera.fov * Math.PI) / 360)
@@ -162,6 +162,7 @@ export function createSalon(host: HTMLElement): Salon {
     camAt.copy(SHOTS[shot].at)
     camera.lookAt(camAt)
     hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
+    screen.fitWidth(visibleWidthAt(BACK_Z))
   }
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
@@ -379,6 +380,7 @@ export function createSalon(host: HTMLElement): Salon {
         camAt.lerpVectors(shotMove.fromAt, SHOTS[shot].at, e)
         camera.lookAt(camAt)
         hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
+        screen.fitWidth(visibleWidthAt(BACK_Z))
         if (shotMove.t >= 1) shotMove = null
       }
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
