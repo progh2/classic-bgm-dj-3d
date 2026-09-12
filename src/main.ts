@@ -41,6 +41,8 @@ let listOffset = 0
  * 누르거나 곡목에서 고른 경우에만 켠다.
  */
 let announceNext = false
+/** 인사를 자막으로만 건넸는가. 첫 조작 때 소리로 다시 건넨다. */
+let greetedSilently = false
 
 /** 안내판 아래에 싣는 집사의 말. */
 let speechLine: string | null = null
@@ -202,7 +204,6 @@ let answers: Answers = { ...DEFAULT_ANSWERS }
 function renderAsk(): void {
   const q = QUESTIONS[askStep]
   if (!q) {
-    salon?.hud.showAsk(null)
     askBox.setAttribute('hidden', '')
     return
   }
@@ -210,22 +211,23 @@ function renderAsk(): void {
   el('ask-step').textContent = `${askStep + 1} / ${QUESTIONS.length}`
   el('ask-question').textContent = q.ask
   el('ask-hint').textContent = q.hint
+  el<HTMLButtonElement>('ask-back').disabled = askStep === 0
   el('ask-options').replaceChildren(
     ...q.options.map((opt) => {
       const b = document.createElement('button')
       b.type = 'button'
-      b.textContent = `${opt.label} — ${opt.blurb}`
+      b.className = 'ask__option'
+      const strong = document.createElement('b')
+      strong.textContent = opt.label
+      const span = document.createElement('span')
+      span.textContent = opt.blurb
+      b.append(strong, span)
       b.addEventListener('click', () => choose(opt.id))
       return b
     }),
   )
-  salon?.hud.showAsk({
-    step: `${askStep + 1} / ${QUESTIONS.length}`,
-    question: q.ask,
-    hint: q.hint,
-    options: q.options.map((o) => ({ id: o.id, label: o.label, blurb: o.blurb })),
-    canGoBack: askStep > 0,
-  })
+  // 키보드만으로도 고를 수 있게 첫 선택지로 초점을 옮긴다.
+  ;(el('ask-options').firstElementChild as HTMLElement | null)?.focus()
   listening = false
   butler?.setPose('speak')
   say(q.ask)
@@ -273,6 +275,14 @@ function act(id: string): void {
     userActed = true
     speech.enabled = true
     updateScene(session.state)
+    // 브라우저는 첫 조작 전에 소리를 내주지 않는다. 들어올 때의 인사는
+    // 자막으로만 지나갔으므로, 이 시점에 한 번 소리로 건넨다.
+    if (greetedSilently) {
+      greetedSilently = false
+      butler?.bow()
+      say(LINES.greetVoice)
+      return
+    }
   }
 
   if (id.startsWith('opt:')) {
@@ -387,7 +397,6 @@ function startScene(): boolean {
     throw err
   }
 
-  salon.hud.onPick(act)
   for (const panel of salon.books.panels) salon.addPanel(panel, act)
 
   const loop = (t: number): void => {
@@ -454,6 +463,8 @@ function playFootstep(): void {
   void a.play().catch(() => {})
 }
 
+const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
+
 async function bringInButler(): Promise<void> {
   if (!salon) return
   status.textContent = '집사가 오는 중입니다…'
@@ -478,11 +489,15 @@ async function bringInButler(): Promise<void> {
   salon.add(butler.root)
   status.textContent = ''
 
-  // 집사가 나타나는 순간부터 천천히 다가간다. 걸어 들어오는 동안 화면이 좁혀진다.
-  salon.moveIn()
+  // 발소리를 듣고 오른쪽 문으로 고개를 돌렸다가, 집사를 따라 가운데로 돌아온다.
+  playFootstep()
+  salon.lookAt('door', 1.6)
+  await wait(1400)
+  salon.lookAt('close', 4.2)
   await butler.walkTo(0.62, -1.0, playFootstep)
   butler.bow()
   say(LINES.greetQuiet)
+  greetedSilently = !speech.enabled
 }
 
 // ---- 감춰진 층의 단추도 같은 일을 한다 ----

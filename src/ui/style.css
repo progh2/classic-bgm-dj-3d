@@ -143,3 +143,89 @@ html, body {
 @media (min-width: 1600px) {
   .led { min-height: 64px; font-size: 1.15rem; }
 }
+
+/* ---- 취향 고르기 ---- */
+
+.ask {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(8, 6, 4, .72);
+  backdrop-filter: blur(6px);
+}
+.ask[hidden] { display: none; }
+
+.ask__card {
+  width: min(48rem, 100%);
+  max-height: calc(100% - 24px);
+  overflow: auto;
+  padding: clamp(18px, 4vw, 32px);
+  border: 1px solid color-mix(in srgb, var(--mood) 34%, transparent);
+  border-radius: 10px;
+  background: rgba(14, 10, 8, .92);
+  box-shadow: var(--shadow);
+}
+
+.ask__step {
+  margin: 0 0 6px;
+  font-size: clamp(.85rem, 2.4vw, 1rem);
+  letter-spacing: .2em;
+  color: color-mix(in srgb, var(--mood) 80%, #fff);
+}
+
+.ask__question {
+  margin: 0 0 6px;
+  font-size: clamp(1.5rem, 5.6vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ivory);
+}
+
+.ask__hint {
+  margin: 0 0 20px;
+  font-size: clamp(.95rem, 3vw, 1.15rem);
+  color: #b7a68f;
+}
+
+.ask__options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 34rem) {
+  .ask__options { grid-template-columns: 1fr 1fr; }
+}
+
+.ask__option {
+  min-height: clamp(76px, 14vw, 104px);
+  padding: 14px 20px;
+  border: 1px solid color-mix(in srgb, var(--mood) 30%, transparent);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, .42);
+  color: color-mix(in srgb, var(--mood) 86%, #fff);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.ask__option:hover {
+  background: color-mix(in srgb, var(--mood) 14%, rgba(0, 0, 0, .42));
+  border-color: color-mix(in srgb, var(--mood) 60%, transparent);
+}
+.ask__option:focus-visible { outline: 3px solid var(--mood); outline-offset: 2px; }
+.ask__option b {
+  display: block;
+  font-size: clamp(1.25rem, 4.4vw, 1.6rem);
+  font-weight: 600;
+}
+.ask__option span {
+  display: block;
+  margin-top: 4px;
+  font-size: clamp(.9rem, 2.8vw, 1.05rem);
+  color: #bfae95;
+}
+
+.ask__nav { display: flex; gap: 10px; margin-top: 20px; }
+.ask__nav .led { min-height: 56px; }

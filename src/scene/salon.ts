@@ -26,7 +26,6 @@ import {
 import { createFurnishings, type Furnishings } from './furnishings'
 import { BACK_Z, createRoom, WALL_X, type Room } from './room'
 import { createBooks, type Books } from './books'
-import { createHud3D, type Hud3D } from './hud3d'
 import type { Panel } from './panel'
 import { createTabletop, type Tabletop } from './tabletop'
 import { createScreen, type Screen } from './screen'
@@ -52,28 +51,27 @@ export interface Salon {
   readonly room: Room
   /** 테이블 위의 정물 */
   readonly tabletop: Tabletop
-  /** 3D 안의 조작부 */
-  readonly hud: Hud3D
   /** 방을 채우는 가구들 */
   readonly furnishings: Furnishings
   /** 프로그램북과 출처 안내서 */
   readonly books: Books
   /** 누를 수 있는 판을 장면에 더한다. 레이캐스트 대상이 된다. */
   addPanel(panel: Panel, pick: (id: string) => void): void
-  /** 조작할 수 있는 거리로 다가간다. 집사가 자리를 잡은 뒤에 부른다. */
-  moveIn(): void
+  /** 구도를 옮긴다. seconds 를 주면 그 시간에 걸쳐 움직인다. */
+  lookAt(shot: 'wide' | 'door' | 'close', seconds?: number): void
   dispose(): void
 }
 
 /** WebGL 초기화 실패를 호출부에서 구분할 수 있게 던지는 오류. */
-/** 상판 높이(m). 집사의 손이 이 뒤로 가려지도록 원래 콘솔보다 높게 잡는다. */
-export const TABLE_TOP = 1.14
+/**
+ * 상판 높이(m). 원래 콘솔은 0.95m 인데, 손을 가리려고 1.14m 까지 키웠더니
+ * 폭이 1.85m 가 되어 사람 옆에서 거대해 보였다. 실제 콘솔에 가깝게 되돌린다.
+ */
+export const TABLE_TOP = 1.0
 
 /** 구도를 옮길 때 쓰는 임시 벡터. 매 프레임 새로 만들지 않는다. */
 const TARGET_POS = new Vector3()
 const TARGET_AT = new Vector3()
-/** 조작판이 서 있는 z. 여기서 화면에 담기는 폭을 재 조작판 크기를 맞춘다. */
-const TABLE_FRONT_Z = 0.5
 
 export class WebGLUnavailableError extends Error {
   constructor(cause?: unknown) {
@@ -122,16 +120,17 @@ export function createSalon(host: HTMLElement): Salon {
    * 여기서 생겼다.
    */
   const SHOTS = {
-    // 처음에는 집사가 들어오는 오른쪽을 조금 비춰 두고, 그가 자리를 잡는 동안
-    // 왼쪽으로 흘러 안내판이 화면 한가운데 오도록 맞춘다.
-    wide: { at: new Vector3(0.78, 1.62, -1.0), box: { w: 5.0, h: 3.1 } },
+    // 처음에는 빈 응접실을 가운데로 본다. 발소리가 나면 오른쪽 문으로 고개를
+    // 돌려 집사를 발견하고, 그가 걸어오는 동안 함께 가운데로 돌아온다.
+    wide: { at: new Vector3(0, 1.6, -1.05), box: { w: 4.6, h: 2.9 } },
+    door: { at: new Vector3(1.5, 1.5, -1.3), box: { w: 3.4, h: 2.2 } },
     close: { at: new Vector3(0, 1.58, -1.1), box: { w: 3.9, h: 2.4 } },
   } as const
   type ShotName = keyof typeof SHOTS
 
   let shot: ShotName = 'wide'
   /** 구도를 옮기는 중이면 0~1 로 진행한다. 끝나면 null. */
-  let shotMove: { from: Vector3; fromAt: Vector3; t: number } | null = null
+  let shotMove: { from: Vector3; fromAt: Vector3; t: number; seconds: number } | null = null
   const camAt = SHOTS.wide.at.clone()
 
   /**
@@ -177,7 +176,6 @@ export function createSalon(host: HTMLElement): Salon {
   const applyShot = (): void => {
     if (shotMove) return
     placeFor(shot, camera.position)
-    hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
     screen.fitWidth(visibleWidthAt(BACK_Z))
     camAt.copy(SHOTS[shot].at).setY(aimHeightFor(shot))
     camera.lookAt(camAt)
@@ -328,12 +326,10 @@ export function createSalon(host: HTMLElement): Salon {
   const tabletop = createTabletop()
   const books = createBooks()
 
-  const hud = createHud3D()
-  for (const panel of hud.panels) pickable.push({ panel, pick: (id) => hud.pick(id) })
 
   const onTable = new Group()
   onTable.position.y = TABLE_TOP
-  onTable.add(turntable.root, tabletop.root, books.root, hud.root)
+  onTable.add(turntable.root, tabletop.root, books.root)
   scene.add(onTable)
 
   const resize = (): void => {
@@ -350,7 +346,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const goTo = (name: ShotName): void => {
+  const goTo = (name: ShotName, seconds = 4): void => {
     if (shot === name) return
     shot = name
     if (reduceMotion) {
@@ -358,7 +354,7 @@ export function createSalon(host: HTMLElement): Salon {
       applyShot()
       return
     }
-    shotMove = { from: camera.position.clone(), fromAt: camAt.clone(), t: 0 }
+    shotMove = { from: camera.position.clone(), fromAt: camAt.clone(), t: 0, seconds }
   }
 
   return {
@@ -367,14 +363,13 @@ export function createSalon(host: HTMLElement): Salon {
     turntable,
     room,
     tabletop,
-    hud,
     furnishings,
     books,
     addPanel(panel, pick) {
       pickable.push({ panel, pick })
     },
-    moveIn() {
-      goTo('close')
+    lookAt(name, seconds) {
+      goTo(name, seconds)
     },
     add(object) {
       scene.add(object)
@@ -392,15 +387,13 @@ export function createSalon(host: HTMLElement): Salon {
     },
     tick(nowMs, deltaSec) {
       if (shotMove) {
-        // 집사가 걸어 들어오는 동안 천천히 다가간다.
-        shotMove.t = Math.min(1, shotMove.t + deltaSec / 5)
+        shotMove.t = Math.min(1, shotMove.t + deltaSec / shotMove.seconds)
         // 부드럽게 들어가고 부드럽게 멈춘다.
         const e = shotMove.t < 0.5
           ? 4 * shotMove.t ** 3
           : 1 - (-2 * shotMove.t + 2) ** 3 / 2
         placeFor(shot, TARGET_POS)
         camera.position.lerpVectors(shotMove.from, TARGET_POS, e)
-        hud.fitWidth(visibleWidthAt(TABLE_FRONT_Z))
         screen.fitWidth(visibleWidthAt(BACK_Z))
         TARGET_AT.copy(SHOTS[shot].at).setY(aimHeightFor(shot))
         camAt.lerpVectors(shotMove.fromAt, TARGET_AT, e)

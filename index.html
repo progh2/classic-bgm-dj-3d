@@ -11,42 +11,8 @@
   <div id="scene" class="scene"></div>
 
   <!--
-    조작은 모두 3D 안의 판에서 한다. 아래는 화면에 보이지 않지만 키보드와
-    화면 낭독기를 위해 같은 기능을 제공하는 층이다. 3D 만으로는 낭독기가
-    읽을 것이 없고 Tab 으로 옮겨 다닐 수도 없다.
-  -->
-  <div id="a11y" class="sr-only">
-    <h1>세바스티안의 음악 응접실</h1>
-    <p id="now-announce" role="status" aria-live="polite"></p>
-    <p id="butler-status" role="status" aria-live="polite"></p>
-    <p id="subtitle-text" aria-live="polite"></p>
-    <p id="now-title"></p>
-    <p id="now-meta"></p>
-    <p id="problem" role="status" aria-live="polite"></p>
-
-    <!-- 화면의 조작부에서는 뺐지만 키보드와 낭독기로는 여전히 쓸 수 있어야 한다. -->
-    <button id="repeat-greeting" type="button">인사 다시 듣기</button>
-    <button id="voice-toggle" type="button" aria-pressed="false">음성 끄기</button>
-
-    <label for="seek">재생 위치</label>
-    <input id="seek" type="range" min="0" max="1000" value="0">
-    <label for="volume">음량</label>
-    <input id="volume" type="range" min="0" max="100" value="80">
-
-    <div id="ask" hidden>
-      <p id="ask-step"></p>
-      <h2 id="ask-question"></h2>
-      <p id="ask-hint"></p>
-      <div id="ask-options"></div>
-      <button id="ask-back" type="button">뒤로</button>
-      <button id="ask-skip" type="button">이건 맡길게요</button>
-    </div>
-  </div>
-
-  <!--
-    조작판만 3D 밖으로 뺀다. 장면 안에 두면 화면 비율이 바뀔 때마다 위치가
-    흔들리고, 가로 모드에서는 화면 아래로 내려가 손이 닿지 않았다.
-    브라우저 아래에 붙여 두는 편이 어느 기기에서나 같은 자리에 있다.
+    조작은 브라우저 아래에 붙는 막대에서 한다. 장면 안에 두면 화면 비율이
+    바뀔 때마다 자리가 흔들리고, 가로 모드에서는 화면 밖으로 내려갔다.
   -->
   <div id="console" class="console">
     <div class="console__row">
@@ -57,10 +23,41 @@
     <div class="console__row">
       <button id="start-ask" class="led" type="button">취향 고르기</button>
       <button id="start-auto" class="led" type="button">맡길게</button>
-      <button id="repeat-greeting" class="led" type="button">인사</button>
-      <button id="voice-toggle" class="led" type="button" aria-pressed="false">음성 켜기</button>
     </div>
     <p id="console-notice" class="console__notice" role="status" aria-live="polite"></p>
+  </div>
+
+  <!-- 취향 고르기 — 멀리서도 읽히도록 화면을 덮는 큰 카드로 띄운다. -->
+  <div id="ask" class="ask" hidden>
+    <div class="ask__card">
+      <p class="ask__step" id="ask-step"></p>
+      <h2 class="ask__question" id="ask-question"></h2>
+      <p class="ask__hint" id="ask-hint"></p>
+      <div class="ask__options" id="ask-options"></div>
+      <div class="ask__nav">
+        <button id="ask-back" class="led" type="button">뒤로</button>
+        <button id="ask-skip" class="led" type="button">이건 맡길게요</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 화면에 보이지 않지만 키보드와 낭독기를 위해 같은 기능을 남겨 둔다. -->
+  <div id="a11y" class="sr-only">
+    <h1>세바스티안의 음악 응접실</h1>
+    <p id="now-announce" role="status" aria-live="polite"></p>
+    <p id="butler-status" role="status" aria-live="polite"></p>
+    <p id="subtitle-text" aria-live="polite"></p>
+    <p id="now-title"></p>
+    <p id="now-meta"></p>
+    <p id="problem" role="status" aria-live="polite"></p>
+
+    <button id="repeat-greeting" type="button">인사 다시 듣기</button>
+    <button id="voice-toggle" type="button" aria-pressed="false">음성 끄기</button>
+
+    <label for="seek">재생 위치</label>
+    <input id="seek" type="range" min="0" max="1000" value="0">
+    <label for="volume">음량</label>
+    <input id="volume" type="range" min="0" max="100" value="80">
   </div>
 
   <noscript>
