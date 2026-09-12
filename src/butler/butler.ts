@@ -44,6 +44,8 @@ export interface Butler {
    * seatY 는 앉는 면의 높이, facing 은 몸이 향할 방향이다.
    */
   sit(on: boolean, seatY?: number, facing?: number): void
+  /** 걷지 않고 그 자리로 옮겨 놓는다. 의자에 앉힐 때처럼 짧은 거리에 쓴다. */
+  placeAt(x: number, z: number): void
   /** 앉은 채로 건반을 친다. */
   setPlaying(on: boolean): void
   /** 목례하고 돌아온다. */
@@ -183,6 +185,11 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
 
     setGroove(on) {
       groove = on
+    },
+
+    placeAt(x, z) {
+      root.position.x = x
+      root.position.z = z
     },
 
     sit(on, y = 0, facing = 0) {

@@ -21,6 +21,8 @@ export interface Piano {
   readonly root: Group
   /** 집사가 앉을 자리(세계 좌표) */
   readonly seat: Vector3
+  /** 의자 뒤쪽, 걸어와 서는 자리(세계 좌표) */
+  readonly approach: Vector3
   /** 앉았을 때 몸이 향할 방향(라디안) */
   readonly facing: number
   /** 의자 앉는 면의 높이 */
@@ -164,13 +166,17 @@ export function createPiano(position: Vector3, rotationY: number): Piano {
   }
   root.add(bench)
 
-  // 집사가 앉을 자리를 세계 좌표로 돌려준다.
+  // 앉는 자리와, 그 뒤로 물러선 자리를 세계 좌표로 돌려준다.
+  // 세계 좌표로 z 를 더하면 피아노를 돌려 놓았을 때 엉뚱한 곳이 나온다.
+  // 반드시 피아노의 방향을 태워서 옮겨야 한다.
   const seat = new Vector3(0, 0, -1.12).applyAxisAngle(UP, rotationY).add(position)
+  const approach = new Vector3(0, 0, -1.62).applyAxisAngle(UP, rotationY).add(position)
 
   return {
     root,
     seat,
-    // 의자에 앉으면 건반 쪽, 곧 피아노의 +Z 를 등지고 앉는다.
+    approach,
+    // 의자에 앉으면 건반 쪽, 곧 피아노의 +Z 를 바라본다.
     facing: rotationY,
     seatHeight: SEAT_H,
   }

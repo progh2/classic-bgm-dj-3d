@@ -46,6 +46,8 @@ let announceNext = false
 let greetedSilently = false
 /** 집사가 지금 어디에 있는가. 자리를 옮기는 동안 겹쳐 부르지 않도록 센다. */
 let butlerPlace: 'console' | 'piano' = 'console'
+/** 실제로 의자에 앉았는가. 걸어가는 중에는 거짓이다. */
+let butlerSeated = false
 let moveToken = 0
 
 /** 집사가 서는 콘솔 뒤 자리 */
@@ -70,13 +72,19 @@ async function placeButler(toPiano: boolean): Promise<void> {
 
   if (toPiano) {
     salon.lookAt('piano', 2.4)
-    const seat = salon.piano.seat
-    await butler.walkTo(seat.x, seat.z + 0.34, playFootstep)
+    // 의자 뒤로 걸어가 선 다음에 앉는다. 앉는 자세를 걷는 중에 씌우면
+    // 다리를 접은 채로 걷는 괴상한 모습이 된다.
+    const stand = salon.piano.approach
+    await butler.walkTo(stand.x, stand.z, playFootstep)
     if (my !== moveToken) return
+    const seat = salon.piano.seat
+    butler.placeAt(seat.x, seat.z)
     butler.sit(true, salon.piano.seatHeight, salon.piano.facing)
-    butler.setPlaying(true)
+    butlerSeated = true
+    butler.setPlaying(session.state.playback.state === 'playing')
   } else {
     butler.setPlaying(false)
+    butlerSeated = false
     butler.sit(false)
     salon.lookAt('close', 2.4)
     await butler.walkTo(CONSOLE_SPOT.x, CONSOLE_SPOT.z, playFootstep)
@@ -224,8 +232,8 @@ function updateScene(state: SessionState): void {
   })
 
   butler?.setGroove(playing && butlerPlace === 'console')
-  // 피아노 앞에서는 멈추면 손을 내린다.
-  if (butlerPlace === 'piano') butler?.setPlaying(playing)
+  // 피아노 앞에서는 멈추면 손을 내린다. 걸어가는 중에는 손대지 않는다.
+  if (butlerPlace === 'piano' && butlerSeated) butler?.setPlaying(playing)
 
   salon.turntable.set({
     spinning: playing,
