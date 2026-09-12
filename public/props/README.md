@@ -73,3 +73,20 @@ CC-BY 모델을 쓰기로 바꾼다면 출처 안내서에 제작자 표기를 �
 
 응접실 바닥에 1.6m 간격으로 반복해 깝니다. 입장한 뒤에 따로 받으며,
 받지 못해도 단색 바닥으로 보입니다.
+
+## 벽·판벽 결
+
+| 쓰임 | 원본 | 라이선스 |
+|---|---|---|
+| 윗벽 직물 벽지 | [Poly Haven — Quatrefoil Jacquard Fabric](https://polyhaven.com/a/quatrefoil_jacquard_fabric) | CC0 |
+| 판벽·몰딩·안내판 액자 | [Poly Haven — Dark Wooden Planks](https://polyhaven.com/a/dark_wooden_planks) | CC0 |
+
+각 1k JPG 3장(`diff`/`nor_gl`/`arm`). 입장 후에 받으며, 받지 못해도 단색으로 보입니다.
+
+## 발걸음 소리 — `public/audio/step.ogg`
+
+[100 CC0 SFX #2](https://opengameart.org/content/100-cc0-sfx-2) 의 `footstep_wood_01` · **CC0** · 7KB.
+
+집사가 걸어 들어올 때만 씁니다. 음악 음원은 저장소에 담지 않는다는 원칙의 예외인데,
+이런 짧은 효과음은 스트리밍할 출처가 없기 때문입니다. 원치 않으시면 Web Audio 로
+합성한 소리로 바꿀 수 있습니다.

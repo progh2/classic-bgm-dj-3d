@@ -198,10 +198,14 @@ async function lightRoom(): Promise<void> {
 
 async function dressRoom(): Promise<void> {
   if (!salon) return
-  // 마룻바닥 결. 실패해도 단색 바닥으로 보인다.
+  // 바닥·벽·판벽의 결. 실패해도 단색으로 보인다.
+  const textures = `${import.meta.env.BASE_URL}textures/`
   void salon.room
-    .applyFloorTexture(`${import.meta.env.BASE_URL}textures/herringbone-parquet/`)
-    .catch((err) => console.warn('바닥 결을 불러오지 못했습니다', err))
+    .applyTextures(textures)
+    .catch((err: unknown) => console.warn('방의 결을 불러오지 못했습니다', err))
+  void salon.screen
+    .applyTextures(textures)
+    .catch((err: unknown) => console.warn('안내판 액자 결을 불러오지 못했습니다', err))
   try {
     const { loadTable } = await import('./scene/table')
     const table = await loadTable(`${import.meta.env.BASE_URL}props/classic-console/ClassicConsole_01_1k.gltf`)
@@ -209,6 +213,35 @@ async function dressRoom(): Promise<void> {
     salon.removePlaceholderTable()
   } catch (err) {
     console.warn('콘솔 테이블을 불러오지 못했습니다', err)
+  }
+}
+
+/**
+ * 발걸음 소리. 겹쳐 울려야 하므로 요소를 돌려 쓰고, 걸음마다 세기를 조금씩
+ * 달리해 기계음처럼 들리지 않게 한다.
+ */
+const footsteps: HTMLAudioElement[] = []
+let footstepAt = 0
+
+function playFootstep(): void {
+  try {
+    if (footsteps.length === 0) {
+      for (let i = 0; i < 3; i++) {
+        const a = new Audio(`${import.meta.env.BASE_URL}audio/step.ogg`)
+        a.preload = 'auto'
+        footsteps.push(a)
+      }
+    }
+    const a = footsteps[footstepAt % footsteps.length]
+    footstepAt += 1
+    if (!a) return
+    a.currentTime = 0
+    a.volume = 0.16 + Math.random() * 0.06
+    void a.play().catch(() => {
+      // 첫 조작 전이면 브라우저가 막는다. 발소리는 없어도 되는 소리다.
+    })
+  } catch {
+    // 소리가 없어도 입장은 그대로 진행한다.
   }
 }
 
@@ -233,11 +266,13 @@ async function bringInButler(): Promise<void> {
     // 자세를 화면에서 맞춰 보기 위한 통로.
     ;(window as unknown as Record<string, unknown>).__butler = butler
   }
-  butler.root.position.set(0, 0, -1.05)
+  // 오른쪽 문에서 걸어 들어온다. 이미 서 있는 것보다 사람이 온 느낌이 난다.
+  butler.root.position.set(2.35, 0, -1.45)
   butler.lookAt(salon.viewerAnchor)
   salon.add(butler.root)
   status.textContent = ''
 
+  await butler.walkTo(0.06, -1.05, playFootstep)
   butler.bow()
   say(speech.enabled ? LINES.greetVoice : LINES.greetQuiet)
   if (speech.enabled && !speech.hasKoreanVoice()) status.textContent = LINES.noVoice

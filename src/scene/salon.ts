@@ -75,7 +75,7 @@ export function createSalon(host: HTMLElement): Salon {
   renderer.shadowMap.type = PCFSoftShadowMap
   // 선형 출력은 촛불 같은 밝은 부분이 하얗게 뭉친다. 필름 톤매핑으로 눌러 준다.
   renderer.toneMapping = ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.15
+  renderer.toneMappingExposure = 0.92
   renderer.outputColorSpace = SRGBColorSpace
   host.appendChild(renderer.domElement)
 
@@ -115,10 +115,10 @@ export function createSalon(host: HTMLElement): Salon {
   const room = createRoom()
   scene.add(room.root)
 
-  scene.add(new AmbientLight(0xffd9a8, 0.18))
+  scene.add(new AmbientLight(0xffd9a8, 0.12))
 
   // 키 — 왼쪽 위에서 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
-  const key = new SpotLight(0xffd2a1, 16, 8, Math.PI / 5, 0.5, 1.6)
+  const key = new SpotLight(0xffd2a1, 13, 8, Math.PI / 5, 0.5, 1.6)
   key.position.set(-1.15, 2.6, 1.35)
   key.target.position.set(0, 1.0, -0.4)
   key.castShadow = true
@@ -128,13 +128,13 @@ export function createSalon(host: HTMLElement): Salon {
   scene.add(key, key.target)
 
   // 림 — 뒤 오른쪽에서 오는 서늘한 빛. 집사의 윤곽을 배경에서 떼어낸다.
-  const rim = new SpotLight(0xbcd2ff, 9, 8, Math.PI / 4.5, 0.7, 1.5)
+  const rim = new SpotLight(0xbcd2ff, 7, 8, Math.PI / 4.5, 0.7, 1.5)
   rim.position.set(1.9, 2.5, -2.1)
   rim.target.position.set(0, 1.35, -1.05)
   scene.add(rim, rim.target)
 
   // 필 — 정면 아래에서 아주 약하게. 얼굴 그늘이 까맣게 막히지 않도록.
-  const fill = new PointLight(0xffe6c8, 2.2, 6, 2)
+  const fill = new PointLight(0xffe6c8, 1.5, 6, 2)
   fill.position.set(0.4, 1.5, 2.2)
   scene.add(fill)
 
@@ -175,7 +175,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   // 집사 뒤 안내판 — 지금 흐르는 곡을 여기에 띄운다.
   const screen = createScreen()
-  screen.root.position.set(0, 1.8, -2.35)
+  screen.root.position.set(0, 1.72, -2.15)
   scene.add(screen.root)
 
   // 테이블 위의 레코드 재생기. 콘솔 상판(0.95m) 위에 놓는다.
@@ -210,7 +210,7 @@ export function createSalon(host: HTMLElement): Salon {
       const pmrem = new PMREMGenerator(renderer)
       // 배경으로 그리지는 않는다. 반사와 간접광에만 쓴다.
       scene.environment = pmrem.fromEquirectangular(texture).texture
-      scene.environmentIntensity = 0.55
+      scene.environmentIntensity = 0.3
       pmrem.dispose()
       texture.dispose()
     },

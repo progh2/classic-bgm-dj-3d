@@ -1,3 +1,4 @@
+import { applyTextureSet } from './textures'
 import {
   BackSide,
   BoxGeometry,
@@ -5,10 +6,6 @@ import {
   Mesh,
   MeshStandardMaterial,
   PlaneGeometry,
-  RepeatWrapping,
-  SRGBColorSpace,
-  TextureLoader,
-  type Texture,
 } from 'three'
 
 /**
@@ -19,25 +16,26 @@ import {
  */
 
 /** 방의 크기(m). 카메라가 들어앉는 쪽(+Z)은 열어 둔다. */
-const W = 7.2
-const D = 7.0
-const H = 3.2
+const W = 5.8
+const D = 5.6
+const H = 2.85
 /** 판벽(웨인스코팅) 높이 */
 const DADO = 1.05
 
 export interface Room {
   readonly root: Group
-  /** 바닥 텍스처를 입힌다. 실패해도 단색으로 보인다. */
-  applyFloorTexture(base: string): Promise<void>
+  /** 바닥·벽·판벽에 결을 입힌다. 실패해도 단색으로 보인다. */
+  applyTextures(base: string): Promise<void>
 }
 
 export function createRoom(): Room {
   const root = new Group()
 
-  const plaster = new MeshStandardMaterial({ color: 0x3d3226, roughness: 0.92 })
-  const panelWood = new MeshStandardMaterial({ color: 0x33200f, roughness: 0.45, metalness: 0.05 })
-  const trimWood = new MeshStandardMaterial({ color: 0x5a3a1d, roughness: 0.38, metalness: 0.08 })
-  const floorMat = new MeshStandardMaterial({ color: 0x4a3323, roughness: 0.55, metalness: 0.02 })
+  // 시작값은 전부 무광이다. 번들거림은 텍스처의 거칠기 맵이 정한다.
+  const wallMat = new MeshStandardMaterial({ color: 0x3a1c1e, roughness: 1, metalness: 0 })
+  const panelWood = new MeshStandardMaterial({ color: 0x2a1a0e, roughness: 0.95, metalness: 0 })
+  const trimWood = new MeshStandardMaterial({ color: 0x30200f, roughness: 0.9, metalness: 0 })
+  const floorMat = new MeshStandardMaterial({ color: 0x3a281b, roughness: 0.95, metalness: 0 })
 
   const floor = new Mesh(new PlaneGeometry(W, D), floorMat)
   floor.rotation.x = -Math.PI / 2
@@ -47,7 +45,7 @@ export function createRoom(): Room {
 
   // 벽 — 안쪽 면만 보이면 되므로 평면을 뒤집어 쓴다.
   const wall = (w: number, x: number, z: number, rotY: number): void => {
-    const m = new Mesh(new PlaneGeometry(w, H), plaster)
+    const m = new Mesh(new PlaneGeometry(w, H), wallMat)
     m.position.set(x, H / 2, z)
     m.rotation.y = rotY
     m.receiveShadow = true
@@ -82,15 +80,18 @@ export function createRoom(): Room {
   wall(D, W / 2, floor.position.z, -Math.PI / 2)
 
   // 천장 — 보이지는 않지만 빛이 새지 않도록 덮는다.
-  const ceiling = new Mesh(new PlaneGeometry(W, D), new MeshStandardMaterial({ color: 0x2a241c, roughness: 1, side: BackSide }))
+  const ceiling = new Mesh(
+    new PlaneGeometry(W, D),
+    new MeshStandardMaterial({ color: 0x1e1811, roughness: 1, metalness: 0, side: BackSide }),
+  )
   ceiling.rotation.x = -Math.PI / 2
   ceiling.position.set(0, H, floor.position.z)
   root.add(ceiling)
 
   // 러그 — 테이블 아래. 바닥이 온통 같은 무늬면 눈이 쉴 데가 없다.
   const rug = new Mesh(
-    new PlaneGeometry(3.6, 2.6),
-    new MeshStandardMaterial({ color: 0x2c1c22, roughness: 0.95 }),
+    new PlaneGeometry(3.2, 2.3),
+    new MeshStandardMaterial({ color: 0x241318, roughness: 1, metalness: 0 }),
   )
   rug.rotation.x = -Math.PI / 2
   rug.position.set(0, 0.004, -0.2)
@@ -98,8 +99,8 @@ export function createRoom(): Room {
   root.add(rug)
 
   const rugTrim = new Mesh(
-    new PlaneGeometry(3.32, 2.32),
-    new MeshStandardMaterial({ color: 0x4a2c33, roughness: 0.95 }),
+    new PlaneGeometry(2.94, 2.04),
+    new MeshStandardMaterial({ color: 0x3a2028, roughness: 1, metalness: 0 }),
   )
   rugTrim.rotation.x = -Math.PI / 2
   rugTrim.position.set(0, 0.006, -0.2)
@@ -108,32 +109,31 @@ export function createRoom(): Room {
   return {
     root,
 
-    async applyFloorTexture(base) {
-      const loader = new TextureLoader()
-      const load = async (suffix: string, srgb: boolean): Promise<Texture> => {
-        const t = await loader.loadAsync(`${base}herringbone_parquet_${suffix}_1k.jpg`)
-        t.wrapS = RepeatWrapping
-        t.wrapT = RepeatWrapping
-        // 1m 에 한 장씩. 헤링본 무늬가 잘게 반복되어야 마루로 읽힌다.
-        t.repeat.set(W / 1.6, D / 1.6)
-        if (srgb) t.colorSpace = SRGBColorSpace
-        return t
-      }
-      const [diff, normal, arm] = await Promise.all([
-        load('diff', true),
-        load('nor_gl', false),
-        load('arm', false),
+    async applyTextures(base) {
+      await Promise.all([
+        // 마루는 0.9m 에 한 장. 헤링본 무늬가 잘게 반복되어야 마루로 읽힌다.
+        applyTextureSet(floorMat, `${base}herringbone-parquet/`, 'herringbone_parquet', {
+          repeat: [W / 0.9, D / 0.9],
+          tint: 0x9c7a55,
+          envMapIntensity: 0.35,
+        }),
+        // 벽은 붉은 자카드 천. 응접실 윗벽에 바르는 직물 벽지다.
+        applyTextureSet(wallMat, `${base}quatrefoil-jacquard-fabric/`, 'quatrefoil_jacquard_fabric', {
+          repeat: [W / 1.1, H / 1.1],
+          tint: 0x6d4247,
+          envMapIntensity: 0.25,
+        }),
+        applyTextureSet(panelWood, `${base}dark-wooden-planks/`, 'dark_wooden_planks', {
+          repeat: [W / 1.4, DADO / 1.4],
+          tint: 0x8a6b4c,
+          envMapIntensity: 0.3,
+        }),
+        applyTextureSet(trimWood, `${base}dark-wooden-planks/`, 'dark_wooden_planks', {
+          repeat: [W / 0.7, 1],
+          tint: 0x9a7a55,
+          envMapIntensity: 0.35,
+        }),
       ])
-      floorMat.map = diff
-      floorMat.normalMap = normal
-      // Poly Haven 의 arm 은 R=AO, G=거칠기, B=금속이다. 세 채널을 같은 이미지로 준다.
-      floorMat.aoMap = arm
-      floorMat.roughnessMap = arm
-      floorMat.metalnessMap = arm
-      floorMat.metalness = 1
-      floorMat.roughness = 1
-      floorMat.color.set(0xffffff)
-      floorMat.needsUpdate = true
     },
   }
 }

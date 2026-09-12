@@ -5,5 +5,7 @@ dist/
 .vite/
 .cache/
 
-# 음원은 저장소에 담지 않는다. Commons 에서 직접 스트리밍한다.
-public/audio/
+# 음악 음원은 저장소에 담지 않는다. Commons 에서 직접 스트리밍한다.
+# 발걸음 같은 짧은 효과음은 스트리밍할 출처가 없어 예외로 둔다.
+public/audio/*.mp3
+public/audio/*.flac

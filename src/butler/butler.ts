@@ -8,6 +8,10 @@ import { dressAsButler } from './recolour'
 const TARGET_HEIGHT = 1.72
 
 /** 고개가 돌아가는 한계. 이보다 크면 몸까지 돌아야 자연스럽다. */
+/** 걷는 속도(m/s)와 한 걸음의 보폭(m). 집사는 서두르지 않는다. */
+const WALK_SPEED = 0.78
+const STRIDE = 0.72
+
 const HEAD_YAW_LIMIT = 0.42
 const HEAD_PITCH_LIMIT = 0.22
 
@@ -35,6 +39,11 @@ export interface Butler {
   setTalking(on: boolean): void
   /** 목례하고 돌아온다. */
   bow(): void
+  /**
+   * 지금 자리에서 목표 지점까지 걸어간다. 도착하면 정면을 향해 선다.
+   * 발이 바닥에 닿을 때마다 onFootstep 을 부른다.
+   */
+  walkTo(x: number, z: number, onFootstep?: () => void): Promise<void>
   lookAt(target: Object3D): void
   tick(nowMs: number, deltaSec: number): void
   dispose(): void
@@ -82,6 +91,12 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
     upperArmR: bone('rightUpperArm'),
     lowerArmL: bone('leftLowerArm'),
     lowerArmR: bone('rightLowerArm'),
+    upperLegL: bone('leftUpperLeg'),
+    upperLegR: bone('rightUpperLeg'),
+    lowerLegL: bone('leftLowerLeg'),
+    lowerLegR: bone('rightLowerLeg'),
+    footL: bone('leftFoot'),
+    footR: bone('rightFoot'),
   }
 
   let pose: Pose = POSES.idle
@@ -93,6 +108,15 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   let blinkT = -1
   /** 눈이 좇는 대상. 고개도 여기를 향해 조금 돌린다. */
   let gazeTarget: Object3D | null = null
+  /** 걷는 중일 때의 목표와 진행. 걷지 않으면 null. */
+  let walk: {
+    to: Vector3
+    onFootstep: (() => void) | undefined
+    resolve: () => void
+    phase: number
+    lastStepSign: number
+  } | null = null
+  let facing = 0
   let headYaw = 0
   let headPitch = 0
 
@@ -103,6 +127,8 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   const qTorso = new Quaternion()
   const qHead = new Quaternion()
   const qHeadYaw = new Quaternion()
+  const qLeg = new Quaternion()
+  const walkDir = new Vector3()
   const gazeWorld = new Vector3()
   const headWorld = new Vector3()
   const headNode = vrm.humanoid?.getRawBoneNode('head') ?? joints.head
@@ -151,12 +177,68 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       bowUntil = performance.now() + 2400
     },
 
+    walkTo(x, z, onFootstep) {
+      return new Promise<void>((resolve) => {
+        // 걷는 도중 다시 부르면 앞의 약속을 먼저 매듭짓는다.
+        walk?.resolve()
+        walk = {
+          to: new Vector3(x, 0, z),
+          onFootstep,
+          resolve,
+          phase: 0,
+          lastStepSign: 0,
+        }
+      })
+    },
+
     lookAt(target) {
       gazeTarget = target
       if (vrm.lookAt) vrm.lookAt.target = target
     },
 
     tick(nowMs, deltaSec) {
+      if (walk) {
+        walkDir.copy(walk.to).sub(root.position)
+        walkDir.y = 0
+        const distance = walkDir.length()
+
+        if (distance < 0.04) {
+          // 도착 — 다리를 모으고 정면으로 돌아선다.
+          root.position.set(walk.to.x, 0, walk.to.z)
+          const done = walk
+          walk = null
+          done.resolve()
+        } else {
+          const step = Math.min(distance, WALK_SPEED * deltaSec)
+          root.position.addScaledVector(walkDir.normalize(), step)
+          walk.phase += (WALK_SPEED / STRIDE) * Math.PI * 2 * deltaSec
+          facing = Math.atan2(walkDir.x, walkDir.z)
+
+          // 발이 가장 뒤로 갔다가 바닥을 짚는 순간에 소리를 낸다.
+          const sign = Math.sign(Math.sin(walk.phase))
+          if (sign !== 0 && sign !== walk.lastStepSign) {
+            walk.lastStepSign = sign
+            walk.onFootstep?.()
+          }
+        }
+      } else {
+        facing += (0 - facing) * Math.min(1, deltaSec * 3)
+      }
+      root.rotation.y = facing
+
+      // 다리 — 걸을 때만 움직이고, 서 있으면 곧게 편다.
+      const swing = walk ? Math.sin(walk.phase) : 0
+      const lift = walk ? Math.max(0, -Math.cos(walk.phase)) : 0
+      const legK = Math.min(1, deltaSec * 12)
+      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, swing * 0.42), legK)
+      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, -swing * 0.42), legK)
+      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, -Math.max(0, -swing) * 0.75), legK)
+      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, -Math.max(0, swing) * 0.75), legK)
+      slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, lift * 0.2), legK)
+      slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, lift * 0.2), legK)
+      // 걸을 때 몸이 조금 오르내린다.
+      root.position.y = walk ? Math.abs(Math.sin(walk.phase)) * 0.018 : 0
+
       if (bowUntil > 0 && nowMs > bowUntil) {
         bowUntil = 0
         pose = poseBeforeBow
@@ -171,8 +253,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const twistR = pose.armTwistR ?? pose.armTwist
       const elbowR = pose.elbowR ?? pose.elbow
 
-      slerp(joints.upperArmL, armQuat(qArmL, 1, pose.armDown, pose.armSwing, pose.armTwist), k)
-      slerp(joints.upperArmR, armQuat(qArmR, -1, downR, swingR, twistR), k)
+      // 걸을 때는 모은 손을 풀고 팔을 조금 흔든다.
+      const gaitL = walk ? Math.sin(walk.phase) * 0.26 : 0
+      slerp(joints.upperArmL, armQuat(qArmL, 1, pose.armDown, pose.armSwing - gaitL, pose.armTwist), k)
+      slerp(joints.upperArmR, armQuat(qArmR, -1, downR, swingR + gaitL, twistR), k)
       slerp(joints.lowerArmL, qElbowL.setFromAxisAngle(AX_Y, -pose.elbow), k)
       slerp(joints.lowerArmR, qElbowR.setFromAxisAngle(AX_Y, elbowR), k)
       slerp(joints.spine, qTorso.setFromAxisAngle(AX_X, pose.torso + breath), k)

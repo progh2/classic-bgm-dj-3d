@@ -8,7 +8,8 @@ import {
   PlaneGeometry,
   SRGBColorSpace,
 } from 'three'
-import { BoxGeometry } from 'three'
+import { BoxGeometry, MeshPhysicalMaterial } from 'three'
+import { applyTextureSet } from './textures'
 
 /**
  * 집사 뒤에 걸린 안내판. 지금 무엇이 흐르고 있는지를 여기에 띄운다.
@@ -36,6 +37,8 @@ export interface ScreenContent {
 export interface Screen {
   readonly root: Group
   set(content: ScreenContent): void
+  /** 액자 목재에 결을 입힌다. */
+  applyTextures(base: string): Promise<void>
 }
 
 const W = 1280
@@ -43,6 +46,8 @@ const H = 720
 const FONT = '"Noto Serif KR", "Apple SD Gothic Neo", "Malgun Gothic", serif'
 
 export function createScreen(): Screen {
+  // 액자 목재는 방의 판벽과 같은 결을 쓴다.
+  const frameWood = new MeshStandardMaterial({ color: 0x2a1a0e, roughness: 0.92, metalness: 0 })
   const canvas = document.createElement('canvas')
   canvas.width = W
   canvas.height = H
@@ -55,18 +60,40 @@ export function createScreen(): Screen {
 
   const root = new Group()
 
-  // 황동 테두리 액자
-  const frame = new Mesh(
-    new BoxGeometry(2.52, 1.48, 0.06),
-    new MeshStandardMaterial({ color: 0x6b5320, roughness: 0.42, metalness: 0.75 }),
+  // 바깥 액자는 어두운 목재, 안쪽 테두리만 황동으로 둘러 무게를 잡는다.
+  const woodFrame = new Mesh(
+    new BoxGeometry(3.48, 2.06, 0.08),
+    frameWood,
   )
-  frame.castShadow = true
-  root.add(frame)
+  woodFrame.castShadow = true
+  root.add(woodFrame)
+
+  const brassBezel = new Mesh(
+    new BoxGeometry(3.26, 1.84, 0.05),
+    new MeshStandardMaterial({ color: 0x6b5320, roughness: 0.52, metalness: 0.7 }),
+  )
+  brassBezel.position.z = 0.03
+  root.add(brassBezel)
 
   // 화면은 스스로 빛나야 하므로 조명을 받지 않는 재질을 쓴다.
-  const panel = new Mesh(new PlaneGeometry(2.36, 1.32), new MeshBasicMaterial({ map: texture }))
-  panel.position.z = 0.032
+  const panel = new Mesh(new PlaneGeometry(3.12, 1.72), new MeshBasicMaterial({ map: texture }))
+  panel.position.z = 0.058
   root.add(panel)
+
+  // 유리 한 겹 — 표면이 주변을 아주 옅게 비춰야 판때기로 보이지 않는다.
+  const glass = new Mesh(
+    new PlaneGeometry(3.14, 1.74),
+    new MeshPhysicalMaterial({
+      color: 0x101010,
+      roughness: 0.12,
+      metalness: 0,
+      transparent: true,
+      opacity: 0.12,
+      envMapIntensity: 1.1,
+    }),
+  )
+  glass.position.z = 0.062
+  root.add(glass)
 
   let last: ScreenContent | null = null
 
@@ -143,6 +170,15 @@ export function createScreen(): Screen {
 
   return {
     root,
+
+    async applyTextures(base) {
+      await applyTextureSet(frameWood, `${base}dark-wooden-planks/`, 'dark_wooden_planks', {
+        repeat: [4, 2],
+        tint: 0x8a6b4c,
+        envMapIntensity: 0.3,
+      })
+    },
+
     set(content) {
       // 진행 막대가 1% 넘게 움직였거나 글이 바뀌었을 때만 다시 그린다.
       if (last && !changed(last, content)) return
