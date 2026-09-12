@@ -12,6 +12,12 @@ const TARGET_HEIGHT = 1.72
 const WALK_SPEED = 0.78
 const STRIDE = 0.72
 
+/**
+ * 앉았을 때 살짝 띄우는 값. 엉덩이 뼈를 앉는 면에 정확히 맞추면 엉덩이 살이
+ * 의자를 파고들어 주저앉은 것처럼 보인다.
+ */
+const SEAT_LIFT = 0.1
+
 const HEAD_YAW_LIMIT = 0.42
 const HEAD_PITCH_LIMIT = 0.22
 
@@ -336,7 +342,7 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       // 뿌리는 발밑이다. 앉는 면 높이를 그대로 주면 엉덩이가 그만큼 더 올라가
       // 공중에 뜬다. 서 있을 때의 엉덩이 높이만큼 내려 앉혀야 한다.
       root.position.y = seated && !walk
-        ? seatY - hipRestY
+        ? seatY - hipRestY + SEAT_LIFT
         : walk
           ? Math.abs(Math.sin(walk.phase)) * 0.018
           : 0
