@@ -152,10 +152,11 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const k = Math.min(1, deltaSec * 9)
       const downR = pose.armDownR ?? pose.armDown
       const swingR = pose.armSwingR ?? pose.armSwing
+      const twistR = pose.armTwistR ?? pose.armTwist
       const elbowR = pose.elbowR ?? pose.elbow
 
-      slerp(joints.upperArmL, armQuat(qArmL, 1, pose.armDown, pose.armSwing), k)
-      slerp(joints.upperArmR, armQuat(qArmR, -1, downR, swingR), k)
+      slerp(joints.upperArmL, armQuat(qArmL, 1, pose.armDown, pose.armSwing, pose.armTwist), k)
+      slerp(joints.upperArmR, armQuat(qArmR, -1, downR, swingR, twistR), k)
       slerp(joints.lowerArmL, qElbowL.setFromAxisAngle(AX_Y, -pose.elbow), k)
       slerp(joints.lowerArmR, qElbowR.setFromAxisAngle(AX_Y, elbowR), k)
       slerp(joints.spine, qTorso.setFromAxisAngle(AX_X, pose.torso + breath), k)
