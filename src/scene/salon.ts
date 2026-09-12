@@ -121,8 +121,10 @@ export function createSalon(host: HTMLElement): Salon {
    * 여기서 생겼다.
    */
   const SHOTS = {
-    wide: { at: new Vector3(0.1, 1.62, -1.0), box: { w: 5.0, h: 3.1 } },
-    close: { at: new Vector3(0.1, 1.58, -1.1), box: { w: 3.9, h: 2.4 } },
+    // 처음에는 집사가 들어오는 오른쪽을 조금 비춰 두고, 그가 자리를 잡는 동안
+    // 왼쪽으로 흘러 안내판이 화면 한가운데 오도록 맞춘다.
+    wide: { at: new Vector3(0.78, 1.62, -1.0), box: { w: 5.0, h: 3.1 } },
+    close: { at: new Vector3(0, 1.58, -1.1), box: { w: 3.9, h: 2.4 } },
   } as const
   type ShotName = keyof typeof SHOTS
 

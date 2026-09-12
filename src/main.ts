@@ -394,7 +394,6 @@ async function dressRoom(): Promise<void> {
   const textures = `${import.meta.env.BASE_URL}textures/`
   const warn = (what: string) => (err: unknown) => console.warn(`${what}을 불러오지 못했습니다`, err)
   void salon.room.applyTextures(textures).catch(warn('방의 결'))
-  void salon.tabletop.applyTextures(textures).catch(warn('러너 결'))
   void salon.screen.applyTextures(textures).catch(warn('안내판 액자 결'))
 
   try {

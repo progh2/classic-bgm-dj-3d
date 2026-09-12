@@ -9,7 +9,6 @@ import {
   Vector2,
   Vector3,
 } from 'three'
-import { applyTextureSet } from './textures'
 
 /**
  * 테이블 위의 정물 — 악보집 더미, 테이블 러너, 찻잔, 황동 호출벨.
@@ -20,8 +19,6 @@ import { applyTextureSet } from './textures'
 
 export interface Tabletop {
   readonly root: Group
-  /** 러너 천에 결을 입힌다. */
-  applyTextures(base: string): Promise<void>
 }
 
 const GOLD = 0x8a6a1e
@@ -30,21 +27,8 @@ const UP = new Vector3(0, 1, 0)
 export function createTabletop(): Tabletop {
   const root = new Group()
 
-  const runnerMat = new MeshStandardMaterial({ color: 0x5a4a2c, roughness: 1, metalness: 0 })
   const brass = new MeshStandardMaterial({ color: GOLD, roughness: 0.34, metalness: 0.82 })
   const porcelain = new MeshStandardMaterial({ color: 0xf2ece0, roughness: 0.22, metalness: 0.02 })
-
-  // 테이블 러너 — 상판 가운데를 가로질러 앞뒤로 늘어뜨린다.
-  const runner = new Group()
-  const runnerTop = new Mesh(new BoxGeometry(0.42, 0.004, 0.62), runnerMat)
-  runner.add(runnerTop)
-  for (const z of [0.31, -0.31] as const) {
-    const fall = new Mesh(new BoxGeometry(0.42, 0.26, 0.004), runnerMat)
-    fall.position.set(0, -0.13, z)
-    runner.add(fall)
-  }
-  runner.position.set(-0.02, 0, -0.04)
-  root.add(runner)
 
   // 악보집 더미 — 아래로 갈수록 조금씩 크다. 책등에 금박 띠를 두른다.
   const spineColours = [0x3c2418, 0x2a3626, 0x412028, 0x2b2a3c]
@@ -135,12 +119,5 @@ export function createTabletop(): Tabletop {
 
   return {
     root,
-    async applyTextures(base) {
-      await applyTextureSet(runnerMat, `${base}quatrefoil-jacquard-fabric/`, 'quatrefoil_jacquard_fabric', {
-        repeat: [1.4, 2.2],
-        tint: 0x8a7448,
-        envMapIntensity: 0.3,
-      })
-    },
   }
 }
