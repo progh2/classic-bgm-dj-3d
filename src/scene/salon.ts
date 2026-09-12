@@ -8,10 +8,17 @@ import {
   Group,
   Mesh,
   MeshStandardMaterial,
+  PCFSoftShadowMap,
+  PMREMGenerator,
   PerspectiveCamera,
   PointLight,
+  Vector2,
+  Vector3,
   Scene,
   SpotLight,
+  Texture,
+  SRGBColorSpace,
+  ACESFilmicToneMapping,
   WebGLRenderer,
 } from 'three'
 
@@ -26,6 +33,8 @@ export interface Salon {
   add(object: Object3D): void
   /** 콘솔 테이블 모델이 도착하면 임시 상판을 치운다. */
   removePlaceholderTable(): void
+  /** 환경광을 입힌다. 놋쇠와 목재가 반사할 대상이 생긴다. */
+  applyEnvironment(texture: Texture): void
   /** 집사가 바라볼 대상. 카메라 앞에 둔 빈 오브젝트다. */
   readonly viewerAnchor: Object3D
   /** 집사 뒤에 걸린 안내판 */
@@ -60,6 +69,11 @@ export function createSalon(host: HTMLElement): Salon {
   const pixelRatio = Math.min(window.devicePixelRatio, 2)
   renderer.setPixelRatio(pixelRatio)
   renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = PCFSoftShadowMap
+  // 선형 출력은 촛불 같은 밝은 부분이 하얗게 뭉친다. 필름 톤매핑으로 눌러 준다.
+  renderer.toneMapping = ACESFilmicToneMapping
+  renderer.toneMappingExposure = 1.15
+  renderer.outputColorSpace = SRGBColorSpace
   host.appendChild(renderer.domElement)
 
   const scene = new Scene()
@@ -104,29 +118,64 @@ export function createSalon(host: HTMLElement): Salon {
   floor.receiveShadow = true
   scene.add(floor)
 
-  scene.add(new AmbientLight(0xffd9a8, 0.32))
+  // 환경광이 오기 전까지 장면이 새카맣지 않도록 아주 약하게 깔아 둔다.
+  scene.add(new AmbientLight(0xffd9a8, 0.18))
 
-  const lamp = new SpotLight(0xffd2a1, 14, 7, Math.PI / 5, 0.45, 1.6)
-  lamp.position.set(-0.9, 2.5, 1.1)
-  lamp.target.position.set(0, 0.8, 0)
-  lamp.castShadow = true
-  lamp.shadow.mapSize.set(1024, 1024)
-  scene.add(lamp, lamp.target)
+  // 키 — 왼쪽 위에서 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
+  const key = new SpotLight(0xffd2a1, 16, 8, Math.PI / 5, 0.5, 1.6)
+  key.position.set(-1.15, 2.6, 1.35)
+  key.target.position.set(0, 1.0, -0.4)
+  key.castShadow = true
+  key.shadow.mapSize.set(1024, 1024)
+  key.shadow.bias = -0.0012
+  key.shadow.normalBias = 0.02
+  scene.add(key, key.target)
+
+  // 림 — 뒤 오른쪽에서 오는 서늘한 빛. 집사의 윤곽을 배경에서 떼어낸다.
+  const rim = new SpotLight(0xbcd2ff, 9, 8, Math.PI / 4.5, 0.7, 1.5)
+  rim.position.set(1.9, 2.5, -2.1)
+  rim.target.position.set(0, 1.35, -1.05)
+  scene.add(rim, rim.target)
+
+  // 필 — 정면 아래에서 아주 약하게. 얼굴 그늘이 까맣게 막히지 않도록.
+  const fill = new PointLight(0xffe6c8, 2.2, 6, 2)
+  fill.position.set(0.4, 1.5, 2.2)
+  scene.add(fill)
 
   const candle = new PointLight(0xffb469, 2.2, 3.2, 2)
   candle.position.set(0.78, 1.02, 0.28)
   scene.add(candle)
 
-  // 테이블 너머에 선 집사의 얼굴이 어둠에 묻히지 않도록 한 단계 더.
-  const butlerKey = new SpotLight(0xffe0bb, 9, 6, Math.PI / 5.5, 0.6, 1.5)
-  butlerKey.position.set(0.5, 2.7, 0.9)
-  butlerKey.target.position.set(0, 1.35, -1.05)
-  scene.add(butlerKey, butlerKey.target)
+
 
   // 집사가 이쪽을 보게 할 기준점. 카메라보다 살짝 아래에 둬야 눈이 마주친다.
   const viewerAnchor = new Object3D()
-  viewerAnchor.position.set(0, 1.5, 2.9)
+  const HOME = new Vector3(0, 1.5, 2.55)
+  viewerAnchor.position.copy(HOME)
   scene.add(viewerAnchor)
+
+  // 마우스·손가락이 가리키는 곳을 집사가 본다. 포인터가 없으면 정면으로 돌아온다.
+  const wanted = HOME.clone()
+  const ndc = new Vector2()
+  const pointerPlane = new Vector3()
+
+  const aimAt = (clientX: number, clientY: number): void => {
+    const rect = renderer.domElement.getBoundingClientRect()
+    if (rect.width === 0 || rect.height === 0) return
+    ndc.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1)
+    // 카메라 앞 일정 거리의 평면 위로 옮긴다. 그 점을 집사가 본다.
+    pointerPlane.set(ndc.x, ndc.y, 0.5).unproject(camera)
+    pointerPlane.sub(camera.position).normalize()
+    wanted.copy(camera.position).addScaledVector(pointerPlane, 2.1)
+  }
+
+  const onPointerMove = (e: PointerEvent): void => aimAt(e.clientX, e.clientY)
+  const onPointerLeave = (): void => {
+    wanted.copy(HOME)
+  }
+  window.addEventListener('pointermove', onPointerMove, { passive: true })
+  document.addEventListener('pointerleave', onPointerLeave)
+  window.addEventListener('blur', onPointerLeave)
 
   // 집사 뒤 안내판 — 지금 흐르는 곡을 여기에 띄운다.
   const screen = createScreen()
@@ -160,14 +209,27 @@ export function createSalon(host: HTMLElement): Salon {
     removePlaceholderTable() {
       scene.remove(table)
     },
+    applyEnvironment(texture) {
+      const pmrem = new PMREMGenerator(renderer)
+      // 배경으로 그리지는 않는다. 반사와 간접광에만 쓴다.
+      scene.environment = pmrem.fromEquirectangular(texture).texture
+      scene.environmentIntensity = 0.55
+      pmrem.dispose()
+      texture.dispose()
+    },
     tick(nowMs, deltaSec) {
       // 촛불의 미세한 흔들림. 모션 줄이기에서는 고정한다.
       candle.intensity = reduceMotion ? 2.2 : 2.2 + Math.sin(nowMs / 240) * 0.18
+      // 시선은 조금 늦게 따라온다. 그래야 눈이 홱홱 돌지 않는다.
+      viewerAnchor.position.lerp(wanted, Math.min(1, deltaSec * 4))
       turntable.tick(deltaSec)
       renderer.render(scene, camera)
     },
     resize,
     dispose() {
+      window.removeEventListener('pointermove', onPointerMove)
+      document.removeEventListener('pointerleave', onPointerLeave)
+      window.removeEventListener('blur', onPointerLeave)
       renderer.dispose()
       renderer.domElement.remove()
     },

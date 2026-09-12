@@ -7,6 +7,12 @@ import { dressAsButler } from './recolour'
 /** 집사 키를 이 값으로 맞춘다. 모델을 바꿔도 테이블과의 비례가 유지된다. */
 const TARGET_HEIGHT = 1.72
 
+/** 고개가 돌아가는 한계. 이보다 크면 몸까지 돌아야 자연스럽다. */
+const HEAD_YAW_LIMIT = 0.42
+const HEAD_PITCH_LIMIT = 0.22
+
+const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v))
+
 /** VRM 표준 표정 이름. 0.x 의 joy/sorrow/fun 은 three-vrm 이 이 이름으로 넘겨준다. */
 const EXPRESSION_KEYS = ['happy', 'sad', 'angry', 'relaxed', 'surprised', 'aa', 'oh', 'ih', 'ee', 'ou'] as const
 
@@ -85,6 +91,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   /** 다음 눈 깜빡임까지 남은 시간(초). */
   let nextBlink = 1 + Math.random() * 3
   let blinkT = -1
+  /** 눈이 좇는 대상. 고개도 여기를 향해 조금 돌린다. */
+  let gazeTarget: Object3D | null = null
+  let headYaw = 0
+  let headPitch = 0
 
   const qArmL = new Quaternion()
   const qArmR = new Quaternion()
@@ -92,9 +102,14 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   const qElbowR = new Quaternion()
   const qTorso = new Quaternion()
   const qHead = new Quaternion()
+  const qHeadYaw = new Quaternion()
+  const gazeWorld = new Vector3()
+  const headWorld = new Vector3()
+  const headNode = vrm.humanoid?.getRawBoneNode('head') ?? joints.head
   const AX_X = new Vector3(1, 0, 0)
   // 팔을 내린 뒤의 국소 좌표에서 팔꿈치 굽힘은 Y축 회전이고, 좌우가 서로 반대다.
   const AX_Y = new Vector3(0, 1, 0)
+  const AX_Y_WORLD = new Vector3(0, 1, 0)
 
   const setExpressionValues = (name: ExpressionName): void => {
     const m = vrm.expressionManager
@@ -137,6 +152,7 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
     },
 
     lookAt(target) {
+      gazeTarget = target
       if (vrm.lookAt) vrm.lookAt.target = target
     },
 
@@ -160,7 +176,23 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       slerp(joints.lowerArmL, qElbowL.setFromAxisAngle(AX_Y, -pose.elbow), k)
       slerp(joints.lowerArmR, qElbowR.setFromAxisAngle(AX_Y, elbowR), k)
       slerp(joints.spine, qTorso.setFromAxisAngle(AX_X, pose.torso + breath), k)
-      slerp(joints.head, qHead.setFromAxisAngle(AX_X, pose.head - breath * 0.5), k)
+
+      // 눈만 굴리면 노려보는 것처럼 보인다. 고개도 조금 따라 돌린다.
+      // 눈이 먼저 가고 고개가 뒤따르도록 고개 쪽 추종은 더 느리게 둔다.
+      if (gazeTarget) {
+        gazeTarget.getWorldPosition(gazeWorld)
+        headNode?.getWorldPosition(headWorld)
+        gazeWorld.sub(headWorld)
+        // 집사는 +Z 를 보고 서 있다. 그 기준으로 좌우·상하 각을 잰다.
+        const wantYaw = clamp(Math.atan2(gazeWorld.x, gazeWorld.z), -HEAD_YAW_LIMIT, HEAD_YAW_LIMIT)
+        const flat = Math.hypot(gazeWorld.x, gazeWorld.z)
+        const wantPitch = clamp(-Math.atan2(gazeWorld.y, flat), -HEAD_PITCH_LIMIT, HEAD_PITCH_LIMIT)
+        headYaw += (wantYaw - headYaw) * Math.min(1, deltaSec * 2.6)
+        headPitch += (wantPitch - headPitch) * Math.min(1, deltaSec * 2.6)
+      }
+      qHead.setFromAxisAngle(AX_X, pose.head - breath * 0.5 + headPitch)
+      qHeadYaw.setFromAxisAngle(AX_Y_WORLD, headYaw)
+      slerp(joints.head, qHead.multiply(qHeadYaw), k)
 
       // 눈 깜빡임 — 불규칙한 간격으로 짧게.
       const m = vrm.expressionManager

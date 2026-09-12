@@ -184,6 +184,18 @@ function startScene(): void {
   window.addEventListener('resize', () => salon?.resize())
 }
 
+/** 환경광을 입힌다. 실패해도 조명만으로 장면은 보인다. */
+async function lightRoom(): Promise<void> {
+  if (!salon) return
+  try {
+    const { RGBELoader } = await import('three/examples/jsm/loaders/RGBELoader.js')
+    const hdr = await new RGBELoader().loadAsync(`${import.meta.env.BASE_URL}hdri/ballroom_1k.hdr`)
+    salon.applyEnvironment(hdr)
+  } catch (err) {
+    console.warn('환경광을 불러오지 못했습니다', err)
+  }
+}
+
 async function dressRoom(): Promise<void> {
   if (!salon) return
   try {
@@ -242,6 +254,7 @@ function enter(withVoice: boolean): void {
 
   startScene()
   updateScene(session.state)
+  void lightRoom()
   void dressRoom()
   void bringInButler()
 }
