@@ -146,10 +146,9 @@ function updateScene(state: SessionState): void {
         : (state.problem ?? '')
 
   const hasTrack = current !== null || playback.state === 'loading'
+  // 누를 수 없는 단추는 없는 편이 낫다. 곡이 걸리기 전에는 감춘다.
+  el('transport').toggleAttribute('hidden', !hasTrack)
   el('play').textContent = PLAY_LABEL[playback.state] ?? '재생'
-  el<HTMLButtonElement>('play').disabled = !hasTrack
-  el<HTMLButtonElement>('prev').disabled = !hasTrack
-  el<HTMLButtonElement>('next').disabled = !hasTrack
   el('voice-toggle').textContent = speech.enabled ? '음성 끄기' : '음성 켜기'
   el('voice-toggle').setAttribute('aria-pressed', String(speech.enabled))
   el('console-notice').textContent = notice
@@ -273,7 +272,6 @@ function act(id: string): void {
   // 첫 조작이 소리의 출발점이다. 이때부터 음성을 켤 수 있다.
   if (!userActed) {
     userActed = true
-    speech.enabled = true
     updateScene(session.state)
     // 브라우저는 첫 조작 전에 소리를 내주지 않는다. 들어올 때의 인사는
     // 자막으로만 지나갔으므로, 이 시점에 한 번 소리로 건넨다.
@@ -496,8 +494,10 @@ async function bringInButler(): Promise<void> {
   salon.lookAt('close', 4.2)
   await butler.walkTo(0.62, -1.0, playFootstep)
   butler.bow()
-  say(LINES.greetQuiet)
-  greetedSilently = !speech.enabled
+  // 자리에 서면 바로 인사한다. 브라우저가 소리를 막았으면 자막만 지나가므로,
+  // 그 사실을 기억해 두었다가 첫 조작 때 다시 건넨다.
+  await speech.say(LINES.greetVoice)
+  greetedSilently = !speech.didSpeak()
 }
 
 // ---- 감춰진 층의 단추도 같은 일을 한다 ----

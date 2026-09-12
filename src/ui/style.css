@@ -81,6 +81,7 @@ html, body {
 }
 
 .console__row { display: flex; gap: 8px; }
+.console__row[hidden] { display: none; }
 
 .led {
   flex: 1 1 auto;
@@ -160,9 +161,9 @@ html, body {
 
 .ask__card {
   width: min(48rem, 100%);
-  max-height: calc(100% - 24px);
+  max-height: calc(100dvh - 32px);
   overflow: auto;
-  padding: clamp(18px, 4vw, 32px);
+  padding: clamp(18px, 3.4vmin, 32px);
   border: 1px solid color-mix(in srgb, var(--mood) 34%, transparent);
   border-radius: 10px;
   background: rgba(14, 10, 8, .92);
@@ -171,14 +172,14 @@ html, body {
 
 .ask__step {
   margin: 0 0 6px;
-  font-size: clamp(.85rem, 2.4vw, 1rem);
+  font-size: clamp(.8rem, 1.9vmin, 1rem);
   letter-spacing: .2em;
   color: color-mix(in srgb, var(--mood) 80%, #fff);
 }
 
 .ask__question {
   margin: 0 0 6px;
-  font-size: clamp(1.5rem, 5.6vw, 2.4rem);
+  font-size: clamp(1.3rem, 4.4vmin, 2.2rem);
   font-weight: 600;
   line-height: 1.35;
   color: var(--ivory);
@@ -186,7 +187,7 @@ html, body {
 
 .ask__hint {
   margin: 0 0 20px;
-  font-size: clamp(.95rem, 3vw, 1.15rem);
+  font-size: clamp(.9rem, 2.3vmin, 1.1rem);
   color: #b7a68f;
 }
 
@@ -199,8 +200,17 @@ html, body {
   .ask__options { grid-template-columns: 1fr 1fr; }
 }
 
+/* 가로로 납작한 화면에서는 여백과 줄간격을 더 줄여 한 화면에 담는다. */
+@media (orientation: landscape) and (max-height: 30rem) {
+  .ask__card { padding: 14px 20px; }
+  .ask__hint { margin-bottom: 10px; }
+  .ask__option { min-height: 58px; padding: 8px 16px; }
+  .ask__nav { margin-top: 12px; }
+  .ask__nav .led { min-height: 44px; }
+}
+
 .ask__option {
-  min-height: clamp(76px, 14vw, 104px);
+  min-height: clamp(68px, 11vmin, 104px);
   padding: 14px 20px;
   border: 1px solid color-mix(in srgb, var(--mood) 30%, transparent);
   border-radius: 8px;
@@ -217,13 +227,13 @@ html, body {
 .ask__option:focus-visible { outline: 3px solid var(--mood); outline-offset: 2px; }
 .ask__option b {
   display: block;
-  font-size: clamp(1.25rem, 4.4vw, 1.6rem);
+  font-size: clamp(1.1rem, 3.2vmin, 1.55rem);
   font-weight: 600;
 }
 .ask__option span {
   display: block;
   margin-top: 4px;
-  font-size: clamp(.9rem, 2.8vw, 1.05rem);
+  font-size: clamp(.85rem, 2vmin, 1.05rem);
   color: #bfae95;
 }
 

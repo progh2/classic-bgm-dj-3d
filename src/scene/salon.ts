@@ -122,11 +122,16 @@ export function createSalon(host: HTMLElement): Salon {
   const SHOTS = {
     // 처음에는 빈 응접실을 가운데로 본다. 발소리가 나면 오른쪽 문으로 고개를
     // 돌려 집사를 발견하고, 그가 걸어오는 동안 함께 가운데로 돌아온다.
-    wide: { at: new Vector3(0, 1.6, -1.05), box: { w: 4.6, h: 2.9 } },
-    door: { at: new Vector3(1.5, 1.5, -1.3), box: { w: 3.4, h: 2.2 } },
-    close: { at: new Vector3(0, 1.58, -1.1), box: { w: 3.9, h: 2.4 } },
+    // 세 구도 모두 같은 자리에서 본다. 시작 연출에서 움직이는 것은 카메라가
+    // 아니라 바라보는 방향이다. 사람이 고개를 돌리는 것에 가깝다.
+    wide: { at: new Vector3(0, 1.6, -1.05), box: { w: 4.2, h: 2.6 } },
+    door: { at: new Vector3(1.55, 1.48, -1.35), box: { w: 4.2, h: 2.6 } },
+    close: { at: new Vector3(0, 1.58, -1.1), box: { w: 4.2, h: 2.6 } },
   } as const
   type ShotName = keyof typeof SHOTS
+
+  /** 카메라가 서는 자리. 구도가 바뀌어도 이 자리는 움직이지 않는다. */
+  const EYE = new Vector3(0, 1.56, -1.1)
 
   let shot: ShotName = 'wide'
   /** 구도를 옮기는 중이면 0~1 로 진행한다. 끝나면 null. */
@@ -148,10 +153,9 @@ export function createSalon(host: HTMLElement): Salon {
       MAX_BACK,
       Math.max(s.box.w / 2 / (half * camera.aspect), s.box.h / 2 / half),
     )
-    // 상판이 보이도록 거리에 비례해 눈높이를 올린다.
-    // 눈높이를 높이면 안내판이 사다리꼴로 일그러진다. 판의 가운데 높이에
-    // 가깝게 서서 반듯하게 본다.
-    return out.set(s.at.x, s.at.y + d * 0.07, s.at.z + d)
+    // 카메라는 늘 방 한가운데 앞자리에 선다. 눈높이를 많이 올리면 안내판이
+    // 사다리꼴로 일그러지므로 조금만 올린다.
+    return out.set(EYE.x, EYE.y + d * 0.07, EYE.z + d)
   }
 
   /** 어떤 z 평면에서 화면에 담기는 가로 폭(m) */
