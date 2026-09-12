@@ -53,8 +53,8 @@ export function createSalon(host: HTMLElement): Salon {
   scene.fog = new Fog(0x17110c, 4.5, 11)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
-  camera.position.set(0, 1.5, 2.6)
-  camera.lookAt(0, 0.95, 0)
+  camera.position.set(0, 1.72, 3.1)
+  camera.lookAt(0, 0.85, 0)
 
   const table = new Group()
   const topMat = new MeshStandardMaterial({ color: 0x4a2a1b, roughness: 0.42, metalness: 0.08 })
@@ -78,8 +78,9 @@ export function createSalon(host: HTMLElement): Salon {
   }
   scene.add(table)
 
+  // 바닥 가장자리가 화면에 보이지 않도록 안개가 걷히는 거리보다 넓게 깐다.
   const floor = new Mesh(
-    new BoxGeometry(9, 0.1, 9),
+    new BoxGeometry(24, 0.1, 24),
     new MeshStandardMaterial({ color: 0x241711, roughness: 0.9 }),
   )
   floor.position.y = -0.05
