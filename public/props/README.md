@@ -65,3 +65,11 @@ CC-BY 모델을 쓰기로 바꾼다면 출처 안내서에 제작자 표기를 �
 배경으로 그리지 않고 **환경광으로만** 씁니다. 놋쇠와 마호가니가 반사할 대상이
 있어야 금속과 목재로 보이기 때문입니다. 빅토리아풍 무도회장이라 응접실의
 색 온도와 맞습니다. 입장한 뒤에 따로 받습니다.
+
+## 바닥 결 — `public/textures/herringbone-parquet/`
+
+[Poly Haven — Herringbone Parquet](https://polyhaven.com/a/herringbone_parquet) · **CC0** · 1k JPG 3장 1.7MB
+(`diff` 베이스 컬러 · `nor_gl` 노멀 · `arm` AO/거칠기/메탈).
+
+응접실 바닥에 1.6m 간격으로 반복해 깝니다. 입장한 뒤에 따로 받으며,
+받지 못해도 단색 바닥으로 보입니다.

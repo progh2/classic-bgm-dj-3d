@@ -22,6 +22,7 @@ import {
   WebGLRenderer,
 } from 'three'
 
+import { createRoom, type Room } from './room'
 import { createScreen, type Screen } from './screen'
 import { createTurntable, type Turntable } from './turntable'
 
@@ -41,6 +42,8 @@ export interface Salon {
   readonly screen: Screen
   /** 테이블 위의 레코드 재생기 */
   readonly turntable: Turntable
+  /** 응접실의 방 자체 */
+  readonly room: Room
   dispose(): void
 }
 
@@ -78,7 +81,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   const scene = new Scene()
   scene.background = new Color(0x17110c)
-  scene.fog = new Fog(0x17110c, 4.5, 11)
+  scene.fog = new Fog(0x17110c, 6, 16)
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
   // 안내판(뒤)·집사·테이블 위 재생기가 한 화면에 들어오도록 잡는다.
@@ -109,16 +112,9 @@ export function createSalon(host: HTMLElement): Salon {
   }
   scene.add(table)
 
-  // 바닥 가장자리가 화면에 보이지 않도록 안개가 걷히는 거리보다 넓게 깐다.
-  const floor = new Mesh(
-    new BoxGeometry(24, 0.1, 24),
-    new MeshStandardMaterial({ color: 0x241711, roughness: 0.9 }),
-  )
-  floor.position.y = -0.05
-  floor.receiveShadow = true
-  scene.add(floor)
+  const room = createRoom()
+  scene.add(room.root)
 
-  // 환경광이 오기 전까지 장면이 새카맣지 않도록 아주 약하게 깔아 둔다.
   scene.add(new AmbientLight(0xffd9a8, 0.18))
 
   // 키 — 왼쪽 위에서 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
@@ -203,6 +199,7 @@ export function createSalon(host: HTMLElement): Salon {
     viewerAnchor,
     screen,
     turntable,
+    room,
     add(object) {
       scene.add(object)
     },

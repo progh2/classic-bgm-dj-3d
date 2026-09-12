@@ -198,6 +198,10 @@ async function lightRoom(): Promise<void> {
 
 async function dressRoom(): Promise<void> {
   if (!salon) return
+  // 마룻바닥 결. 실패해도 단색 바닥으로 보인다.
+  void salon.room
+    .applyFloorTexture(`${import.meta.env.BASE_URL}textures/herringbone-parquet/`)
+    .catch((err) => console.warn('바닥 결을 불러오지 못했습니다', err))
   try {
     const { loadTable } = await import('./scene/table')
     const table = await loadTable(`${import.meta.env.BASE_URL}props/classic-console/ClassicConsole_01_1k.gltf`)
