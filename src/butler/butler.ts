@@ -274,7 +274,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
         headYaw += (wantYaw - headYaw) * Math.min(1, deltaSec * 2.6)
         headPitch += (wantPitch - headPitch) * Math.min(1, deltaSec * 2.6)
       }
-      qHead.setFromAxisAngle(AX_X, pose.head - breath * 0.5 + headPitch)
+      // 이 모델은 VRM 0.x 라 rotateVRM0 으로 180° 돌려 세운다. 그래서 머리 뼈의
+      // +X 회전은 고개를 드는 쪽이 된다. 자세 값은 "앞으로(+) 숙임"으로 읽히도록
+      // 적어 두고, 적용할 때 한 번에 뒤집는다.
+      qHead.setFromAxisAngle(AX_X, -(pose.head - breath * 0.5 + headPitch))
       qHeadYaw.setFromAxisAngle(AX_Y_WORLD, headYaw)
       slerp(joints.head, qHead.multiply(qHeadYaw), k)
 

@@ -22,7 +22,7 @@ import {
   WebGLRenderer,
 } from 'three'
 
-import { createRoom, type Room } from './room'
+import { BACK_Z, createRoom, type Room } from './room'
 import { createScreen, type Screen } from './screen'
 import { createTurntable, type Turntable } from './turntable'
 
@@ -85,8 +85,8 @@ export function createSalon(host: HTMLElement): Salon {
 
   const camera = new PerspectiveCamera(38, 1, 0.1, 60)
   // 안내판(뒤)·집사·테이블 위 재생기가 한 화면에 들어오도록 잡는다.
-  camera.position.set(0, 1.72, 2.85)
-  camera.lookAt(0, 1.3, -0.7)
+  camera.position.set(0, 1.7, 2.35)
+  camera.lookAt(0, 1.28, -0.9)
 
   // 콘솔 테이블 모델이 도착하기 전까지 세워 두는 임시 상판.
   const table = new Group()
@@ -146,7 +146,7 @@ export function createSalon(host: HTMLElement): Salon {
 
   // 집사가 이쪽을 보게 할 기준점. 카메라보다 살짝 아래에 둬야 눈이 마주친다.
   const viewerAnchor = new Object3D()
-  const HOME = new Vector3(0, 1.5, 2.55)
+  const HOME = new Vector3(0, 1.5, 2.05)
   viewerAnchor.position.copy(HOME)
   scene.add(viewerAnchor)
 
@@ -175,7 +175,8 @@ export function createSalon(host: HTMLElement): Salon {
 
   // 집사 뒤 안내판 — 지금 흐르는 곡을 여기에 띄운다.
   const screen = createScreen()
-  screen.root.position.set(0, 1.72, -2.15)
+  // 안내판은 뒷벽에 건다. 벽에서 떠 있으면 허공에 뜬 판때기로 보인다.
+  screen.root.position.set(0, 1.68, BACK_Z + 0.07)
   scene.add(screen.root)
 
   // 테이블 위의 레코드 재생기. 콘솔 상판(0.95m) 위에 놓는다.
