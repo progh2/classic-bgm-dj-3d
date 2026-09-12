@@ -161,9 +161,12 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
   const hipRestY = (() => {
     const hips = vrm.humanoid?.getRawBoneNode('hips')
     if (!hips) return TARGET_HEIGHT * 0.53
+    // 장면에 넣기 전이라 행렬이 낡아 있다. 재기 전에 갱신한다.
+    root.updateWorldMatrix(true, true)
     const world = new Vector3()
     hips.getWorldPosition(world)
-    return world.y - root.position.y
+    const y = world.y - root.position.y
+    return y > 0.3 && y < TARGET_HEIGHT ? y : TARGET_HEIGHT * 0.53
   })()
   const AX_X = new Vector3(1, 0, 0)
   // 팔을 내린 뒤의 국소 좌표에서 팔꿈치 굽힘은 Y축 회전이고, 좌우가 서로 반대다.

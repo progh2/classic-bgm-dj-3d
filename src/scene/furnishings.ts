@@ -51,7 +51,7 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
 
   // ---- 왼쪽 벽: 창과 커튼 ----
   const window = new Group()
-  window.position.set(-wallX + 0.06, 1.5, backZ + 1.35)
+  window.position.set(-wallX + 0.06, 1.5, backZ + 3.5)
   window.rotation.y = Math.PI / 2
 
   const glassGlow = new Mesh(
@@ -77,14 +77,14 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
 
   // 창으로 드는 빛. RectAreaLight 는 별도 초기화가 필요해 스포트로 대신한다.
   const daylight = new SpotLight(0xffd9a0, 9, 9, Math.PI / 3.4, 0.85, 1.4)
-  daylight.position.set(-wallX + 0.2, 1.9, backZ + 1.35)
-  daylight.target.position.set(wallX * 0.4, 0.4, backZ + 3.2)
+  daylight.position.set(-wallX + 0.2, 1.9, backZ + 3.5)
+  daylight.target.position.set(wallX * 0.4, 0.5, backZ + 2.2)
   root.add(daylight, daylight.target)
 
   // 커튼 — 주름진 천을 세로 판 여러 장으로 흉내낸다
   for (const side of [-1, 1] as const) {
     const curtain = new Group()
-    curtain.position.set(-wallX + 0.12, 1.5, backZ + 1.35 + side * 0.92)
+    curtain.position.set(-wallX + 0.12, 1.5, backZ + 3.5 + side * 0.92)
     curtain.rotation.y = Math.PI / 2
     for (let i = 0; i < 5; i++) {
       const fold = new Mesh(new BoxGeometry(0.11, 2.5, 0.06), velvet)
@@ -97,12 +97,12 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
   }
   const rod = new Mesh(new CylinderGeometry(0.022, 0.022, 2.9, 12), brass)
   rod.rotation.x = Math.PI / 2
-  rod.position.set(-wallX + 0.16, 2.78, backZ + 1.35)
+  rod.position.set(-wallX + 0.16, 2.78, backZ + 3.5)
   root.add(rod)
 
   // ---- 왼쪽 벽: LP 책장 ----
   const shelf = new Group()
-  shelf.position.set(-wallX + 0.3, 0, backZ + 3.5)
+  shelf.position.set(-wallX + 0.3, 0, backZ + 5.2)
   shelf.rotation.y = Math.PI / 2
 
   const CASE_W = 1.7
@@ -140,7 +140,7 @@ export function createFurnishings(backZ: number, wallX: number): Furnishings {
 
   // 책장 위 초록 갓 램프
   const lamp = new Group()
-  lamp.position.set(-wallX + 0.3, CASE_H, backZ + 3.5)
+  lamp.position.set(-wallX + 0.3, CASE_H, backZ + 5.2)
   const lampBase = new Mesh(new CylinderGeometry(0.07, 0.085, 0.03, 20), brass)
   lamp.add(lampBase)
   const lampStem = new Mesh(new CylinderGeometry(0.012, 0.012, 0.2, 12), brass)
