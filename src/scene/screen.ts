@@ -178,7 +178,7 @@ export function createScreen(): Screen {
     if (c.speech) {
       ctx.fillStyle = 'rgba(224, 199, 106, .8)'
       ctx.font = `500 24px ${FONT}`
-      ctx.fillText('세바스티안', 72, 566)
+      ctx.fillText('세실리아', 72, 566)
       ctx.fillStyle = '#f4ece0'
       wrap(ctx, c.speech, 72, 596, W - 144, 38, `400 30px ${FONT}`, 3)
     } else if (c.notice) {
@@ -190,7 +190,7 @@ export function createScreen(): Screen {
   }
 
   draw({
-    title: '세바스티안의 음악 응접실',
+    title: '세실리아의 음악 응접실',
     subtitle: '취향을 고르시거나 제게 맡기십시오.',
     progress: null,
     elapsed: '--:--',

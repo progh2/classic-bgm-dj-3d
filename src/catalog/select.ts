@@ -228,13 +228,13 @@ function shuffle<T>(arr: T[], random: () => number): T[] {
 
 function describe(answers: Answers, entries: CatalogEntry[], relaxed: boolean): string {
   const lines = [
-    `${ERA_WORD[answers.era]}에서 ${MOOD_WORD[answers.mood]} 결로 ${entries.length}곡 골라 두었습니다.`,
+    `${ERA_WORD[answers.era]}에서 ${MOOD_WORD[answers.mood]} 결로 ${entries.length}곡 골라 두었어요.`,
   ]
   if (answers.instrument !== 'any') {
-    lines.push(`${INSTRUMENT_WORD[answers.instrument]}을 앞에 세웠습니다.`)
+    lines.push(`${INSTRUMENT_WORD[answers.instrument]}을 앞에 세웠어요.`)
   }
-  if (answers.presence === 'bg') lines.push('있는 줄 모르게 깔아 두겠습니다.')
-  else if (answers.presence === 'fore') lines.push('오늘은 음악에 귀를 내어 주십시오.')
-  if (relaxed) lines.push('원하신 조건이 좁아, 결이 가까운 곡을 몇 장 더 얹었습니다.')
+  if (answers.presence === 'bg') lines.push('있는 줄 모르게 깔아 둘게요.')
+  else if (answers.presence === 'fore') lines.push('오늘은 음악에 귀를 내어 주세요.')
+  if (relaxed) lines.push('원하신 조건이 좁아, 결이 가까운 곡을 몇 장 더 얹었어요.')
   return lines.join(' ')
 }

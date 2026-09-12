@@ -214,7 +214,7 @@ function updateScene(state: SessionState): void {
       ? current.track.title
       : playback.state === 'loading'
         ? '곡을 준비하고 있습니다'
-        : '세바스티안의 음악 응접실',
+        : '세실리아의 음악 응접실',
     subtitle: current
       ? `${current.track.composer} · ${current.track.performer}`
       : '취향을 고르시거나 제게 맡기십시오.',
@@ -542,15 +542,15 @@ const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms)
 
 async function bringInButler(): Promise<void> {
   if (!salon) return
-  status.textContent = '집사가 오는 중입니다…'
+  status.textContent = '안내인이 오는 중입니다…'
   try {
     const { loadButler } = await import('./butler/butler')
-    butler = await loadButler(`${import.meta.env.BASE_URL}models/sebastian.vrm`, (frac) => {
-      status.textContent = `집사가 오는 중입니다… ${Math.round(frac * 100)}%`
+    butler = await loadButler(`${import.meta.env.BASE_URL}models/cecilia.vrm`, (frac) => {
+      status.textContent = `안내인이 오는 중입니다… ${Math.round(frac * 100)}%`
     })
   } catch (err) {
-    console.warn('집사 모델을 불러오지 못했습니다', err)
-    status.textContent = '집사가 자리를 비웠습니다. 음악은 그대로 이용하실 수 있습니다.'
+    console.warn('안내인 모델을 불러오지 못했습니다', err)
+    status.textContent = '안내인이 자리를 비웠습니다. 음악은 그대로 이용하실 수 있습니다.'
     say(LINES.greetQuiet)
     return
   }

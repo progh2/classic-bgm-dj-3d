@@ -69,23 +69,24 @@ export function createPiano(position: Vector3, rotationY: number): Piano {
   caseMesh.receiveShadow = true
   root.add(caseMesh)
 
-  // 열린 뚜껑 — 안쪽이 보이도록 한쪽 모서리를 축으로 들어 올린다.
+  // 열린 뚜껑 — 낮은음 쪽(local -X, 바깥 벽 쪽) 모서리를 축으로 들어 올린다.
+  // 반대쪽으로 열면 연주자와 이쪽 사이에 큰 검은 판이 서서 얼굴을 가린다.
   const lidPivot = new Group()
-  lidPivot.position.set(-0.74, 0.72 + CASE_H, 0)
+  lidPivot.position.set(0.74, 0.72 + CASE_H, 0)
   const lid = new Mesh(
     new ExtrudeGeometry(body, { depth: 0.022, bevelEnabled: false }),
     lacquer,
   )
   lid.rotation.x = -Math.PI / 2
-  lid.position.set(0.74, 0, 0)
+  lid.position.set(-0.74, 0, 0)
   lidPivot.add(lid)
-  lidPivot.rotation.z = 0.62
+  lidPivot.rotation.z = -0.6
   root.add(lidPivot)
 
-  // 뚜껑 버팀목
-  const prop = new Mesh(new CylinderGeometry(0.012, 0.012, 0.62, 10), lacquer)
-  prop.position.set(-0.1, 0.72 + CASE_H + 0.3, 0.62)
-  prop.rotation.z = 0.34
+  // 뚜껑 버팀목 — 열린 쪽을 받친다. 뚜껑이 서는 각도와 자리를 맞춘다.
+  const prop = new Mesh(new CylinderGeometry(0.012, 0.012, 0.74, 10), lacquer)
+  prop.position.set(-0.34, 0.72 + CASE_H + 0.35, 0.42)
+  prop.rotation.z = -0.3
   root.add(prop)
 
   // 건반 — 흰 건 위에 검은 건을 얹는다

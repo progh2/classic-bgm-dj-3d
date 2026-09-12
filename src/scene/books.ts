@@ -430,8 +430,8 @@ export const SOURCE_SECTIONS: SourceSection[] = [
     body: '작품은 작곡가 사망 후 보호기간이 끝나 퍼블릭 도메인입니다. 녹음은 Musopen 이 퍼블릭 도메인으로 공개했습니다. 연주는 Musopen Symphony(체코 국립 교향악단), Musopen String Quartet, 피아니스트 Shelley Katz·Paul Pitman 입니다.',
   },
   {
-    title: '집사 모델',
-    body: 'VRoid Studio 샘플 모델(VRoid 프로젝트, pixiv Inc.). 재배포·수정·상업적 이용이 허용되고 크레딧 표기는 의무가 아닙니다. 정장 차림 전용 모델을 마련하기 전까지 쓰는 임시 모델입니다.',
+    title: '안내인 모델',
+    body: '세실리아 — VRoid Studio 샘플 모델(VRoid 프로젝트, pixiv Inc.)입니다. 재배포·수정·상업적 이용이 허용되고 크레딧 표기는 의무가 아닙니다. 이름은 음악의 수호성인 성 체칠리아에서 따 왔습니다. 전용 모델을 마련하기 전까지 쓰는 임시 모델입니다.',
     link: {
       label: 'VRoid 샘플 모델 이용 조건',
       url: 'https://vroid.pixiv.help/hc/en-us/articles/4402614652569-Do-VRoid-Studio-s-sample-models-come-with-conditions-of-use',
