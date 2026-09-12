@@ -19,11 +19,13 @@ import {
  * 방의 크기(m). 카메라가 들어앉는 쪽(+Z)은 열어 두되, 바닥과 옆벽은 카메라
  * 뒤까지 이어져야 한다. 그러지 않으면 화면 아래에 바닥 끝 모서리와 허공이 보인다.
  */
-const W = 5.8
 /** 뒷벽의 z. 안내판이 여기 걸린다. */
 export const BACK_Z = -2.6
+/** 옆벽의 x. 가구를 벽에 붙일 때 쓴다. */
+export const WALL_X = 2.9
 /** 바닥·옆벽이 끝나는 z. 카메라보다 뒤여야 한다. */
 const FRONT_Z = 3.2
+const W = WALL_X * 2
 const D = FRONT_Z - BACK_Z
 const H = 2.85
 /** 판벽(웨인스코팅) 높이 */

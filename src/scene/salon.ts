@@ -23,7 +23,8 @@ import {
   WebGLRenderer,
 } from 'three'
 
-import { BACK_Z, createRoom, type Room } from './room'
+import { createFurnishings, type Furnishings } from './furnishings'
+import { BACK_Z, createRoom, WALL_X, type Room } from './room'
 import { createHud3D, type Hud3D } from './hud3d'
 import { createTabletop, type Tabletop } from './tabletop'
 import { createScreen, type Screen } from './screen'
@@ -51,6 +52,8 @@ export interface Salon {
   readonly tabletop: Tabletop
   /** 3D 안의 조작부 */
   readonly hud: Hud3D
+  /** 방을 채우는 가구들 */
+  readonly furnishings: Furnishings
   dispose(): void
 }
 
@@ -125,6 +128,9 @@ export function createSalon(host: HTMLElement): Salon {
 
   const room = createRoom()
   scene.add(room.root)
+
+  const furnishings = createFurnishings(BACK_Z, WALL_X)
+  scene.add(furnishings.root)
 
   scene.add(new AmbientLight(0xffd9a8, 0.12))
 
@@ -256,6 +262,7 @@ export function createSalon(host: HTMLElement): Salon {
     room,
     tabletop,
     hud,
+    furnishings,
     add(object) {
       scene.add(object)
     },

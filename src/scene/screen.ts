@@ -108,9 +108,14 @@ export function createScreen(): Screen {
     ctx.fillStyle = bg
     ctx.fillRect(0, 0, W, H)
 
-    ctx.strokeStyle = 'rgba(224, 199, 106, .45)'
+    // 이중 괘선과 네 귀의 장식 — 공연 프로그램의 표지처럼
+    ctx.strokeStyle = 'rgba(224, 199, 106, .5)'
     ctx.lineWidth = 3
     ctx.strokeRect(26, 26, W - 52, H - 52)
+    ctx.strokeStyle = 'rgba(224, 199, 106, .22)'
+    ctx.lineWidth = 1.5
+    ctx.strokeRect(38, 38, W - 76, H - 76)
+    corners(ctx, 38, 38, W - 76, H - 76)
 
     ctx.fillStyle = '#c9a227'
     ctx.font = `500 30px ${FONT}`
@@ -133,8 +138,19 @@ export function createScreen(): Screen {
     ctx.fillStyle = '#bfae95'
     wrap(ctx, c.subtitle, 72, 330, W - 144, 46, `400 34px ${FONT}`, 2)
 
+    // 오른쪽 여백에는 피아노 선화와 한 줄 글귀를 둔다.
+    pianoLineArt(ctx, W - 420, 150, 320)
+    ctx.fillStyle = 'rgba(224, 199, 106, .75)'
+    ctx.font = `italic 300 34px ${FONT}`
+    ctx.textAlign = 'right'
+    ctx.fillText('Good Music, Better Day', W - 96, 372)
+    ctx.textAlign = 'left'
+
+    // 본문과 진행 막대를 가르는 장식 괘선
+    divider(ctx, 72, 418, W - 144)
+
     // 진행 막대
-    const barY = 470
+    const barY = 476
     const barW = W - 144
     ctx.fillStyle = 'rgba(244, 236, 224, .16)'
     ctx.fillRect(72, barY, barW, 10)
@@ -201,6 +217,76 @@ function changed(a: ScreenContent, b: ScreenContent): boolean {
   }
   if (a.progress === null || b.progress === null) return a.progress !== b.progress
   return Math.abs(a.progress - b.progress) > 0.01
+}
+
+/** 네 귀의 작은 꺾쇠 장식 */
+function corners(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number): void {
+  const s = 26
+  ctx.strokeStyle = 'rgba(224, 199, 106, .55)'
+  ctx.lineWidth = 2
+  for (const [cx, cy, sx, sy] of [
+    [x, y, 1, 1],
+    [x + w, y, -1, 1],
+    [x, y + h, 1, -1],
+    [x + w, y + h, -1, -1],
+  ] as const) {
+    ctx.beginPath()
+    ctx.moveTo(cx + sx * s, cy)
+    ctx.lineTo(cx + sx * 8, cy)
+    ctx.lineTo(cx, cy + sy * 8)
+    ctx.lineTo(cx, cy + sy * s)
+    ctx.stroke()
+  }
+}
+
+/** 가운데에 마름모를 둔 장식 괘선 */
+function divider(ctx: CanvasRenderingContext2D, x: number, y: number, w: number): void {
+  const mid = x + w / 2
+  ctx.strokeStyle = 'rgba(224, 199, 106, .3)'
+  ctx.lineWidth = 1.5
+  ctx.beginPath()
+  ctx.moveTo(x, y)
+  ctx.lineTo(mid - 26, y)
+  ctx.moveTo(mid + 26, y)
+  ctx.lineTo(x + w, y)
+  ctx.stroke()
+  ctx.fillStyle = 'rgba(224, 199, 106, .55)'
+  ctx.beginPath()
+  ctx.moveTo(mid, y - 7)
+  ctx.lineTo(mid + 9, y)
+  ctx.lineTo(mid, y + 7)
+  ctx.lineTo(mid - 9, y)
+  ctx.closePath()
+  ctx.fill()
+}
+
+/** 그랜드 피아노 선화 — 위에서 본 윤곽과 건반 */
+function pianoLineArt(ctx: CanvasRenderingContext2D, x: number, y: number, w: number): void {
+  const h = w * 0.62
+  ctx.save()
+  ctx.translate(x, y)
+  ctx.strokeStyle = 'rgba(224, 199, 106, .45)'
+  ctx.lineWidth = 2.2
+  ctx.beginPath()
+  ctx.moveTo(w * 0.08, h * 0.86)
+  ctx.lineTo(w * 0.08, h * 0.34)
+  ctx.bezierCurveTo(w * 0.3, h * 0.02, w * 0.86, h * 0.06, w * 0.94, h * 0.42)
+  ctx.bezierCurveTo(w * 0.97, h * 0.64, w * 0.8, h * 0.84, w * 0.52, h * 0.86)
+  ctx.closePath()
+  ctx.stroke()
+  // 건반
+  ctx.beginPath()
+  ctx.rect(w * 0.08, h * 0.86, w * 0.44, h * 0.12)
+  ctx.stroke()
+  ctx.lineWidth = 1
+  for (let i = 1; i < 10; i++) {
+    const kx = w * 0.08 + (w * 0.44 * i) / 10
+    ctx.beginPath()
+    ctx.moveTo(kx, h * 0.86)
+    ctx.lineTo(kx, h * 0.98)
+    ctx.stroke()
+  }
+  ctx.restore()
 }
 
 /** 긴 줄을 폭에 맞춰 자른다. 넘치면 마지막 줄에 말줄임을 붙인다. */

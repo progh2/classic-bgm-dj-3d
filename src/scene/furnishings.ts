@@ -1,0 +1,317 @@
+import {
+  BoxGeometry,
+  CanvasTexture,
+  CylinderGeometry,
+  DoubleSide,
+  ExtrudeGeometry,
+  Group,
+  LatheGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  PlaneGeometry,
+  PointLight,
+  Shape,
+  SphereGeometry,
+  SpotLight,
+  SRGBColorSpace,
+  Vector2,
+} from 'three'
+
+/**
+ * 방을 채우는 것들 — 창과 커튼, LP 책장, 흉상, 액자, 그랜드 피아노.
+ *
+ * 전부 기본 도형으로 세운다. 이 정도 거리와 조도에서는 실루엣과 색이
+ * 형태보다 크게 읽히고, 내려받을 모델을 늘리지 않아도 된다.
+ */
+
+const WOOD_DARK = 0x2a1a0e
+const WOOD = 0x3d2614
+const BRASS = 0x8a6a1e
+const IVORY = 0xe8e0d0
+
+export interface Furnishings {
+  readonly root: Group
+  /** 창으로 드는 빛의 세기를 바꾼다. 단계 F(시간대)에서 쓴다. */
+  setDaylight(amount: number): void
+}
+
+export function createFurnishings(backZ: number, wallX: number): Furnishings {
+  const root = new Group()
+
+  const woodDark = new MeshStandardMaterial({ color: WOOD_DARK, roughness: 0.72, metalness: 0.04 })
+  const wood = new MeshStandardMaterial({ color: WOOD, roughness: 0.6, metalness: 0.05 })
+  const brass = new MeshStandardMaterial({ color: BRASS, roughness: 0.34, metalness: 0.8 })
+  const velvet = new MeshStandardMaterial({ color: 0x6b1a1c, roughness: 0.95, metalness: 0 })
+  const marble = new MeshStandardMaterial({ color: 0xd8d2c4, roughness: 0.42, metalness: 0.02 })
+  const lacquer = new MeshStandardMaterial({ color: 0x0d0b0a, roughness: 0.18, metalness: 0.1 })
+
+  // ---- 왼쪽 벽: 창과 커튼 ----
+  const window = new Group()
+  window.position.set(-wallX + 0.06, 1.5, backZ + 1.35)
+  window.rotation.y = Math.PI / 2
+
+  const glassGlow = new Mesh(
+    new PlaneGeometry(1.5, 2.0),
+    new MeshBasicMaterial({ color: 0xffd9a0, transparent: true, opacity: 0.85 }),
+  )
+  window.add(glassGlow)
+
+  // 창살
+  const bar = (w: number, h: number, x: number, y: number): void => {
+    const m = new Mesh(new BoxGeometry(w, h, 0.05), woodDark)
+    m.position.set(x, y, 0.03)
+    window.add(m)
+  }
+  bar(1.62, 0.08, 0, 1.04)
+  bar(1.62, 0.08, 0, -1.04)
+  bar(0.08, 2.16, -0.79, 0)
+  bar(0.08, 2.16, 0.79, 0)
+  bar(0.05, 2.0, 0, 0)
+  bar(1.5, 0.05, 0, 0.34)
+  bar(1.5, 0.05, 0, -0.34)
+  root.add(window)
+
+  // 창으로 드는 빛. RectAreaLight 는 별도 초기화가 필요해 스포트로 대신한다.
+  const daylight = new SpotLight(0xffd9a0, 9, 9, Math.PI / 3.4, 0.85, 1.4)
+  daylight.position.set(-wallX + 0.2, 1.9, backZ + 1.35)
+  daylight.target.position.set(wallX * 0.4, 0.4, backZ + 3.2)
+  root.add(daylight, daylight.target)
+
+  // 커튼 — 주름진 천을 세로 판 여러 장으로 흉내낸다
+  for (const side of [-1, 1] as const) {
+    const curtain = new Group()
+    curtain.position.set(-wallX + 0.12, 1.5, backZ + 1.35 + side * 0.92)
+    curtain.rotation.y = Math.PI / 2
+    for (let i = 0; i < 5; i++) {
+      const fold = new Mesh(new BoxGeometry(0.11, 2.5, 0.06), velvet)
+      fold.position.set(side * (i * 0.1 - 0.2), 0, Math.sin(i * 1.4) * 0.04)
+      fold.rotation.z = side * 0.012 * i
+      fold.castShadow = true
+      curtain.add(fold)
+    }
+    root.add(curtain)
+  }
+  const rod = new Mesh(new CylinderGeometry(0.022, 0.022, 2.9, 12), brass)
+  rod.rotation.x = Math.PI / 2
+  rod.position.set(-wallX + 0.16, 2.78, backZ + 1.35)
+  root.add(rod)
+
+  // ---- 왼쪽 벽: LP 책장 ----
+  const shelf = new Group()
+  shelf.position.set(-wallX + 0.3, 0, backZ + 3.5)
+  shelf.rotation.y = Math.PI / 2
+
+  const CASE_W = 1.7
+  const CASE_H = 1.25
+  const CASE_D = 0.42
+  const carcass = new Mesh(new BoxGeometry(CASE_W, CASE_H, CASE_D), woodDark)
+  carcass.position.y = CASE_H / 2
+  carcass.castShadow = true
+  carcass.receiveShadow = true
+  shelf.add(carcass)
+
+  // 칸마다 LP 를 빼곡히 꽂는다. 색과 두께를 조금씩 달리해야 줄이 살아난다.
+  const lpColours = [0x2a2420, 0x4a2a1c, 0x24303a, 0x3a2436, 0x5a4a2a, 0x1e2a26]
+  for (const rowY of [0.34, 0.86] as const) {
+    let x = -CASE_W / 2 + 0.08
+    while (x < CASE_W / 2 - 0.1) {
+      const t = 0.008 + Math.random() * 0.012
+      const lp = new Mesh(
+        new BoxGeometry(t, 0.3 + Math.random() * 0.02, 0.3),
+        new MeshStandardMaterial({
+          color: lpColours[Math.floor(Math.random() * lpColours.length)] ?? 0x2a2420,
+          roughness: 0.85,
+        }),
+      )
+      lp.position.set(x, rowY, 0.03)
+      lp.rotation.z = (Math.random() - 0.5) * 0.04
+      shelf.add(lp)
+      x += t + 0.003
+    }
+    const board = new Mesh(new BoxGeometry(CASE_W - 0.04, 0.03, CASE_D - 0.04), wood)
+    board.position.y = rowY - 0.17
+    shelf.add(board)
+  }
+  root.add(shelf)
+
+  // 책장 위 초록 갓 램프
+  const lamp = new Group()
+  lamp.position.set(-wallX + 0.3, CASE_H, backZ + 3.5)
+  const lampBase = new Mesh(new CylinderGeometry(0.07, 0.085, 0.03, 20), brass)
+  lamp.add(lampBase)
+  const lampStem = new Mesh(new CylinderGeometry(0.012, 0.012, 0.2, 12), brass)
+  lampStem.position.y = 0.11
+  lamp.add(lampStem)
+  const shade = new Mesh(
+    new LatheGeometry(
+      [new Vector2(0.001, 0.09), new Vector2(0.09, 0.075), new Vector2(0.115, 0.0)],
+      20,
+    ),
+    new MeshStandardMaterial({ color: 0x1e5c3a, roughness: 0.4, metalness: 0.1, side: DoubleSide }),
+  )
+  shade.position.y = 0.21
+  lamp.add(shade)
+  const lampGlow = new PointLight(0xffe0a8, 1.6, 1.6, 2)
+  lampGlow.position.y = 0.18
+  lamp.add(lampGlow)
+  root.add(lamp)
+
+  // ---- 왼쪽 뒤: 흉상과 받침 ----
+  const bust = new Group()
+  bust.position.set(-wallX + 0.55, 0, backZ + 0.55)
+  const column = new Mesh(new CylinderGeometry(0.16, 0.19, 1.05, 20), woodDark)
+  column.position.y = 0.525
+  column.castShadow = true
+  bust.add(column)
+  const cap = new Mesh(new BoxGeometry(0.42, 0.05, 0.42), wood)
+  cap.position.y = 1.075
+  bust.add(cap)
+  // 흉상 — 어깨, 목, 머리, 뒤로 넘긴 머리칼
+  const shoulders = new Mesh(
+    new LatheGeometry(
+      [new Vector2(0.001, 0.3), new Vector2(0.1, 0.27), new Vector2(0.17, 0.12), new Vector2(0.19, 0)],
+      20,
+    ),
+    marble,
+  )
+  shoulders.position.y = 1.1
+  shoulders.castShadow = true
+  bust.add(shoulders)
+  const head = new Mesh(new SphereGeometry(0.105, 20, 16), marble)
+  head.scale.set(0.92, 1.12, 1)
+  head.position.set(0, 1.47, 0.01)
+  head.castShadow = true
+  bust.add(head)
+  const hair = new Mesh(new SphereGeometry(0.118, 18, 14, 0, Math.PI * 2, 0, Math.PI * 0.62), marble)
+  hair.scale.set(1, 0.95, 1.05)
+  hair.position.set(0, 1.5, -0.012)
+  bust.add(hair)
+  root.add(bust)
+
+  // ---- 오른쪽 벽: 작곡가 액자 ----
+  const portraitTexture = makePortraitTexture()
+  for (const [i, y, h] of [
+    [0, 1.95, 0.62],
+    [1, 1.22, 0.62],
+    [2, 1.95, 0.46],
+  ] as const) {
+    const frame = new Group()
+    frame.position.set(wallX - 0.06, y, backZ + 0.9 + i * 0.95)
+    frame.rotation.y = -Math.PI / 2
+    const w = h * 0.78
+    const outer = new Mesh(new BoxGeometry(w + 0.09, h + 0.09, 0.05), brass)
+    frame.add(outer)
+    const canvasMesh = new Mesh(
+      new PlaneGeometry(w, h),
+      new MeshStandardMaterial({ map: portraitTexture, roughness: 0.9 }),
+    )
+    canvasMesh.position.z = 0.028
+    frame.add(canvasMesh)
+    root.add(frame)
+  }
+
+  // ---- 오른쪽 뒤: 그랜드 피아노 ----
+  const piano = new Group()
+  piano.position.set(wallX - 1.15, 0, backZ + 1.5)
+  piano.rotation.y = -0.42
+
+  const shape = new Shape()
+  shape.moveTo(-0.72, -0.62)
+  shape.lineTo(0.72, -0.62)
+  shape.bezierCurveTo(0.86, 0.1, 0.62, 0.78, 0.12, 0.92)
+  shape.lineTo(-0.72, 0.92)
+  shape.closePath()
+  const body = new Mesh(
+    new ExtrudeGeometry(shape, { depth: 0.26, bevelEnabled: true, bevelSize: 0.012, bevelThickness: 0.012 }),
+    lacquer,
+  )
+  body.rotation.x = -Math.PI / 2
+  body.position.y = 0.98
+  body.castShadow = true
+  piano.add(body)
+
+  // 열린 뚜껑
+  const lid = new Mesh(
+    new ExtrudeGeometry(shape, { depth: 0.02, bevelEnabled: false }),
+    lacquer,
+  )
+  lid.rotation.set(-Math.PI / 2, 0, 0)
+  lid.position.y = 1.26
+  lid.rotation.z = 0
+  lid.rotation.y = 0
+  lid.rotateX(-0.55)
+  piano.add(lid)
+
+  // 건반
+  const keys = new Mesh(new BoxGeometry(1.32, 0.035, 0.18), new MeshStandardMaterial({ color: IVORY, roughness: 0.35 }))
+  keys.position.set(0, 0.99, -0.66)
+  piano.add(keys)
+  const fallboard = new Mesh(new BoxGeometry(1.4, 0.12, 0.06), lacquer)
+  fallboard.position.set(0, 1.05, -0.74)
+  piano.add(fallboard)
+
+  for (const [x, z] of [
+    [-0.56, -0.42],
+    [0.56, -0.42],
+    [0.1, 0.7],
+  ] as const) {
+    const leg = new Mesh(new BoxGeometry(0.085, 0.98, 0.085), lacquer)
+    leg.position.set(x, 0.49, z)
+    piano.add(leg)
+  }
+  root.add(piano)
+
+  // 피아노 위 촛대 대신 작은 놋쇠 보면대 불빛
+  const pianoLight = new PointLight(0xffdca8, 1.1, 2.4, 2)
+  pianoLight.position.set(wallX - 1.2, 1.5, backZ + 1.4)
+  root.add(pianoLight)
+
+  return {
+    root,
+    setDaylight(amount) {
+      const a = Math.min(1, Math.max(0, amount))
+      daylight.intensity = 9 * a
+      ;(glassGlow.material as MeshBasicMaterial).opacity = 0.15 + 0.7 * a
+    },
+  }
+}
+
+/** 액자 속 그림 — 세피아 톤의 흉상 실루엣. 멀리서 초상으로 읽히면 충분하다. */
+function makePortraitTexture(): CanvasTexture {
+  const canvas = document.createElement('canvas')
+  canvas.width = 256
+  canvas.height = 328
+  const ctx = canvas.getContext('2d')
+  if (ctx) {
+    const g = ctx.createLinearGradient(0, 0, 0, canvas.height)
+    g.addColorStop(0, '#4a3a26')
+    g.addColorStop(1, '#221812')
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    ctx.fillStyle = 'rgba(226, 208, 176, .5)'
+    // 어깨
+    ctx.beginPath()
+    ctx.ellipse(128, 300, 92, 74, 0, Math.PI, 0)
+    ctx.fill()
+    // 머리
+    ctx.beginPath()
+    ctx.ellipse(128, 180, 52, 64, 0, 0, Math.PI * 2)
+    ctx.fill()
+    // 머리칼
+    ctx.fillStyle = 'rgba(120, 96, 68, .55)'
+    ctx.beginPath()
+    ctx.ellipse(128, 152, 62, 48, 0, Math.PI, 0)
+    ctx.fill()
+
+    // 캔버스의 낡은 기운
+    ctx.fillStyle = 'rgba(0, 0, 0, .25)'
+    for (let i = 0; i < 260; i++) {
+      ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 1.5, 1.5)
+    }
+  }
+  const t = new CanvasTexture(canvas)
+  t.colorSpace = SRGBColorSpace
+  return t
+}
