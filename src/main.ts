@@ -78,7 +78,7 @@ async function placeButler(toPiano: boolean): Promise<void> {
     await butler.walkTo(stand.x, stand.z, playFootstep)
     if (my !== moveToken) return
     const seat = salon.piano.seat
-    butler.placeAt(seat.x, seat.z)
+    butler.placeAt(seat.x, seat.z, salon.piano.facing)
     butler.sit(true, salon.piano.seatHeight, salon.piano.facing)
     butlerSeated = true
     butler.setPlaying(session.state.playback.state === 'playing')
@@ -616,6 +616,24 @@ window.addEventListener('keydown', (e) => {
     act('prev')
   }
 })
+
+/**
+ * 브라우저는 첫 조작 전에 소리를 내주지 않는다. 단추가 아니라 화면 아무 데나
+ * 처음 닿는 순간을 붙잡아 그때 인사를 건넨다. 단추를 눌러야만 인사하던 것을
+ * 조금 낫게 하는 방법이고, 정책 자체를 비껴갈 수는 없다.
+ */
+function onFirstTouch(): void {
+  if (userActed) return
+  userActed = true
+  updateScene(session.state)
+  if (greetedSilently) {
+    greetedSilently = false
+    butler?.bow()
+    say(LINES.greetVoice)
+  }
+}
+window.addEventListener('pointerdown', onFirstTouch, { once: true, passive: true })
+window.addEventListener('keydown', onFirstTouch, { once: true })
 
 window.addEventListener('pagehide', () => {
   cancelAnimationFrame(frame)

@@ -30,7 +30,7 @@ export interface Piano {
   readonly seatHeight: number
 }
 
-const SEAT_H = 0.5
+const SEAT_H = 0.58
 const W = 1.42
 const H = 1.22
 const D = 0.34
@@ -159,6 +159,9 @@ export function createPiano(position: Vector3, rotationY: number): Piano {
   }
   root.add(bench)
 
+  // 윗판에 얹어 둔 바이올린과 활 — 소품이다. 연주하지는 않는다.
+  root.add(createViolin(0.34, H + 0.06, -0.02))
+
   const place = (localZ: number): Vector3 =>
     new Vector3(0, 0, localZ).applyAxisAngle(UP, rotationY).add(position)
 
@@ -170,6 +173,63 @@ export function createPiano(position: Vector3, rotationY: number): Piano {
     facing: rotationY + Math.PI,
     seatHeight: SEAT_H,
   }
+}
+
+/**
+ * 바이올린 한 대와 활. 가까이서 뜯어볼 물건이 아니라 실루엣만 맞춘다.
+ * 몸통 두 덩이에 잘록한 허리, 목과 소용돌이 머리, 네 줄, 그리고 활.
+ */
+function createViolin(x: number, y: number, z: number): Group {
+  const g = new Group()
+  g.position.set(x, y, z)
+  g.rotation.set(0, 0.4, 0)
+
+  const varnish = new MeshStandardMaterial({ color: 0x6b2f16, roughness: 0.28, metalness: 0.06 })
+  const dark = new MeshStandardMaterial({ color: 0x1a120c, roughness: 0.4 })
+  const hair = new MeshStandardMaterial({ color: 0xe8e0cd, roughness: 0.8 })
+
+  // 몸통 — 위아래 두 덩이를 겹쳐 잘록한 허리를 만든다
+  for (const [bz, r] of [
+    [-0.075, 0.058],
+    [0.055, 0.07],
+  ] as const) {
+    const lobe = new Mesh(new CylinderGeometry(r, r, 0.032, 20), varnish)
+    lobe.rotation.x = Math.PI / 2
+    lobe.position.set(0, 0, bz)
+    g.add(lobe)
+  }
+  const waist = new Mesh(new BoxGeometry(0.07, 0.03, 0.08), varnish)
+  g.add(waist)
+
+  const neck = new Mesh(new BoxGeometry(0.018, 0.016, 0.13), dark)
+  neck.position.set(0, 0.006, -0.185)
+  g.add(neck)
+  const scroll = new Mesh(new CylinderGeometry(0.014, 0.011, 0.03, 10), dark)
+  scroll.rotation.x = Math.PI / 2
+  scroll.position.set(0, 0.008, -0.262)
+  g.add(scroll)
+
+  for (const sx of [-0.008, -0.003, 0.003, 0.008] as const) {
+    const string = new Mesh(new BoxGeometry(0.0016, 0.0016, 0.3), hair)
+    string.position.set(sx, 0.021, -0.09)
+    g.add(string)
+  }
+
+  // 활 — 몸통 옆에 나란히 눕힌다
+  const bow = new Group()
+  bow.position.set(0.085, 0.004, -0.02)
+  bow.rotation.y = 0.06
+  const stick = new Mesh(new BoxGeometry(0.008, 0.008, 0.44), dark)
+  bow.add(stick)
+  const ribbon = new Mesh(new BoxGeometry(0.004, 0.006, 0.4), hair)
+  ribbon.position.set(0, 0.011, 0.01)
+  bow.add(ribbon)
+  const frog = new Mesh(new BoxGeometry(0.016, 0.018, 0.03), dark)
+  frog.position.set(0, 0.006, 0.2)
+  bow.add(frog)
+  g.add(bow)
+
+  return g
 }
 
 const UP = new Vector3(0, 1, 0)

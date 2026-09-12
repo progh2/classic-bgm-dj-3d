@@ -17,6 +17,14 @@ const HEAD_PITCH_LIMIT = 0.22
 
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v))
 
+/** from 에서 to 까지 가까운 쪽으로 도는 각도 */
+function shortestTurn(from: number, to: number): number {
+  let d = (to - from) % (Math.PI * 2)
+  if (d > Math.PI) d -= Math.PI * 2
+  if (d < -Math.PI) d += Math.PI * 2
+  return d
+}
+
 /** VRM 표준 표정 이름. 0.x 의 joy/sorrow/fun 은 three-vrm 이 이 이름으로 넘겨준다. */
 const EXPRESSION_KEYS = ['happy', 'sad', 'angry', 'relaxed', 'surprised', 'aa', 'oh', 'ih', 'ee', 'ou'] as const
 
@@ -45,7 +53,7 @@ export interface Butler {
    */
   sit(on: boolean, seatY?: number, facing?: number): void
   /** 걷지 않고 그 자리로 옮겨 놓는다. 의자에 앉힐 때처럼 짧은 거리에 쓴다. */
-  placeAt(x: number, z: number): void
+  placeAt(x: number, z: number, faceY?: number): void
   /** 앉은 채로 건반을 친다. */
   setPlaying(on: boolean): void
   /** 말이 끝난 뒤 등 지금 처지에 맞는 자세로 돌아간다. */
@@ -201,9 +209,14 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       groove = on
     },
 
-    placeAt(x, z) {
+    placeAt(x, z, faceY) {
       root.position.x = x
       root.position.z = z
+      if (faceY !== undefined) {
+        standFacing = faceY
+        facing = faceY
+        root.rotation.y = faceY
+      }
     },
 
     sit(on, y = 0, facing = 0) {
@@ -296,7 +309,9 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
           }
         }
       } else {
-        facing += (standFacing - facing) * Math.min(1, deltaSec * 3)
+        // 각도를 그냥 빼면 먼 쪽으로 돌아 여러 바퀴를 도는 것처럼 보인다.
+        // 늘 가까운 쪽으로 돌아서게 -π~π 로 접어서 더한다.
+        facing += shortestTurn(facing, standFacing) * Math.min(1, deltaSec * 3)
       }
       root.rotation.y = facing
 
