@@ -25,6 +25,13 @@ const HAIR = /HAIR/i
 const SKIN = /_00_SKIN/i
 /** 눈썹·눈매·속눈썹·입·눈은 건드리지 않는다. */
 const PROTECTED = /FACE|EYE/i
+/**
+ * 얼굴 살결.
+ *
+ * 얼굴은 키라이트를 정면으로 받아 손보다 늘 밝게 나온다. 같은 값으로 낮추면
+ * 목에서 색이 갈라지므로 얼굴만 한 단계 더 낮춘다.
+ */
+const FACE_SKIN = /Face_00_SKIN/i
 
 /** 옷은 짙은 톤으로, 살결은 아주 조금만 낮춰 하얗게 날아가지 않게 한다. */
 const FILTERS = {
@@ -60,7 +67,7 @@ export function dressAsButler(root: Object3D): void {
       // 순서를 바꾸면 얼굴만 빠져 목에서 색이 갈라진다.
       if (SKIN.test(name)) {
         targets.push({ material, kind: 'skin' })
-        toneSkin(material)
+        toneSkin(material, FACE_SKIN.test(name))
         continue
       }
       if (PROTECTED.test(name)) {
@@ -102,11 +109,11 @@ const TEXTURE_SLOTS = ['map', 'shadeMultiplyTexture', 'emissiveMap'] as const
  * 칠해서, 키라이트가 닿는 얼굴은 텍스처와 상관없이 바탕색 그대로 하얗게 뜬다.
  * 재질의 바탕색과 그늘색을 함께 낮춰야 얼굴과 손의 색이 맞는다.
  */
-function toneSkin(material: Material): void {
+function toneSkin(material: Material, isFace: boolean): void {
   const m = material as unknown as { color?: Color; shadeColorFactor?: Color }
-  m.color?.multiplyScalar(0.86)
+  m.color?.multiplyScalar(isFace ? 0.78 : 0.86)
   // 그늘은 조금 더 따뜻하고 짙게. 얼굴에 굴곡이 살아난다.
-  m.shadeColorFactor?.multiplyScalar(0.72)
+  m.shadeColorFactor?.multiplyScalar(isFace ? 0.66 : 0.72)
   material.needsUpdate = true
 }
 
