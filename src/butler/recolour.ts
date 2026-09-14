@@ -15,18 +15,21 @@ import { CanvasTexture, Color, Material, Mesh, Object3D, Texture } from 'three'
 const TARGET = /CLOTH|Tops|Bottoms|Onepice|Shoes|Accessory/i
 /** 머리 재질 */
 const HAIR = /HAIR/i
-/** 얼굴과 눈은 절대 건드리지 않는다. */
-const PROTECTED = /FACE|EYE/i
 /**
- * 몸통 피부 재질에는 살결과 스타킹이 한 이미지에 들어 있다. 그대로 두면
- * 어두운 피아노 앞에서 스타킹이 흰 덩어리처럼 떠 보인다. 아주 조금만 낮춘다.
+ * 살결 재질.
+ *
+ * 얼굴과 몸통이 서로 다른 재질이라 한쪽만 손대면 목에서 색이 갈라진다.
+ * 둘을 늘 같이 다룬다. 몸통 쪽에는 살결과 스타킹이 한 이미지에 들어 있어
+ * 그대로 두면 어두운 피아노 앞에서 스타킹이 흰 덩어리처럼 뜬다.
  */
-const BODY = /Body_00_SKIN/i
+const SKIN = /_00_SKIN/i
+/** 눈썹·눈매·속눈썹·입·눈은 건드리지 않는다. */
+const PROTECTED = /FACE|EYE/i
 
-/** 옷은 짙은 톤으로, 몸통 피부는 아주 조금만 낮춘다. */
+/** 옷은 짙은 톤으로, 살결은 아주 조금만 낮춰 하얗게 날아가지 않게 한다. */
 const FILTERS = {
   cloth: 'saturate(0.18) brightness(0.34) contrast(1.12)',
-  body: 'sepia(0.22) saturate(0.92) brightness(0.76)',
+  skin: 'sepia(0.14) saturate(0.96) brightness(0.88)',
 } as const
 
 type Filtered = Map<Texture, Texture>
@@ -53,12 +56,14 @@ export function dressAsButler(root: Object3D): void {
     if (!mesh.isMesh) return
     for (const material of toArray(mesh.material)) {
       const name = material.name ?? ''
-      if (PROTECTED.test(name)) {
-        for (const tex of texturesOf(material)) if (tex.image) protectedImages.add(tex.image)
+      // 살결을 먼저 가린다. 얼굴 살결의 재질 이름에도 FACE 가 들어 있어
+      // 순서를 바꾸면 얼굴만 빠져 목에서 색이 갈라진다.
+      if (SKIN.test(name)) {
+        targets.push({ material, kind: 'skin' })
         continue
       }
-      if (BODY.test(name)) {
-        targets.push({ material, kind: 'body' })
+      if (PROTECTED.test(name)) {
+        for (const tex of texturesOf(material)) if (tex.image) protectedImages.add(tex.image)
         continue
       }
       if (HAIR.test(name)) {

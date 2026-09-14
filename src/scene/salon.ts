@@ -102,7 +102,7 @@ export function createSalon(host: HTMLElement): Salon {
   renderer.shadowMap.autoUpdate = false
   // 선형 출력은 촛불 같은 밝은 부분이 하얗게 뭉친다. 필름 톤매핑으로 눌러 준다.
   renderer.toneMapping = ACESFilmicToneMapping
-  renderer.toneMappingExposure = 0.94
+  renderer.toneMappingExposure = 1.04
   renderer.outputColorSpace = SRGBColorSpace
   host.appendChild(renderer.domElement)
 
@@ -404,7 +404,7 @@ export function createSalon(host: HTMLElement): Salon {
       const pmrem = new PMREMGenerator(renderer)
       // 배경으로 그리지는 않는다. 반사와 간접광에만 쓴다.
       scene.environment = pmrem.fromEquirectangular(texture).texture
-      scene.environmentIntensity = 0.34
+      scene.environmentIntensity = 0.4
       pmrem.dispose()
       texture.dispose()
     },
