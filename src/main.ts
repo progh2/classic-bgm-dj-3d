@@ -451,12 +451,15 @@ function startScene(): boolean {
 
   for (const panel of salon.books.panels) salon.addPanel(panel, act)
 
+  /** 초당 60장이면 충분하다. 120Hz·144Hz 화면에서 두 배로 그리지 않는다. */
+  const MIN_FRAME_MS = 1000 / 61
   const loop = (t: number): void => {
+    frame = requestAnimationFrame(loop)
+    if (lastMs !== 0 && t - lastMs < MIN_FRAME_MS) return
     const delta = lastMs === 0 ? 0.016 : Math.min(0.1, (t - lastMs) / 1000)
     lastMs = t
     butler?.tick(t, delta)
     salon?.tick(t, delta)
-    frame = requestAnimationFrame(loop)
   }
   frame = requestAnimationFrame(loop)
   window.addEventListener('resize', () => salon?.resize())

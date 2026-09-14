@@ -37,6 +37,13 @@ export interface Books {
 
 const ROWS = 7
 
+function sameQueue(a: readonly CatalogEntry[], b: readonly CatalogEntry[]): boolean {
+  if (a === b) return true
+  if (a.length !== b.length) return false
+  for (let i = 0; i < a.length; i++) if (a[i]?.track.id !== b[i]?.track.id) return false
+  return true
+}
+
 export function createBooks(): Books {
   const root = new Group()
   let program: ProgramBookContent = {
@@ -374,6 +381,18 @@ export function createBooks(): Books {
     panels: [pages, thickLabel, sourceView],
 
     setProgram(c) {
+      // 재생 위치가 바뀔 때마다 이 함수가 불린다(초당 네 번쯤). 그때마다
+      // 1740px 짜리 종이를 다시 그리면 CPU 를 크게 먹는다. 실제로 달라진
+      // 것이 있을 때만 그린다.
+      if (
+        program.currentId === c.currentId &&
+        program.browsedId === c.browsedId &&
+        program.listOffset === c.listOffset &&
+        sameQueue(program.queue, c.queue)
+      ) {
+        program = c
+        return
+      }
       program = c
       drawProgram()
     },

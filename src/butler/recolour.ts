@@ -1,4 +1,4 @@
-import { CanvasTexture, Material, Mesh, Object3D, Texture } from 'three'
+import { CanvasTexture, Color, Material, Mesh, Object3D, Texture } from 'three'
 
 /**
  * 집사가 입은 옷과 머리색을 정장 톤으로 바꾼다.
@@ -25,7 +25,7 @@ const BODY = /Body_00_SKIN/i
 const FILTERS = {
   cloth: 'saturate(0.18) brightness(0.34) contrast(1.12)',
   hair: 'sepia(0.92) saturate(1.7) hue-rotate(-10deg) brightness(0.72)',
-  body: 'saturate(0.94) brightness(0.86)',
+  body: 'sepia(0.22) saturate(0.92) brightness(0.76)',
 } as const
 
 type Filtered = Map<Texture, Texture>
@@ -56,6 +56,7 @@ export function dressAsButler(root: Object3D): void {
   const done: Filtered = new Map()
 
   for (const { material, kind } of targets) {
+    let touched = false
     for (const slot of TEXTURE_SLOTS) {
       const tex = (material as unknown as Record<string, Texture | null>)[slot]
       if (!tex?.image || protectedImages.has(tex.image)) continue
@@ -63,13 +64,26 @@ export function dressAsButler(root: Object3D): void {
       if (!replaced) continue
       done.set(tex, replaced)
       ;(material as unknown as Record<string, Texture>)[slot] = replaced
+      touched = true
+    }
+
+    // MToon 은 그늘 색을 따로 들고 있다. 겉면만 바꾸면 그늘이 원래 색으로 남아
+    // 뒷머리처럼 그늘이 넓은 곳은 그대로 검게 보인다.
+    if (kind === 'hair') {
+      const shade = (material as unknown as { shadeColorFactor?: Color }).shadeColorFactor
+      shade?.setHex(0x3a2415)
+      if (!touched) {
+        // 텍스처를 못 바꾼 재질은 색으로라도 맞춘다.
+        const color = (material as unknown as { color?: Color }).color
+        color?.setHex(0x8a5f3a)
+      }
     }
     material.needsUpdate = true
   }
 }
 
 /** MToon 과 표준 재질에서 색을 담고 있는 슬롯. */
-const TEXTURE_SLOTS = ['map', 'shadeMultiplyTexture'] as const
+const TEXTURE_SLOTS = ['map', 'shadeMultiplyTexture', 'emissiveMap'] as const
 
 function toArray(m: Material | Material[]): Material[] {
   return Array.isArray(m) ? m : [m]

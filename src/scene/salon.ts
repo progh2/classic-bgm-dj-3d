@@ -96,11 +96,10 @@ export function createSalon(host: HTMLElement): Salon {
     throw new WebGLUnavailableError(err)
   }
 
-  // 4K 출력과 devicePixelRatio 를 무제한 추종하지 않는다 (PRD 8. 큰 화면).
-  const pixelRatio = Math.min(window.devicePixelRatio, 2)
-  renderer.setPixelRatio(pixelRatio)
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = PCFSoftShadowMap
+  // 그림자는 매 프레임 다시 그릴 필요가 없다. 사람이 움직일 때만 갱신한다.
+  renderer.shadowMap.autoUpdate = false
   // 선형 출력은 촛불 같은 밝은 부분이 하얗게 뭉친다. 필름 톤매핑으로 눌러 준다.
   renderer.toneMapping = ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.18
@@ -350,6 +349,12 @@ export function createSalon(host: HTMLElement): Salon {
   const resize = (): void => {
     const w = host.clientWidth || window.innerWidth
     const h = host.clientHeight || window.innerHeight
+    // 화소 수에 상한을 둔다. 큰 창에서 devicePixelRatio 2 를 그대로 따르면
+    // 그릴 화소가 800만 개를 넘어 CPU·GPU 를 크게 먹는다.
+    const MAX_PIXELS = 2_400_000
+    const wanted = Math.min(window.devicePixelRatio, 2)
+    const ratio = Math.min(wanted, Math.sqrt(MAX_PIXELS / Math.max(1, w * h)))
+    renderer.setPixelRatio(Math.max(1, ratio))
     renderer.setSize(w, h, false)
     camera.aspect = w / h
     // 세로로 긴 화면에서는 위아래로 더 담아야 옆이 덜 잘린다.
@@ -359,6 +364,7 @@ export function createSalon(host: HTMLElement): Salon {
   }
   resize()
 
+  let shadowTick = 0
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const goTo = (name: ShotName, seconds = 4): void => {
@@ -423,6 +429,12 @@ export function createSalon(host: HTMLElement): Salon {
       // 시선은 조금 늦게 따라온다. 그래야 눈이 홱홱 돌지 않는다.
       viewerAnchor.position.lerp(wanted, Math.min(1, deltaSec * 4))
       turntable.tick(deltaSec)
+
+      // 그림자는 넉 프레임에 한 번만 다시 그린다. 촛불이 흔들릴 뿐인 장면에서
+      // 매 프레임 그림자를 다시 그리는 것은 낭비다.
+      shadowTick = (shadowTick + 1) % 4
+      renderer.shadowMap.needsUpdate = shadowTick === 0
+
       renderer.render(scene, camera)
     },
     resize,

@@ -12,8 +12,8 @@ const TARGET_HEIGHT = 1.72
  * 걷는 속도(m/s)와 한 걸음의 보폭(m).
  * 성큼성큼 걷지 않는다. 보폭을 줄이고 속도를 낮춰 조심스럽게 옮긴다.
  */
-const WALK_SPEED = 0.56
-const STRIDE = 0.44
+const WALK_SPEED = 0.42
+const STRIDE = 0.34
 
 /**
  * 앉았을 때 몸을 띄우는 값.
@@ -244,6 +244,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
         facing = faceY
         root.rotation.y = faceY
       }
+      // 한 번에 옮기면 치마와 머리카락을 흔드는 물리 뼈가 제자리를 잃고
+      // 크게 펄럭인다. 옮긴 자리에서 다시 재운다.
+      root.updateWorldMatrix(true, true)
+      vrm.springBoneManager?.reset()
     },
 
     sit(on, y = 0, facing = 0) {
@@ -353,20 +357,23 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const sitKnee = legPose.knee ?? 0
       const sitFoot = legPose.foot ?? 0
       // 앉은 다리는 좌우를 조금 어긋나게 둔다. 딱 붙이면 인형처럼 보인다.
-      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.24), legK)
-      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.24), legK)
-      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.46), legK)
-      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.46), legK)
+      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.17), legK)
+      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.17), legK)
+      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.32), legK)
+      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.32), legK)
       slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.14), legK)
       slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.14), legK)
       // 걸을 때 몸이 조금 오르내리고, 앉으면 의자 높이에 얹힌다.
       // 뿌리는 발밑이다. 앉는 면 높이를 그대로 주면 엉덩이가 그만큼 더 올라가
       // 공중에 뜬다. 서 있을 때의 엉덩이 높이만큼 내려 앉혀야 한다.
-      root.position.y = seated && !walk
+      // 앉고 서는 높이를 한 번에 바꾸면 치맛자락을 흔드는 물리 뼈가 크게 튄다.
+      // 목표 높이로 천천히 옮긴다.
+      const wantY = seated && !walk
         ? seatY - hipRestY + SEAT_LIFT
         : walk
           ? Math.abs(Math.sin(walk.phase)) * 0.01
           : 0
+      root.position.y += (wantY - root.position.y) * Math.min(1, deltaSec * 4)
 
       if (bowUntil > 0 && nowMs > bowUntil) {
         bowUntil = 0
@@ -388,7 +395,7 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const keysR = reduceMotion ? 0 : Math.sin(nowMs / 430 + 1.7) * 0.09 * playAmount
 
       // 걸을 때는 모은 손을 풀고 팔을 조금 흔든다.
-      const gaitL = walk ? Math.sin(walk.phase) * 0.12 : 0
+      const gaitL = walk ? Math.sin(walk.phase) * 0.08 : 0
       slerp(
         joints.upperArmL,
         armQuat(qArmL, 1, pose.armDown + keysL, pose.armSwing - gaitL, pose.armTwist),
