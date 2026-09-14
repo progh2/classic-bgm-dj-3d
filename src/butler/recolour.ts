@@ -12,14 +12,20 @@ import { CanvasTexture, Material, Mesh, Object3D, Texture } from 'three'
  */
 
 /** 이 문자열이 재질 이름에 들어가면 대상. */
-const TARGET = /CLOTH|Tops|Bottoms|Shoes|Accessory|HAIR/i
-/** 이 문자열이 들어가면 절대 건드리지 않는다. */
-const PROTECTED = /SKIN|FACE|EYE|Body/i
+const TARGET = /CLOTH|Tops|Bottoms|Onepice|Shoes|Accessory|HAIR/i
+/** 얼굴과 눈은 절대 건드리지 않는다. */
+const PROTECTED = /FACE|EYE/i
+/**
+ * 몸통 피부 재질에는 살결과 스타킹이 한 이미지에 들어 있다. 그대로 두면
+ * 어두운 피아노 앞에서 스타킹이 흰 덩어리처럼 떠 보인다. 아주 조금만 낮춘다.
+ */
+const BODY = /Body_00_SKIN/i
 
-/** 옷: 짙은 정장 톤. 머리: 검은 갈색. */
+/** 옷: 짙은 정장 톤. 머리: 따뜻한 갈색. 배경에 검정이 많아 머리까지 검으면 묻힌다. */
 const FILTERS = {
   cloth: 'saturate(0.18) brightness(0.34) contrast(1.12)',
-  hair: 'saturate(0.3) brightness(0.42)',
+  hair: 'sepia(0.92) saturate(1.7) hue-rotate(-10deg) brightness(0.72)',
+  body: 'saturate(0.94) brightness(0.86)',
 } as const
 
 type Filtered = Map<Texture, Texture>
@@ -35,6 +41,10 @@ export function dressAsButler(root: Object3D): void {
       const name = material.name ?? ''
       if (PROTECTED.test(name)) {
         for (const tex of texturesOf(material)) if (tex.image) protectedImages.add(tex.image)
+        continue
+      }
+      if (BODY.test(name)) {
+        targets.push({ material, kind: 'body' })
         continue
       }
       if (!TARGET.test(name)) continue

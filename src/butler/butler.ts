@@ -8,9 +8,12 @@ import { dressAsButler } from './recolour'
 const TARGET_HEIGHT = 1.72
 
 /** 고개가 돌아가는 한계. 이보다 크면 몸까지 돌아야 자연스럽다. */
-/** 걷는 속도(m/s)와 한 걸음의 보폭(m). 집사는 서두르지 않는다. */
-const WALK_SPEED = 0.78
-const STRIDE = 0.72
+/**
+ * 걷는 속도(m/s)와 한 걸음의 보폭(m).
+ * 성큼성큼 걷지 않는다. 보폭을 줄이고 속도를 낮춰 조심스럽게 옮긴다.
+ */
+const WALK_SPEED = 0.56
+const STRIDE = 0.44
 
 /**
  * 앉았을 때 몸을 띄우는 값.
@@ -24,6 +27,21 @@ const HEAD_YAW_LIMIT = 0.42
 const HEAD_PITCH_LIMIT = 0.22
 
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v))
+
+/**
+ * 체형을 한 단계 줄인다.
+ *
+ * 본체 메시에는 체형 모프가 없어서 뼈 크기로만 줄일 수 있다. VRoid 모델에는
+ * 가슴에 전용 뼈(J_Sec_*_Bust)가 있어 그쪽은 따로 줄인다. 엉덩이는 전용 뼈가
+ * 없고 Hips 는 온몸의 뿌리라, 가로로만 아주 조금 줄여 전체를 갸름하게 한다.
+ * 세로는 건드리지 않아 키는 그대로다.
+ */
+function slimFigure(vrm: VRM): void {
+  vrm.scene.traverse((node) => {
+    if (/Bust/i.test(node.name)) node.scale.setScalar(0.8)
+    if (/J_Bip_C_Hips$/i.test(node.name)) node.scale.set(0.94, 1, 0.94)
+  })
+}
 
 /** from 에서 to 까지 가까운 쪽으로 도는 각도 */
 function shortestTurn(from: number, to: number): number {
@@ -105,9 +123,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
     obj.frustumCulled = false
   })
 
-  // 임시 모델은 교복 차림이라 옷과 머리색을 정장 톤으로 낮춰 둔다.
-  // 전용 집사 모델로 갈아 끼우면 이 호출을 지운다.
+  // 임시 모델이라 옷과 머리색을 응접실에 맞게 낮춰 둔다.
+  // 전용 모델로 갈아 끼우면 이 호출을 지운다.
   dressAsButler(vrm.scene)
+  slimFigure(vrm)
 
   const bone = (n: Parameters<NonNullable<VRM['humanoid']>['getNormalizedBoneNode']>[0]) =>
     vrm.humanoid?.getNormalizedBoneNode(n) ?? null
@@ -334,19 +353,19 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const sitKnee = legPose.knee ?? 0
       const sitFoot = legPose.foot ?? 0
       // 앉은 다리는 좌우를 조금 어긋나게 둔다. 딱 붙이면 인형처럼 보인다.
-      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.42), legK)
-      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.42), legK)
-      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.75), legK)
-      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.75), legK)
-      slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.2), legK)
-      slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.2), legK)
+      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.24), legK)
+      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.24), legK)
+      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.46), legK)
+      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.46), legK)
+      slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.14), legK)
+      slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.14), legK)
       // 걸을 때 몸이 조금 오르내리고, 앉으면 의자 높이에 얹힌다.
       // 뿌리는 발밑이다. 앉는 면 높이를 그대로 주면 엉덩이가 그만큼 더 올라가
       // 공중에 뜬다. 서 있을 때의 엉덩이 높이만큼 내려 앉혀야 한다.
       root.position.y = seated && !walk
         ? seatY - hipRestY + SEAT_LIFT
         : walk
-          ? Math.abs(Math.sin(walk.phase)) * 0.018
+          ? Math.abs(Math.sin(walk.phase)) * 0.01
           : 0
 
       if (bowUntil > 0 && nowMs > bowUntil) {
@@ -369,7 +388,7 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const keysR = reduceMotion ? 0 : Math.sin(nowMs / 430 + 1.7) * 0.09 * playAmount
 
       // 걸을 때는 모은 손을 풀고 팔을 조금 흔든다.
-      const gaitL = walk ? Math.sin(walk.phase) * 0.26 : 0
+      const gaitL = walk ? Math.sin(walk.phase) * 0.12 : 0
       slerp(
         joints.upperArmL,
         armQuat(qArmL, 1, pose.armDown + keysL, pose.armSwing - gaitL, pose.armTwist),

@@ -86,7 +86,7 @@ export const POSES = {
    * 연주 — 팔을 건반 높이까지 들어 앞으로 내민다.
    * 팔을 몸에 붙인 채로 두면 손이 건반보다 아래에 놓여 건반 속에 파묻힌다.
    */
-  keys: { armDown: 1.12, armSwing: 0.5, armTwist: -0.86, elbow: 1.04, torso: 0.12, head: 0.1,
+  keys: { armDown: 1.2, armSwing: 0.48, armTwist: -0.84, elbow: 0.98, torso: 0.12, head: 0.1,
           hip: 1.15, knee: -1.5, foot: 0.0 },
 } satisfies Record<string, Pose>
 
