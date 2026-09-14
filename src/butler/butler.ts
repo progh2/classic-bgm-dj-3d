@@ -10,7 +10,10 @@ const TARGET_HEIGHT = 1.72
 /** 고개가 돌아가는 한계. 이보다 크면 몸까지 돌아야 자연스럽다. */
 /**
  * 걷는 속도(m/s)와 한 걸음의 보폭(m).
- * 성큼성큼 걷지 않는다. 보폭을 줄이고 속도를 낮춰 조심스럽게 옮긴다.
+ *
+ * 성큼성큼 걷지 않도록 보폭과 속도를 낮춘다. 다만 무릎 굽힘까지 같이 줄이면
+ * 다리가 뻣뻣한 채로 앞뒤로 흔들리는 인형처럼 보인다. 보폭은 좁게 두고
+ * 무릎은 제대로 굽힌다.
  */
 const WALK_SPEED = 0.42
 const STRIDE = 0.34
@@ -357,12 +360,12 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const sitKnee = legPose.knee ?? 0
       const sitFoot = legPose.foot ?? 0
       // 앉은 다리는 좌우를 조금 어긋나게 둔다. 딱 붙이면 인형처럼 보인다.
-      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.17), legK)
-      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.17), legK)
-      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.32), legK)
-      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.32), legK)
-      slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.14), legK)
-      slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.14), legK)
+      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.26), legK)
+      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.26), legK)
+      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.62), legK)
+      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.62), legK)
+      slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.22), legK)
+      slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.22), legK)
       // 걸을 때 몸이 조금 오르내리고, 앉으면 의자 높이에 얹힌다.
       // 뿌리는 발밑이다. 앉는 면 높이를 그대로 주면 엉덩이가 그만큼 더 올라가
       // 공중에 뜬다. 서 있을 때의 엉덩이 높이만큼 내려 앉혀야 한다.
@@ -371,7 +374,7 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const wantY = seated && !walk
         ? seatY - hipRestY + SEAT_LIFT
         : walk
-          ? Math.abs(Math.sin(walk.phase)) * 0.01
+          ? Math.abs(Math.sin(walk.phase)) * 0.014
           : 0
       root.position.y += (wantY - root.position.y) * Math.min(1, deltaSec * 4)
 

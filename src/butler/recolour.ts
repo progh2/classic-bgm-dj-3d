@@ -1,4 +1,4 @@
-import { CanvasTexture, Color, Material, Mesh, Object3D, Texture } from 'three'
+import { CanvasTexture, Material, Mesh, Object3D, Texture } from 'three'
 
 /**
  * 집사가 입은 옷과 머리색을 정장 톤으로 바꾼다.
@@ -11,8 +11,14 @@ import { CanvasTexture, Color, Material, Mesh, Object3D, Texture } from 'three'
  * 여러 부위를 한 이미지에 담는 경우가 있어 이미지 단위로 한 번 더 거른다.
  */
 
-/** 이 문자열이 재질 이름에 들어가면 대상. */
-const TARGET = /CLOTH|Tops|Bottoms|Onepice|Shoes|Accessory|HAIR/i
+/**
+ * 이 문자열이 재질 이름에 들어가면 대상.
+ *
+ * 머리는 건드리지 않는다. 앞머리와 뒷머리가 서로 다른 재질·다른 텍스처를
+ * 쓰는데 뒷머리 쪽이 끝내 따라오지 않아 반반으로 남았다. 어중간하게 반만
+ * 바뀌는 것보다 모델이 가진 색 그대로가 낫다.
+ */
+const TARGET = /CLOTH|Tops|Bottoms|Onepice|Shoes|Accessory/i
 /** 얼굴과 눈은 절대 건드리지 않는다. */
 const PROTECTED = /FACE|EYE/i
 /**
@@ -21,10 +27,9 @@ const PROTECTED = /FACE|EYE/i
  */
 const BODY = /Body_00_SKIN/i
 
-/** 옷: 짙은 정장 톤. 머리: 따뜻한 갈색. 배경에 검정이 많아 머리까지 검으면 묻힌다. */
+/** 옷은 짙은 톤으로, 몸통 피부는 아주 조금만 낮춘다. */
 const FILTERS = {
   cloth: 'saturate(0.18) brightness(0.34) contrast(1.12)',
-  hair: 'sepia(0.92) saturate(1.7) hue-rotate(-10deg) brightness(0.72)',
   body: 'sepia(0.22) saturate(0.92) brightness(0.76)',
 } as const
 
@@ -48,7 +53,7 @@ export function dressAsButler(root: Object3D): void {
         continue
       }
       if (!TARGET.test(name)) continue
-      targets.push({ material, kind: /HAIR/i.test(name) ? 'hair' : 'cloth' })
+      targets.push({ material, kind: 'cloth' })
     }
   })
 
@@ -56,7 +61,6 @@ export function dressAsButler(root: Object3D): void {
   const done: Filtered = new Map()
 
   for (const { material, kind } of targets) {
-    let touched = false
     for (const slot of TEXTURE_SLOTS) {
       const tex = (material as unknown as Record<string, Texture | null>)[slot]
       if (!tex?.image || protectedImages.has(tex.image)) continue
@@ -64,19 +68,6 @@ export function dressAsButler(root: Object3D): void {
       if (!replaced) continue
       done.set(tex, replaced)
       ;(material as unknown as Record<string, Texture>)[slot] = replaced
-      touched = true
-    }
-
-    // MToon 은 그늘 색을 따로 들고 있다. 겉면만 바꾸면 그늘이 원래 색으로 남아
-    // 뒷머리처럼 그늘이 넓은 곳은 그대로 검게 보인다.
-    if (kind === 'hair') {
-      const shade = (material as unknown as { shadeColorFactor?: Color }).shadeColorFactor
-      shade?.setHex(0x3a2415)
-      if (!touched) {
-        // 텍스처를 못 바꾼 재질은 색으로라도 맞춘다.
-        const color = (material as unknown as { color?: Color }).color
-        color?.setHex(0x8a5f3a)
-      }
     }
     material.needsUpdate = true
   }
