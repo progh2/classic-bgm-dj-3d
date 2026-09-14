@@ -58,6 +58,19 @@
 
     <button id="repeat-greeting" type="button">인사 다시 듣기</button>
     <button id="voice-toggle" type="button" aria-pressed="false">음성 끄기</button>
+    <button id="reshuffle" type="button">다른 결로 다시 고르기</button>
+    <button id="sleep" type="button">종료 예약</button>
+
+    <!--
+      책자는 3D 안에 있어 가리켜야 열린다. 키보드와 낭독기를 위해 같은 일을
+      하는 단추를 여기 둔다. 곡목은 재생 목록이 바뀔 때마다 다시 그린다.
+    -->
+    <h2>곡목</h2>
+    <div id="queue-list"></div>
+    <h2>출처와 라이선스</h2>
+    <button id="source-open" type="button">출처와 라이선스 안내서 열기</button>
+    <button id="source-close" type="button">안내서 덮기</button>
+    <div id="source-links"></div>
 
     <label for="seek">재생 위치</label>
     <input id="seek" type="range" min="0" max="1000" value="0">

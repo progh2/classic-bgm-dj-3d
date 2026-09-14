@@ -147,7 +147,29 @@ const session = createSession(adapter, {
 
 let lastAnnounced = ''
 
+let lastQueueIds = ''
+
+/** 감춰진 층의 곡목. 가리키지 않고도 곡을 고를 수 있어야 한다. */
+function renderQueueList(state: SessionState): void {
+  const ids = state.queue.map((e) => e.track.id).join('|')
+  if (ids === lastQueueIds) return
+  lastQueueIds = ids
+  el('queue-list').replaceChildren(
+    ...state.queue.map((entry, i) => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.textContent = `${i + 1}. ${entry.track.title} — ${entry.track.composer}`
+      b.addEventListener('click', () => {
+        announceNext = true
+        void session.playEntry(entry)
+      })
+      return b
+    }),
+  )
+}
+
 function renderAccessible(state: SessionState): void {
+  renderQueueList(state)
   const entry = state.current
   el('now-title').textContent = entry?.track.title ?? ''
   el('now-meta').textContent = entry ? `${entry.track.composer} · ${entry.track.performer}` : ''
@@ -161,6 +183,21 @@ function renderAccessible(state: SessionState): void {
   const d = state.playback.durationSec
   seek.disabled = d === null
   if (d) seek.value = String(Math.round((state.playback.currentTimeSec / d) * 1000))
+}
+
+/** 감춰진 층의 출처 링크. 3D 안내서와 같은 항목을 연다. */
+async function renderSourceLinks(): Promise<void> {
+  const { SOURCE_SECTIONS } = await import('./scene/books')
+  el('source-links').replaceChildren(
+    ...SOURCE_SECTIONS.filter((x) => x.link).map((section) => {
+      const a = document.createElement('a')
+      a.href = section.link?.url ?? '#'
+      a.target = '_blank'
+      a.rel = 'noopener noreferrer'
+      a.textContent = `${section.title} — ${section.link?.label ?? ''}`
+      return a
+    }),
+  )
 }
 
 // ---- 3D 안의 조작부와 안내판 ----
@@ -308,10 +345,46 @@ function renderAsk(): void {
   say(q.ask)
 }
 
+/** 취향 카드를 열기 전에 초점이 어디 있었는지. 닫으면 그리로 돌려준다. */
+let askOpener: HTMLElement | null = null
+
 function startAsk(): void {
+  askOpener = document.activeElement as HTMLElement | null
   askStep = 0
   answers = { ...DEFAULT_ANSWERS }
   renderAsk()
+}
+
+function closeAsk(): void {
+  askStep = -1
+  renderAsk()
+  askOpener?.focus()
+  askOpener = null
+}
+
+/**
+ * 카드가 열려 있는 동안 초점이 카드 밖으로 새지 않게 한다. 뒤에 있는 조작부로
+ * 초점이 넘어가면 화면에 보이지 않는 곳을 누르게 된다.
+ */
+function trapFocus(e: KeyboardEvent): void {
+  if (askBox.hasAttribute('hidden')) return
+  if (e.key === 'Escape') {
+    e.preventDefault()
+    closeAsk()
+    return
+  }
+  if (e.key !== 'Tab') return
+  const focusable = askBox.querySelectorAll<HTMLElement>('button:not([disabled])')
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+  if (!first || !last) return
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
 }
 
 function choose(optionId: string): void {
@@ -320,8 +393,7 @@ function choose(optionId: string): void {
   answers = { ...answers, [q.id]: optionId } as Answers
   askStep += 1
   if (askStep >= QUESTIONS.length) {
-    askStep = -1
-    renderAsk()
+    closeAsk()
     void begin(answers)
     return
   }
@@ -648,6 +720,8 @@ for (const [id, action] of [
   ['reshuffle', 'reshuffle'],
   ['sleep', 'sleep'],
   ['repeat-greeting', 'greet'],
+  ['source-open', 'source:open'],
+  ['source-close', 'source:close'],
   ['voice-toggle', 'voice'],
   ['ask-back', 'back'],
   ['ask-skip', 'skip'],
@@ -666,9 +740,13 @@ el<HTMLInputElement>('volume').addEventListener('input', (e) => {
   localStorage.setItem('salon.volume', String(v))
 })
 
+window.addEventListener('keydown', trapFocus)
+
 window.addEventListener('keydown', (e) => {
   const target = e.target as HTMLElement | null
   if (target && (target.tagName === 'INPUT' || target.isContentEditable)) return
+  // 취향 카드가 열려 있으면 재생 단축키가 끼어들지 않게 한다.
+  if (!askBox.hasAttribute('hidden')) return
   if (e.key === ' ') {
     e.preventDefault()
     act('play')
@@ -729,6 +807,7 @@ if (startScene()) {
   void dressRoom()
   followDaylight()
   watchSleepTimer()
+  void renderSourceLinks()
   void hangArtworks()
   void bringInButler()
 }
