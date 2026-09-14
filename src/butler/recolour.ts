@@ -1,4 +1,4 @@
-import { CanvasTexture, Material, Mesh, Object3D, Texture } from 'three'
+import { CanvasTexture, Color, Material, Mesh, Object3D, Texture } from 'three'
 
 /**
  * 집사가 입은 옷과 머리색을 정장 톤으로 바꾼다.
@@ -11,14 +11,10 @@ import { CanvasTexture, Material, Mesh, Object3D, Texture } from 'three'
  * 여러 부위를 한 이미지에 담는 경우가 있어 이미지 단위로 한 번 더 거른다.
  */
 
-/**
- * 이 문자열이 재질 이름에 들어가면 대상.
- *
- * 머리는 건드리지 않는다. 앞머리와 뒷머리가 서로 다른 재질·다른 텍스처를
- * 쓰는데 뒷머리 쪽이 끝내 따라오지 않아 반반으로 남았다. 어중간하게 반만
- * 바뀌는 것보다 모델이 가진 색 그대로가 낫다.
- */
+/** 이 문자열이 재질 이름에 들어가면 옷으로 보고 텍스처를 다시 그린다. */
 const TARGET = /CLOTH|Tops|Bottoms|Onepice|Shoes|Accessory/i
+/** 머리 재질 */
+const HAIR = /HAIR/i
 /** 얼굴과 눈은 절대 건드리지 않는다. */
 const PROTECTED = /FACE|EYE/i
 /**
@@ -35,6 +31,16 @@ const FILTERS = {
 
 type Filtered = Map<Texture, Texture>
 
+/**
+ * 머리색.
+ *
+ * 이 모델의 머리는 텍스처가 아니라 재질의 색 값에 들어 있다(거의 흰색에
+ * 가까운 백금발). 텍스처를 다시 그리는 방식이 반만 먹혔던 이유가 이것이다.
+ * 밝은 텍스처에 색을 곱하는 편이 확실하다.
+ */
+const HAIR_COLOUR = 0x6f4a2a
+const HAIR_SHADE = 0x3f2917
+
 export function dressAsButler(root: Object3D): void {
   const protectedImages = new Set<unknown>()
   const targets: { material: Material; kind: keyof typeof FILTERS }[] = []
@@ -50,6 +56,10 @@ export function dressAsButler(root: Object3D): void {
       }
       if (BODY.test(name)) {
         targets.push({ material, kind: 'body' })
+        continue
+      }
+      if (HAIR.test(name)) {
+        tintHair(material)
         continue
       }
       if (!TARGET.test(name)) continue
@@ -75,6 +85,21 @@ export function dressAsButler(root: Object3D): void {
 
 /** MToon 과 표준 재질에서 색을 담고 있는 슬롯. */
 const TEXTURE_SLOTS = ['map', 'shadeMultiplyTexture', 'emissiveMap'] as const
+
+/**
+ * 머리 재질의 색을 갈색으로 돌린다. 초록 리본처럼 머리가 아닌 것이 같은
+ * 이름을 달고 있는 경우가 있어, 초록빛이 도는 재질은 건드리지 않는다.
+ */
+function tintHair(material: Material): void {
+  const m = material as unknown as { color?: Color; shadeColorFactor?: Color }
+  const c = m.color
+  if (!c) return
+  const greenish = c.g > c.r + 0.08 && c.g > c.b + 0.04
+  if (greenish) return
+  c.setHex(HAIR_COLOUR)
+  m.shadeColorFactor?.setHex(HAIR_SHADE)
+  material.needsUpdate = true
+}
 
 function toArray(m: Material | Material[]): Material[] {
   return Array.isArray(m) ? m : [m]

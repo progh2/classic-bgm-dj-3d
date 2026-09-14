@@ -360,10 +360,10 @@ export async function loadButler(url: string, onProgress?: (frac: number) => voi
       const sitKnee = legPose.knee ?? 0
       const sitFoot = legPose.foot ?? 0
       // 앉은 다리는 좌우를 조금 어긋나게 둔다. 딱 붙이면 인형처럼 보인다.
-      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.26), legK)
-      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.26), legK)
-      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.62), legK)
-      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.62), legK)
+      slerp(joints.upperLegL, qLeg.setFromAxisAngle(AX_X, sitHip + swing * 0.3), legK)
+      slerp(joints.upperLegR, qLeg.setFromAxisAngle(AX_X, sitHip * 0.94 - swing * 0.3), legK)
+      slerp(joints.lowerLegL, qLeg.setFromAxisAngle(AX_X, sitKnee - Math.max(0, -swing) * 0.85), legK)
+      slerp(joints.lowerLegR, qLeg.setFromAxisAngle(AX_X, sitKnee * 0.96 - Math.max(0, swing) * 0.85), legK)
       slerp(joints.footL, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.22), legK)
       slerp(joints.footR, qLeg.setFromAxisAngle(AX_X, sitFoot + lift * 0.22), legK)
       // 걸을 때 몸이 조금 오르내리고, 앉으면 의자 높이에 얹힌다.

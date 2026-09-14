@@ -102,7 +102,7 @@ export function createSalon(host: HTMLElement): Salon {
   renderer.shadowMap.autoUpdate = false
   // 선형 출력은 촛불 같은 밝은 부분이 하얗게 뭉친다. 필름 톤매핑으로 눌러 준다.
   renderer.toneMapping = ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.18
+  renderer.toneMappingExposure = 1.06
   renderer.outputColorSpace = SRGBColorSpace
   host.appendChild(renderer.domElement)
 
