@@ -21,6 +21,13 @@
 html, body {
   margin: 0;
   height: 100%;
+  /*
+   * 두 번 두드리면 화면이 확대되던 것을 막는다. manipulation 은 더블탭 확대만
+   * 끄고 두 손가락 확대는 남긴다. user-scalable=no 로 막으면 글씨를 키워 보는
+   * 사람이 곤란해지므로 그 방법은 쓰지 않는다.
+   */
+  touch-action: manipulation;
+  overscroll-behavior: none;
   background: #14100d;
   color: var(--ivory);
   font-family: "Noto Serif KR", "Apple SD Gothic Neo", serif;
@@ -85,6 +92,7 @@ html, body {
 
 .led {
   flex: 1 1 auto;
+  touch-action: manipulation;
   min-height: 52px;
   padding: 10px 14px;
   white-space: nowrap;
@@ -210,6 +218,7 @@ html, body {
 }
 
 .ask__option {
+  touch-action: manipulation;
   min-height: clamp(68px, 11vmin, 104px);
   padding: 14px 20px;
   border: 1px solid color-mix(in srgb, var(--mood) 30%, transparent);
