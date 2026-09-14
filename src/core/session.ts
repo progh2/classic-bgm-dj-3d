@@ -39,6 +39,8 @@ export interface Session {
   setVolume(v: number): void
   /** 멈춘 상태를 풀고 현재 곡부터 다시 시도한다. */
   resume(): Promise<void>
+  /** 감상을 마친다. 곡목은 남기고 재생만 멈춘다. */
+  stop(): void
   recentIds(): readonly string[]
   dispose(): void
 }
@@ -210,6 +212,11 @@ export function createSession(adapter: PlaybackAdapter, options: SessionOptions 
       failures = 0
       emit({ halted: false, problem: null })
       await start(state.index >= 0 ? state.index : 0)
+    },
+
+    stop() {
+      adapter.stop()
+      emit({ problem: null })
     },
 
     recentIds() {

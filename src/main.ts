@@ -1,5 +1,5 @@
 import type { Butler } from './butler/butler'
-import { introduce, LINES } from './butler/lines'
+import { introduce, LINES, sleepIn } from './butler/lines'
 import { createSpeech } from './butler/speech'
 import { CATALOG, formatTime } from './catalog/catalog'
 import { buildQueue, DEFAULT_ANSWERS, QUESTIONS, type Answers } from './catalog/select'
@@ -42,6 +42,16 @@ let listOffset = 0
  * 누르거나 곡목에서 고른 경우에만 켠다.
  */
 let announceNext = false
+/**
+ * 맡길게로 시작했는가. 시작한 뒤에만 '다른 결로'와 '종료 예약'을 보여 준다.
+ * 아무것도 틀지 않은 자리에 끌 시각부터 정하라고 하는 것은 이상하다.
+ */
+let autoMode = false
+/** 마칠 시각(밀리초). 예약하지 않았으면 null. */
+let stopAt: number | null = null
+/** 종료 예약 단추를 누를 때마다 도는 순서(분). 0 은 예약 없음. */
+const SLEEP_STEPS = [0, 30, 60, 120] as const
+let sleepStep = 0
 /** 인사를 자막으로만 건넸는가. 첫 조작 때 소리로 다시 건넨다. */
 let greetedSilently = false
 /** 집사가 지금 어디에 있는가. 자리를 옮기는 동안 겹쳐 부르지 않도록 센다. */
@@ -165,6 +175,14 @@ const MOOD_COLOUR: Record<string, string> = {
   tense: '#e08a63',
 }
 
+/** 종료 예약 단추에 쓸 글자. 예약했으면 남은 시간을 보여 준다. */
+function sleepLabel(): string {
+  if (stopAt === null) return '종료 예약'
+  const left = Math.max(0, stopAt - Date.now())
+  const minutes = Math.ceil(left / 60_000)
+  return minutes > 1 ? `${minutes}분 뒤 종료` : '곧 종료'
+}
+
 function moodColour(moods: readonly string[]): string {
   for (const m of moods) {
     const c = MOOD_COLOUR[m]
@@ -204,6 +222,10 @@ function updateScene(state: SessionState): void {
   el('voice-toggle').textContent = speech.enabled ? '음성 끄기' : '음성 켜기'
   el('voice-toggle').setAttribute('aria-pressed', String(speech.enabled))
   el('console-notice').textContent = notice
+
+  // 맡길게로 듣는 중에만 '다른 결로'와 '종료 예약'을 보여 준다.
+  el('auto-row').toggleAttribute('hidden', !autoMode)
+  el('sleep').textContent = sleepLabel()
   // 곡의 결에 따라 조작부의 빛깔이 바뀐다.
   document.documentElement.style.setProperty('--mood', moodColour(current?.track.moods ?? []))
 
@@ -306,8 +328,9 @@ function choose(optionId: string): void {
   renderAsk()
 }
 
-async function begin(picked: Answers): Promise<void> {
+async function begin(picked: Answers, auto = false): Promise<void> {
   lastAnswers = picked
+  if (auto) autoMode = true
   const queue = buildQueue(picked, CATALOG, { size: 20, exclude: session.recentIds() })
   if (queue.entries.length === 0) {
     say('죄송합니다. 지금 틀어 드릴 수 있는 곡이 없습니다.')
@@ -365,7 +388,19 @@ function act(id: string): void {
     case 'auto':
       askStep = -1
       renderAsk()
-      void begin(DEFAULT_ANSWERS)
+      void begin(DEFAULT_ANSWERS, true)
+      break
+    case 'reshuffle':
+      void begin(otherMood(lastAnswers), autoMode)
+      break
+    case 'sleep':
+      sleepStep = (sleepStep + 1) % SLEEP_STEPS.length
+      {
+        const minutes = SLEEP_STEPS[sleepStep] ?? 0
+        stopAt = minutes === 0 ? null : Date.now() + minutes * 60_000
+        say(minutes === 0 ? LINES.sleepCleared : sleepIn(minutes))
+      }
+      updateScene(session.state)
       break
     case 'prev':
       announceNext = true
@@ -430,6 +465,28 @@ function act(id: string): void {
       break
     }
   }
+}
+
+/** 지금과 다른 결을 하나 고른다. 같은 결이 다시 나오지 않게 한다. */
+function otherMood(from: Answers): Answers {
+  const moods: Answers['mood'][] = ['grand', 'hushed', 'lyrical', 'bright']
+  const others = moods.filter((m) => m !== from.mood)
+  const next = others[Math.floor(Math.random() * others.length)] ?? 'hushed'
+  return { ...from, mood: next }
+}
+
+/** 예약한 시각이 되면 마친다. 1초마다 본다. */
+function watchSleepTimer(): void {
+  window.setInterval(() => {
+    if (stopAt !== null && Date.now() >= stopAt) {
+      stopAt = null
+      sleepStep = 0
+      autoMode = false
+      session.stop()
+      say(LINES.sleepDone)
+    }
+    if (stopAt !== null) updateScene(session.state)
+  }, 1000)
 }
 
 // ---- 장면 ----
@@ -588,6 +645,8 @@ for (const [id, action] of [
   ['prev', 'prev'],
   ['play', 'play'],
   ['next', 'next'],
+  ['reshuffle', 'reshuffle'],
+  ['sleep', 'sleep'],
   ['repeat-greeting', 'greet'],
   ['voice-toggle', 'voice'],
   ['ask-back', 'back'],
@@ -669,6 +728,7 @@ if (startScene()) {
   void lightRoom()
   void dressRoom()
   followDaylight()
+  watchSleepTimer()
   void hangArtworks()
   void bringInButler()
 }

@@ -8,7 +8,14 @@ export const LINES = {
   paused: '잠시 멈추어 둘게요.',
   resumed: '이어서 틀어 드릴게요.',
   stopped: '멈추었습니다.',
+  sleepCleared: '종료 예약을 풀었어요. 계속 틀어 드릴게요.',
+  sleepDone: '예약하신 시각이 되어 여기서 마치겠습니다. 편히 쉬세요.',
 } as const
+
+/** 몇 분 뒤에 마칠지 알리는 말 */
+export function sleepIn(minutes: number): string {
+  return `${minutes}분 뒤에 마치겠습니다. 그때까지 조용히 틀어 둘게요.`
+}
 
 /** 곡을 소개하는 말. 해설이 없으면 편성과 시대만 알린다. */
 export function introduce(track: {
