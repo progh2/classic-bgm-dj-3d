@@ -9,7 +9,12 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "catalog:survey": "node tools/survey-commons.mjs \"Musopen Kickstarter Project\" data/candidates.json",
+    "catalog:build": "node tools/build-catalog.mjs",
+    "catalog:check": "node tools/check-catalog.mjs",
+    "catalog:check:links": "node tools/check-catalog.mjs --links",
+    "artworks:survey": "node tools/survey-artworks.mjs"
   },
   "dependencies": {
     "@pixiv/three-vrm": "^3.4.4",

@@ -84,6 +84,9 @@ API로 확인한 실측값:
 
 ## 도구와 절차
 
+곡을 실제로 늘리는 방법은 [곡을 추가하는 법](ADDING-TRACKS.md)에 따로 적었습니다.
+여기서는 도구가 무엇을 하는지만 정리합니다.
+
 ```bash
 # 1. 후보 조사 — 카테고리의 파일·길이·라이선스를 data/candidates.json 에 기록
 node tools/survey-commons.mjs "Musopen Kickstarter Project" data/candidates.json
@@ -110,5 +113,9 @@ node tools/build-catalog.mjs
 확인: 라이선스 상태(API 실측 144/144), 파일별 길이·용량, MP3·OGG 변환본 제공, CORS·Range 지원,
 33곡 선정과 분위기·시대·악기 분류, 한국어 해설 초안.
 
-남은 것: 해설 검수, 실제 기기(특히 iOS Safari)에서의 스트리밍 재생 확인, 링크 상태 정기 점검 자동화,
+남은 것: 해설 검수(33곡 모두 초안), 실제 기기(특히 iOS Safari)에서의 스트리밍 재생 확인,
 원 출처가 끊겼을 때의 대체 동작.
+
+링크 점검은 `npm run catalog:check:links` 로 합니다. `--update` 를 붙이면 결과를
+카탈로그의 `availability` 와 `lastCheckedAt` 에 적습니다. `broken` 인 곡은
+재생 목록에 들어가지 않습니다.

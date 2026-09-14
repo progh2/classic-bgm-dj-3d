@@ -10,8 +10,8 @@
 
 ## 상태
 
-**단계 4까지 완료.** 방과 안내인, 선곡과 재생, 두 권의 책자, 맡길게 모드가 모두 동작합니다.
-남은 것은 곡 추가 절차 문서화와 공개 전 검증입니다.
+**단계 5까지 완료.** 방과 안내인, 선곡과 재생, 두 권의 책자, 맡길게 모드가 모두 동작하고,
+곡을 늘리는 절차도 문서와 점검 도구로 갖춰졌습니다. 남은 것은 공개 전 검증입니다.
 자세한 계획은 [PRD](docs/PRD-3D-CLASSIC-SALON.md) 9장을 보세요.
 
 | 단계 | 내용 | 상태 |
@@ -21,7 +21,7 @@
 | 2 | 응접실과 안내인 (VRM·TTS·피아노) | 완료 |
 | 3 | 프로그램북 · 출처 안내서 | 완료 |
 | 4 | “맡길게” 자동 감상 | 완료 |
-| 5 | 곡 추가 절차 | 일부 — 도구는 있고 문서가 얇음 |
+| 5 | 곡 추가 절차 | 완료 — [곡을 추가하는 법](docs/ADDING-TRACKS.md) |
 | 6 | 공개 전 검증 → 초기 공개 | 미착수 |
 | 7 | 공유 손글씨 방명록 (Firebase) | 후속 |
 
@@ -62,13 +62,15 @@ npm test         # vitest
 npm run build    # 타입 검사 + 프로덕션 빌드
 ```
 
-곡을 추가할 때:
+곡을 추가할 때 — 자세한 절차는 **[곡을 추가하는 법](docs/ADDING-TRACKS.md)**:
 
 ```bash
-node tools/survey-commons.mjs "Musopen Kickstarter Project"   # 후보 조사
-# data/selection.ko.json 에 곡과 한국어 해설을 추가한 뒤
-node tools/build-catalog.mjs                                  # 스트리밍 주소 확인·카탈로그 생성
-node tools/survey-artworks.mjs                                # 벽에 걸 CC0 회화 조사
+npm run catalog:survey        # 후보 조사
+# data/selection.ko.json 에 곡과 한국어 해설을 적은 뒤
+npm run catalog:build         # 스트리밍 주소 확인·카탈로그 생성
+npm run catalog:check         # 분류·권리·해설 점검
+npm run catalog:check:links   # 주소가 살아 있는지까지 (한 달에 한 번쯤)
+npm run artworks:survey       # 벽에 걸 CC0 회화 조사
 ```
 
 ## 구성
