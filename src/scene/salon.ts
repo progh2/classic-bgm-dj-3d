@@ -225,12 +225,27 @@ export function createSalon(host: HTMLElement): Salon {
   const piano = createPiano(new Vector3(-WALL_X + 0.2, 0, -0.6), Math.PI / 2)
   scene.add(piano.root)
 
+  // 피아노 쪽이 방에서 가장 어두웠다. 연주할 때 연주자와 건반이 보이도록
+  // 그쪽에 따로 빛을 둔다. 키라이트보다 약하게 해서 주광원을 흐리지 않는다.
+  const pianoKey = new SpotLight(0xffdcb0, 9, 6.5, Math.PI / 5, 0.6, 1.5)
+  pianoKey.position.set(-1.55, 2.6, 0.35)
+  pianoKey.target.position.set(-2.5, 1.05, -0.7)
+  scene.add(pianoKey, pianoKey.target)
+
+  // 앞판 촛대의 불빛. 건반과 악보 언저리를 따뜻하게 띄운다.
+  const pianoCandles = new PointLight(0xffb469, 1.4, 2.4, 2)
+  pianoCandles.position.set(-2.42, 1.16, -0.6)
+  scene.add(pianoCandles)
+
   scene.add(new AmbientLight(0xffd9a8, 0.18))
 
-  // 키 — 왼쪽 위에서 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
-  const key = new SpotLight(0xffd2a1, 13, 10, Math.PI / 4.4, 0.5, 1.5)
-  key.position.set(-1.15, 2.6, 1.35)
-  key.target.position.set(0, 1.0, -0.4)
+  // 키 — 왼쪽 위에서 비껴 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
+  //
+  // 정면에서 때리면 얼굴이 평평해지고 하얗게 뜬다. 옆으로 더 물리고 각도를
+  // 세워 얼굴을 스치듯 지나가게 한다. 굴곡이 살고 밝기도 눌린다.
+  const key = new SpotLight(0xffd2a1, 11, 10, Math.PI / 4.6, 0.55, 1.5)
+  key.position.set(-1.85, 2.85, 0.75)
+  key.target.position.set(0.45, 1.05, -0.95)
   key.castShadow = true
   key.shadow.mapSize.set(1024, 1024)
   key.shadow.bias = -0.0012
@@ -238,7 +253,7 @@ export function createSalon(host: HTMLElement): Salon {
   scene.add(key, key.target)
 
   // 림 — 뒤 오른쪽에서 오는 서늘한 빛. 집사의 윤곽을 배경에서 떼어낸다.
-  const rim = new SpotLight(0xbcd2ff, 10, 9, Math.PI / 4.5, 0.7, 1.4)
+  const rim = new SpotLight(0xbcd2ff, 8, 9, Math.PI / 4.5, 0.7, 1.4)
   rim.position.set(1.9, 2.5, -2.1)
   rim.target.position.set(0, 1.35, -1.05)
   scene.add(rim, rim.target)
