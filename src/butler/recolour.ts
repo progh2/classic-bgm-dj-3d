@@ -60,6 +60,7 @@ export function dressAsButler(root: Object3D): void {
       // 순서를 바꾸면 얼굴만 빠져 목에서 색이 갈라진다.
       if (SKIN.test(name)) {
         targets.push({ material, kind: 'skin' })
+        toneSkin(material)
         continue
       }
       if (PROTECTED.test(name)) {
@@ -93,6 +94,21 @@ export function dressAsButler(root: Object3D): void {
 
 /** MToon 과 표준 재질에서 색을 담고 있는 슬롯. */
 const TEXTURE_SLOTS = ['map', 'shadeMultiplyTexture', 'emissiveMap'] as const
+
+/**
+ * 살결의 밝기를 낮춘다.
+ *
+ * 텍스처를 다시 그리는 것만으로는 부족했다. MToon 은 빛을 받은 쪽을 평평하게
+ * 칠해서, 키라이트가 닿는 얼굴은 텍스처와 상관없이 바탕색 그대로 하얗게 뜬다.
+ * 재질의 바탕색과 그늘색을 함께 낮춰야 얼굴과 손의 색이 맞는다.
+ */
+function toneSkin(material: Material): void {
+  const m = material as unknown as { color?: Color; shadeColorFactor?: Color }
+  m.color?.multiplyScalar(0.86)
+  // 그늘은 조금 더 따뜻하고 짙게. 얼굴에 굴곡이 살아난다.
+  m.shadeColorFactor?.multiplyScalar(0.72)
+  material.needsUpdate = true
+}
 
 /**
  * 머리 재질의 색을 갈색으로 돌린다. 머리에 달린 리본이 같은 이름을 달고

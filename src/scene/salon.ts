@@ -228,7 +228,7 @@ export function createSalon(host: HTMLElement): Salon {
   scene.add(new AmbientLight(0xffd9a8, 0.18))
 
   // 키 — 왼쪽 위에서 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
-  const key = new SpotLight(0xffd2a1, 16, 10, Math.PI / 4.4, 0.5, 1.5)
+  const key = new SpotLight(0xffd2a1, 13, 10, Math.PI / 4.4, 0.5, 1.5)
   key.position.set(-1.15, 2.6, 1.35)
   key.target.position.set(0, 1.0, -0.4)
   key.castShadow = true
