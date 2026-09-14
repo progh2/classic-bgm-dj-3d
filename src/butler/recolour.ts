@@ -38,8 +38,11 @@ type Filtered = Map<Texture, Texture>
  * 가까운 백금발). 텍스처를 다시 그리는 방식이 반만 먹혔던 이유가 이것이다.
  * 밝은 텍스처에 색을 곱하는 편이 확실하다.
  */
-const HAIR_COLOUR = 0x6f4a2a
-const HAIR_SHADE = 0x3f2917
+const HAIR_COLOUR = 0x5e3d23
+const HAIR_SHADE = 0x33210f
+/** 머리에 달린 리본. 모델 기본은 민트색이라 응접실과 겉돈다. */
+const RIBBON_COLOUR = 0x5d1f28
+const RIBBON_SHADE = 0x35121a
 
 export function dressAsButler(root: Object3D): void {
   const protectedImages = new Set<unknown>()
@@ -87,17 +90,17 @@ export function dressAsButler(root: Object3D): void {
 const TEXTURE_SLOTS = ['map', 'shadeMultiplyTexture', 'emissiveMap'] as const
 
 /**
- * 머리 재질의 색을 갈색으로 돌린다. 초록 리본처럼 머리가 아닌 것이 같은
- * 이름을 달고 있는 경우가 있어, 초록빛이 도는 재질은 건드리지 않는다.
+ * 머리 재질의 색을 갈색으로 돌린다. 머리에 달린 리본이 같은 이름을 달고
+ * 있는데 기본이 민트색이라 응접실과 겉돈다. 초록빛이 도는 재질은 리본으로
+ * 보고 짙은 포도줏빛으로 돌린다.
  */
 function tintHair(material: Material): void {
   const m = material as unknown as { color?: Color; shadeColorFactor?: Color }
   const c = m.color
   if (!c) return
-  const greenish = c.g > c.r + 0.08 && c.g > c.b + 0.04
-  if (greenish) return
-  c.setHex(HAIR_COLOUR)
-  m.shadeColorFactor?.setHex(HAIR_SHADE)
+  const ribbon = c.g > c.r + 0.08 && c.g > c.b + 0.04
+  c.setHex(ribbon ? RIBBON_COLOUR : HAIR_COLOUR)
+  m.shadeColorFactor?.setHex(ribbon ? RIBBON_SHADE : HAIR_SHADE)
   material.needsUpdate = true
 }
 

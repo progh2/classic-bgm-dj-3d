@@ -102,7 +102,7 @@ export function createSalon(host: HTMLElement): Salon {
   renderer.shadowMap.autoUpdate = false
   // 선형 출력은 촛불 같은 밝은 부분이 하얗게 뭉친다. 필름 톤매핑으로 눌러 준다.
   renderer.toneMapping = ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.06
+  renderer.toneMappingExposure = 0.94
   renderer.outputColorSpace = SRGBColorSpace
   host.appendChild(renderer.domElement)
 
@@ -225,10 +225,10 @@ export function createSalon(host: HTMLElement): Salon {
   const piano = createPiano(new Vector3(-WALL_X + 0.2, 0, -0.6), Math.PI / 2)
   scene.add(piano.root)
 
-  scene.add(new AmbientLight(0xffd9a8, 0.26))
+  scene.add(new AmbientLight(0xffd9a8, 0.18))
 
   // 키 — 왼쪽 위에서 내려오는 따뜻한 빛. 그림자를 만드는 주광원이다.
-  const key = new SpotLight(0xffd2a1, 20, 10, Math.PI / 4.4, 0.5, 1.5)
+  const key = new SpotLight(0xffd2a1, 16, 10, Math.PI / 4.4, 0.5, 1.5)
   key.position.set(-1.15, 2.6, 1.35)
   key.target.position.set(0, 1.0, -0.4)
   key.castShadow = true
@@ -244,7 +244,8 @@ export function createSalon(host: HTMLElement): Salon {
   scene.add(rim, rim.target)
 
   // 필 — 정면 아래에서 아주 약하게. 얼굴 그늘이 까맣게 막히지 않도록.
-  const fill = new PointLight(0xffe6c8, 2.4, 7, 1.8)
+  // 세게 주면 얼굴이 평평해지고 피부가 하얗게 날아간다.
+  const fill = new PointLight(0xffe6c8, 1.1, 6, 2)
   fill.position.set(0.4, 1.5, 2.2)
   scene.add(fill)
 
@@ -403,7 +404,7 @@ export function createSalon(host: HTMLElement): Salon {
       const pmrem = new PMREMGenerator(renderer)
       // 배경으로 그리지는 않는다. 반사와 간접광에만 쓴다.
       scene.environment = pmrem.fromEquirectangular(texture).texture
-      scene.environmentIntensity = 0.5
+      scene.environmentIntensity = 0.34
       pmrem.dispose()
       texture.dispose()
     },
